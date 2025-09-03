@@ -1,19 +1,16 @@
-package lecture;
+package jpanel;
 
-import java.awt.Color;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.awt.*;
+import java.io.*;
+import java.util.*;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 import VO.Lecture;
+import action.LectureDetailAction;
 
-public class LectureManagerList extends JPanel {
-	public LectureManagerList() {
+public class LectureList extends JPanel {
+	public LectureList() {
 		// TODO : resource\data\LectureList.txt 불러와서 수업 객체들 생성하기
 		ArrayList<Lecture> lectureList = new ArrayList<>();
 		// 파일 읽어오기
@@ -35,20 +32,28 @@ public class LectureManagerList extends JPanel {
 				}
 			}
 			// lectureList의 길이만큼 버튼 만들어서 붙이기
-
-			JButton[] btnList = new JButton[lectureList.size()];
+			JButton[] btnList = new JButton[lectureList.size() + 1];
 			for (int i = 0; i < lectureList.size(); i++) {
 				btnList[i] = new JButton(lectureList.get(i).getlName());
 				btnList[i].addActionListener(new LectureDetailAction(lectureList.get(i)));
 			}
+			btnList[lectureList.size()] = new JButton("+");
 			for (int i = 0; i < btnList.length; i++) {
 				add(btnList[i]);
 			}
+			JLabel lectureName = new JLabel("new Lecture Name");
+			JTextArea lectureNameInput = new JTextArea(1,10);
+			JLabel lecturePlace = new JLabel("new Lecture Place");
+			JTextArea lecturePlaceInput = new JTextArea(1,10);
+			add(lectureName);
+			add(lectureNameInput);
+			add(lecturePlace);
+			add(lecturePlaceInput);
+			btnList[lectureList.size()]
+					.addActionListener(new CreateNewLecture(lectureNameInput,lecturePlaceInput));
 		} catch (Exception e) {
 		} // try~catch 파일 읽어오기 끝
-			// TODO :
-			// TODO :
-		setBackground(Color.WHITE);
+		setBackground(Color.GRAY);
 		setVisible(true);
 	}
 }

@@ -1,8 +1,1 @@
-teamListName,teamNameList
-teamList1,[&&&]
-teamList1,[&&&]
-teamList1,[&&&]
-teamList1,[&&&]
-teamList1,[&&&]
-teamList1,[&&&]
-teamList1,[&&&]
+lindex,ssindex,teamListName,teamNameList

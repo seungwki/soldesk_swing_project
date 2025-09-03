@@ -1,4 +1,4 @@
-package lecture;
+package jpanel;
 
 import java.awt.Color;
 import java.io.File;
@@ -6,10 +6,13 @@ import java.io.FileReader;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import VO.Lecture;
 import VO.Session;
+import action.SessionCreateAction;
+import action.showTeamListAction;
 
 public class LectureDetail extends JPanel {
 	public LectureDetail(Lecture lecture) throws Exception {
@@ -36,7 +39,8 @@ public class LectureDetail extends JPanel {
 		for (int i = 0; i < splitNewline.length; i++) {
 			sessionInfoList = splitNewline[i].split(String.valueOf((char) 3));
 			if (sessionInfoList[0].equals(String.valueOf(lectureIndex))
-					&& sessionInfoList[3].equals(String.valueOf(0))) {
+//					&& sessionInfoList[3].equals(String.valueOf(0))
+			) {
 				sessionNameList = sessionInfoList[1].split(String.valueOf((char) 4));
 				for (int j = 0; j < sessionNameList.length; j++) {
 					sessionList.add(new Session(sessionNameList[j], Integer.parseInt(sessionInfoList[2])));
@@ -44,13 +48,19 @@ public class LectureDetail extends JPanel {
 				break;
 			}
 		} // for
-			// Session 목록 가져와서 이름대로 버튼 만들어서 뿌려주기
+			// Lecture 이름 보여주기
+		JLabel lectureName = new JLabel(lecture.getlName());
+		// Session 목록 가져와서 이름대로 버튼 만들어서 뿌려주기
 		JButton[] sessionBtn = new JButton[sessionList.size() + 1];
 		for (int i = 0; i < sessionBtn.length - 1; i++) {
 			sessionBtn[i] = new JButton(sessionList.get(i).getSsName());
+			sessionBtn[i].addActionListener(new showTeamListAction(lecture, sessionList.get(i)));// session 버튼을 눌러 팀 목록
+																									// 조회 기능 추가
 		}
 		sessionBtn[sessionList.size()] = new JButton("+");
+		sessionBtn[sessionList.size()].addActionListener(new SessionCreateAction());// session 생성 기능 추가
 
+		add(lectureName);
 		for (JButton jButton : sessionBtn) {
 			add(jButton);
 		}

@@ -25,6 +25,10 @@ public class Lecture {
 		sessionList = new ArrayList<>();
 	}
 
+	public static int getLastIndex() {
+		return lastIndex;
+	}
+
 	public String getlName() {
 		return lName;
 	}
