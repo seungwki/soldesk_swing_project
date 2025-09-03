@@ -10,6 +10,7 @@ public class TeamList extends JPanel {
 	public TeamList(Lecture lecture, Session session) {
 		int lIndex = lecture.getIndex();
 		int ssIndex = session.getIndex();
+		System.out.println("엄준식");
 	}
 
 }

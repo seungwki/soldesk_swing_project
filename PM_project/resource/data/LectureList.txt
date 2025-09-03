@@ -6,6 +6,4 @@ LectureName4LecturePlace4400
 LectureName5LecturePlace5500
 LectureName6LecturePlace6600
 LectureName7LecturePlace7700
-qweqweqqweqwewqe900
-wqewqewqeqweweqweqewq1800
-qweqweqweqwewqeweq2800
+새 강의새 장소900

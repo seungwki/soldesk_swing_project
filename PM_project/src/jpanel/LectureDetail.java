@@ -1,10 +1,12 @@
 package jpanel;
 
 import java.awt.Color;
+import java.awt.Image;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +19,10 @@ import action.showTeamListAction;
 public class LectureDetail extends JPanel {
 	public LectureDetail(Lecture lecture) throws Exception {
 		ArrayList<Session> sessionList = lecture.getSessionList();
+		// 휴지통 아이콘(크기 수정)
+		ImageIcon binIcon = new ImageIcon(
+				new ImageIcon("resource\\image\\bin.png").getImage().getScaledInstance(18, 18, Image.SCALE_SMOOTH));
+//		new ImageIcon("resource\\image\\bin.png").getImage().getScaledInstance(18, 18, Image.SCALE_FAST));//성능 우선이면 이거
 		// 파일 가져와서 읽고 인덱스에 해당하는 세션 목록들 가져와서 sessionList 채우기
 		int lectureIndex = lecture.getIndex();
 
@@ -51,19 +57,23 @@ public class LectureDetail extends JPanel {
 			// Lecture 이름 보여주기
 		JLabel lectureName = new JLabel(lecture.getlName());
 		// Session 목록 가져와서 이름대로 버튼 만들어서 뿌려주기
-		JButton[] sessionBtn = new JButton[sessionList.size() + 1];
-		for (int i = 0; i < sessionBtn.length - 1; i++) {
+		JButton[] sessionBtn = new JButton[sessionList.size() + 2];// 추가 버튼, 삭제 버튼 공간
+		for (int i = 0; i < sessionList.size(); i++) {
 			sessionBtn[i] = new JButton(sessionList.get(i).getSsName());
 			sessionBtn[i].addActionListener(new showTeamListAction(lecture, sessionList.get(i)));// session 버튼을 눌러 팀 목록
 																									// 조회 기능 추가
 		}
 		sessionBtn[sessionList.size()] = new JButton("+");
 		sessionBtn[sessionList.size()].addActionListener(new SessionCreateAction());// session 생성 기능 추가
+//		sessionBtn[sessionList.size() + 1] = new JButton("delete");
+		sessionBtn[sessionList.size() + 1] = new JButton(binIcon);
+		sessionBtn[sessionList.size() + 1].addActionListener(new deleteLectureAction(lecture));// 이 강의 삭제 기능 추가
 
 		add(lectureName);
 		for (JButton jButton : sessionBtn) {
 			add(jButton);
 		}
+		add(sessionBtn[sessionList.size() + 1]);
 		setBackground(Color.GRAY);
 	}
 }
