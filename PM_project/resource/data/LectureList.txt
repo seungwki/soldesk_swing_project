@@ -1,0 +1,8 @@
+LectureNameLecturePlaceindexisDeletedBookmark
+LectureName1LecturePlace1100
+LectureName2LecturePlace2200
+LectureName3LecturePlace3300
+LectureName4LecturePlace4400
+LectureName5LecturePlace5500
+LectureName6LecturePlace6600
+LectureName7LecturePlace7700
