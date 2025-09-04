@@ -25,8 +25,13 @@ public class ProjectList extends JPanel {
 		for (int i = 0; i < projectData.size(); i++) {
 			JPanel tempPanel = new JPanel();
 			JLabel tempLabel = new JLabel(projectData.get(i).getName());
-			JLabel tempBookmark = new JLabel(bookmarkOff);
+			JLabel tempBookmark;
 			tempPanel.add(tempLabel);
+			if (projectData.get(i).isBookmark()) {
+				tempBookmark = new JLabel(bookmarkOn);
+			} else {
+				tempBookmark = new JLabel(bookmarkOff);
+			}
 			tempPanel.add(tempBookmark);
 			tempPanel.addMouseListener(new ProjectPanelClickAction(projectData.get(i)));
 			projectPanelList.add(tempPanel);

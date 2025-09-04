@@ -27,7 +27,15 @@ public class ProjectPanelClickAction implements MouseListener {
 		JMenuItem edit = new JMenuItem("수정");
 		JMenuItem delete = new JMenuItem("삭제");
 		// 아이템에 기능 연결
+		// 북마크 기능 구현
 		bookmark.addActionListener(e -> {
+			ArrayList<Project> projectList = ProjectList.projectData;
+			for (int i = 0; i < projectList.size(); i++) {
+				if (projectList.get(i).getName().equals(this.project.getName())) {
+					projectList.get(i).setBookmark(!projectList.get(i).isBookmark());
+				}
+			}
+			BasicFrame.getInstance(new ProjectList());
 		});
 		edit.addActionListener(e -> {
 		});
