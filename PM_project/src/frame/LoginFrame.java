@@ -1,7 +1,9 @@
-package skeleton;
+package frame;
 
-import java.awt.*;
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+
+import frame.action.LoginAction;
 
 public class LoginFrame extends JPanel {
 	public LoginFrame() {

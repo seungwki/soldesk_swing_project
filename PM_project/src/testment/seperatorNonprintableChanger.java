@@ -27,7 +27,7 @@ public class seperatorNonprintableChanger {
 			sb.append((char) data);
 		} // while
 		fr.close();
-		//닫아주고 실행하지 않으면 입출력 통로가 꼬여서 제대로 출력이 안 됨...
+		// 닫아주고 실행하지 않으면 입출력 통로가 꼬여서 제대로 출력이 안 됨...
 		FileWriter fw = new FileWriter(file);
 		content = sb.toString();
 		for (int i = 0; i < content.length(); i++) {

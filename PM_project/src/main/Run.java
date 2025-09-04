@@ -1,12 +1,11 @@
-package run;
+package main;
 
 import java.awt.EventQueue;
 
-import javax.swing.*;
-import java.awt.*;
+import javax.swing.JFrame;
 
-import basicFrame.BasicFrame;
-import skeleton.LoginFrame;
+import frame.BasicFrame;
+import frame.LoginFrame;
 
 public class Run {
 	public static void main(String[] args) {
