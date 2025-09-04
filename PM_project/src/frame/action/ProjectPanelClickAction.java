@@ -37,8 +37,21 @@ public class ProjectPanelClickAction implements MouseListener {
 			}
 			BasicFrame.getInstance(new ProjectList());
 		});
+		// 수정 기능 구현
 		edit.addActionListener(e -> {
+			ArrayList<Project> projectList = ProjectList.projectData;
+			String oldTitle = project.getName();
+			String newTitle = JOptionPane.showInputDialog(null, "변경 할 제목을 입력하세요.", oldTitle);
+			if (newTitle != null) {
+				for (int i = 0; i < projectList.size(); i++) {
+					if (projectList.get(i).getName().equals(this.project.getName())) {
+						projectList.get(i).setName(newTitle);
+					}
+				}
+			}
+			BasicFrame.getInstance(new ProjectList());
 		});
+		// 삭제 기능 구현
 		delete.addActionListener(e -> {
 			String content = "삭제 하시겠습니까?";
 			String title = "삭제 확인";
