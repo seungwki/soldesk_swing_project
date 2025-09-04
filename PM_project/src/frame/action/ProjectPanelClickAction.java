@@ -39,16 +39,17 @@ public class ProjectPanelClickAction implements MouseListener {
 		});
 		// 수정 기능 구현
 		edit.addActionListener(e -> {
-			ArrayList<Project> projectList = ProjectList.projectData;
-			String oldTitle = project.getName();
-			String newTitle = JOptionPane.showInputDialog(null, "변경 할 제목을 입력하세요.", oldTitle);
-			if (newTitle != null) {
-				for (int i = 0; i < projectList.size(); i++) {
-					if (projectList.get(i).getName().equals(this.project.getName())) {
-						projectList.get(i).setName(newTitle);
-					}
-				}
-			}
+			showEditProjectDialog(project);
+//			ArrayList<Project> projectList = ProjectList.projectData;
+//			String oldTitle = project.getName();
+//			String newTitle = JOptionPane.showInputDialog(null, "변경 할 제목을 입력하세요.", oldTitle);
+//			if (newTitle != null) {
+//				for (int i = 0; i < projectList.size(); i++) {
+//					if (projectList.get(i).getName().equals(this.project.getName())) {
+//						projectList.get(i).setName(newTitle);
+//					}
+//				}
+//			}
 			BasicFrame.getInstance(new ProjectList());
 		});
 		// 삭제 기능 구현
@@ -102,4 +103,26 @@ public class ProjectPanelClickAction implements MouseListener {
 	public void mouseExited(MouseEvent e) {
 	}
 
+//	public static void showEditProjectDialog(JFrame parent, Project project) {
+	public static void showEditProjectDialog(Project project) {
+		JTextField nameField = new JTextField(project.getName(), 30);
+		JTextField placeField = new JTextField(project.getPlace(), 30);
+
+		JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
+		panel.add(new JLabel("이름 :"));
+		panel.add(nameField);
+		panel.add(new JLabel("위치 :"));
+		panel.add(placeField);
+
+		int result = JOptionPane.showConfirmDialog(null, panel, "프로젝트 수정", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (result == JOptionPane.OK_OPTION) {
+			project.setName(nameField.getText());
+			project.setPlace(placeField.getText());
+			System.out.println("수정 완료 → " + project.getName() + ", " + project.getPlace());
+		} else {
+			System.out.println("수정 취소됨");
+		}
+	}
 }
