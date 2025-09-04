@@ -7,9 +7,11 @@ public class BasicFrame extends JFrame {
 	// 싱글톤
 	private static JFrame instance;
 
-//	private JPanel contentPane;
-
 	private BasicFrame(JPanel jPanel) {
+		//스크롤바 추가
+		JScrollPane scroll = new JScrollPane();
+		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+		add(scroll);
 		int frameHeight = 600;
 		int frameWidth = 800;
 		// 프레임 닫기 설정
