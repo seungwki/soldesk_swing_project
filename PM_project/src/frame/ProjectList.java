@@ -2,6 +2,8 @@ package frame;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
+
 import javax.swing.*;
 
 import VO.Project;
@@ -20,7 +22,7 @@ public class ProjectList extends JPanel {
 
 	public ProjectList() {
 		setProjectList();
-		setLayout(new GridLayout(0,2,10,10));
+		setLayout(new GridLayout(0, 2, 10, 10));
 		ArrayList<JPanel> projectPanelList = new ArrayList<JPanel>();
 		// 수업 목록 패널 생성
 		for (int i = 0; i < projectData.size(); i++) {
@@ -72,5 +74,28 @@ public class ProjectList extends JPanel {
 			projectData.add(new Project("Java&Spring 기반 풀스택 개발자 양성 과정", "강남 603호"));
 			projectData.add(new Project("Node.js 백엔드 엔지니어 트랙", "강남 604호"));
 		}
+		projectData.sort(new Comparator<Project>() {
+			@Override
+			public int compare(Project o1, Project o2) {
+				if (o1.isBookmark() != o2.isBookmark()) {
+					if (o1.isBookmark()) {
+						return -1;
+					} else {
+						return 1;
+					}
+				} else {
+					int minLen = Math.min(o1.getName().length(), o2.getName().length());
+					for (int i = 0; i < minLen; i++) {
+						if(o1.getName().charAt(i) != o2.getName().charAt(i)) {
+						return o1.getName().charAt(i) - o2.getName().charAt(i);}
+					}
+					if (o1.getName().length() > o2.getName().length()) {
+						return 1;
+					}else {
+						return -1;
+					}
+				}
+			}
+		});
 	}
 }

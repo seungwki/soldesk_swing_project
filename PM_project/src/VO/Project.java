@@ -6,6 +6,8 @@ import java.util.List;
 public class Project {
 	private String name;
 	private String place;
+	private List<Team> teams = new ArrayList<>();
+	private boolean isBookmark;
 
 	public String getPlace() {
 		return place;
@@ -15,8 +17,6 @@ public class Project {
 		this.place = place;
 	}
 
-	private List<Team> teams = new ArrayList<>();
-	private boolean isBookmark;
 
 	public boolean isBookmark() {
 		return isBookmark;
