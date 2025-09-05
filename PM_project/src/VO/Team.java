@@ -17,7 +17,7 @@ public class Team {
 		return tName;
 	}
 
-	public int getdegree() {
+	public int getDegree() {
 		return degree;
 	}
 
