@@ -5,5 +5,7 @@ import java.util.ArrayList;
 
 public class Output {
 	private ArrayList<File> file;
-	private Team team;
+	private ArrayList<Tag> tagList = new ArrayList<>();
+	private String review;
+	private double score;
 }

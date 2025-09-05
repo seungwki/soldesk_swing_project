@@ -6,7 +6,8 @@ import java.util.List;
 public class Project {
 	private String name;
 	private String place;
-	private List<Team> teams = new ArrayList<>();
+	//	private List<Team> teams = new ArrayList<>();
+	private ArrayList<Team> teams = new ArrayList<>();
 	private boolean isBookmark;
 
 	public String getPlace() {
@@ -16,7 +17,6 @@ public class Project {
 	public void setPlace(String place) {
 		this.place = place;
 	}
-
 
 	public boolean isBookmark() {
 		return isBookmark;
@@ -31,6 +31,7 @@ public class Project {
 		this.isBookmark = false;
 		this.teams = new ArrayList<Team>();
 	}
+
 	public Project(String name, String place) {
 		this.name = name;
 		this.place = place;
@@ -46,9 +47,11 @@ public class Project {
 		this.name = name;
 	}
 
-	public List<Team> getTeams() {
-		return List.copyOf(teams);
-	}// 리스트 그 자체가 아니라 배열로 반환해야 할 이유?? 이게 더 안전한지?
+	public ArrayList<Team> getTeams() {
+		//		public List<Team> getTeams() {//불변성 이슈
+		//		return List.copyOf(teams); //정렬 시도 시 불변성 이슈
+		return teams;
+	}
 
 	public void addTeam(Team team) {
 		teams.add(team);

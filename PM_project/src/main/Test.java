@@ -15,7 +15,7 @@ public class Test {
 			data.get(i).getTeams().sort(new Comparator<Team>() {
 				@Override
 				public int compare(Team o1, Team o2) {
-					return o1.getDegree() - o2.getDegree();
+					return Integer.compare(o1.getDegree(), o2.getDegree());
 				}
 			});
 		}

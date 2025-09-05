@@ -7,6 +7,15 @@ public class Team {
 	private String tName;
 	private int degree;
 	private List<Student> members = new ArrayList<>();
+	private Output output = new Output();
+
+	public Output getOutput() {
+		return output;
+	}
+
+	public void setOutput(Output output) {
+		this.output = output;
+	}
 
 	public Team(String tName, int degree) {
 		this.tName = tName;
