@@ -40,6 +40,7 @@ public class showTeamList extends JPanel {
 			teamMap.get(degree).add(project.getTeams().get(i));
 		}
 		//차수(degree)에 해당하는 팀 길이를 체크하고, size!=0이라면 차수 버튼을 추가
+		boolean isClicked = false;
 		for (int i = 1; i < 6; i++) {
 			if (teamMap.get(i).size() != 0) {
 				JButton tempDegreeBtn = new JButton(i + "차");
@@ -47,7 +48,6 @@ public class showTeamList extends JPanel {
 				sessionListPanel.add(tempDegreeBtn);
 				//차수 버튼에 "차수에 해당하는 팀 목록들 가져오기" 기능 추가
 				tempDegreeBtn.addActionListener(new ShowTeamListAction(i, project));
-				boolean isClicked = false;
 				if (!isClicked) {
 					tempDegreeBtn.doClick();
 					isClicked = true;

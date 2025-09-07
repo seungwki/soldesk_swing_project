@@ -1,12 +1,17 @@
 package frame.action;
 
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.*;
-import java.awt.*;
+import java.util.ArrayList;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import VO.Project;
-import VO.Team;
+import VO.Student;
 
 public class ShowTeamListAction implements ActionListener {
 	int degree;
@@ -35,8 +40,15 @@ public class ShowTeamListAction implements ActionListener {
 				JPanel tempPanel = new JPanel();
 				JLabel tempLabel = new JLabel(project.getTeams().get(i).getTName());
 				tempPanel.add(tempLabel);
-				tempPanel.setBackground(new Color(0xB4C7E7));
+				tempPanel.setBackground(new Color(0xB4EEEE));
 				tempPanel.setName(project.getTeams().get(i).getTName());
+				//임시용 학생 목록 출력(여기부터 삭제)
+				ArrayList<Student> temp = (ArrayList<Student>) project.getTeams().get(i).getMembers2();
+				for (int j = 0; j < temp.size(); j++) {
+					JLabel tempLabel2 = new JLabel(temp.get(j).getsName());
+					tempPanel.add(tempLabel2);
+				}
+				//임시학생목록 출력 끝(여기까지 삭제)
 				teamListPanel.add(tempPanel);
 			}
 		}

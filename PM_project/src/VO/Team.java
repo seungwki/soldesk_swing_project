@@ -33,6 +33,9 @@ public class Team {
 	public List<Student> getMembers() {
 		return List.copyOf(members);
 	}
+	public List<Student> getMembers2() {//불변성 이슈
+		return members;
+	}
 
 	public void addMember(Student s) {
 		members.add(s);
