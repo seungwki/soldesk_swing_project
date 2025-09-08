@@ -3,7 +3,6 @@ package frame;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.util.Collections;
-import java.util.Comparator;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -11,7 +10,6 @@ import javax.swing.JPanel;
 
 import VO.Output;
 import VO.Project;
-import VO.Student;
 import VO.Team;
 
 public class OutputDetail extends JPanel {
@@ -25,12 +23,12 @@ public class OutputDetail extends JPanel {
 		this.output = team.getOutput();
 		setBackground(new Color(0x78FFEE));
 		setLayout(new GridLayout(0, 1));
-		//보여줘야 되는거
-		//주제
+		// 보여줘야 되는거
+		// 주제
 		JLabel title = new JLabel(output.getTitle());
-		//		System.out.println("output>>" + output);
+		// System.out.println("output>>" + output);
 		add(title);
-		//팀명 : 조원 조원 조원
+		// 팀명 : 조원 조원 조원
 		JLabel teamName = new JLabel(team.getTName() + ":");
 		JPanel studentList = new JPanel();
 		studentList.setLayout(new GridLayout(1, 0));
@@ -42,19 +40,19 @@ public class OutputDetail extends JPanel {
 			studentList.add(tempName);
 		}
 		add(studentList);
-		//파일 목록
+		// 파일 목록
 		if (output.getFile() != null) {
 			for (int i = 0; i < output.getFile().size(); i++) {
 				JLabel tempFile = new JLabel(output.getFile().get(i).getName());
-				tempFile.addMouseListener(null);//[구현 예정]클릭 시 파일 다운로드
+				tempFile.addMouseListener(null);// [구현 예정]클릭 시 파일 다운로드
 			}
 		}
-		//메모
+		// 메모
 		JPanel reviewPanel = new JPanel();
 		JLabel tempReview = new JLabel(output.getReview());
 		reviewPanel.add(tempReview);
 		add(reviewPanel);
-		//태그 목록
+		// 태그 목록
 		JPanel tagList = new JPanel();
 		tagList.setLayout(new GridLayout(1, 0));
 		for (int i = 0; i < output.getTagList().size(); i++) {
@@ -62,21 +60,22 @@ public class OutputDetail extends JPanel {
 			tagList.add(tempTag);
 		}
 		add(tagList);
-		//평점
+		// 평점
 		JPanel scorePanel = new JPanel();
 		String score = String.format("%.2f", output.getScore());
 		JLabel tempScore = new JLabel(score);
 		reviewPanel.add(tempScore);
 		add(scorePanel);
-		//수정 삭제 버튼
+		// TODO : 수정 버튼 구현
 		JPanel btnList = new JPanel();
 		btnList.setLayout(new GridLayout(1, 0));
 		JButton editBtn = new JButton("수정");
-		editBtn.addActionListener(new EdOutput(EdOutput.EDIT_OUTPUT));
+		editBtn.addActionListener(new EdOutput(EdOutput.EDIT_OUTPUT, this.project, this.team, output));
 		btnList.add(editBtn);
-		//		JButton deleteBtn = new JButton("삭제");
-		//		deleteBtn.addActionListener(new EdOutput(EdOutput.DELETE_OUTPUT));
-		//		btnList.add(deleteBtn);
+		// TODO: 삭제 버튼 구현
+		JButton deleteBtn = new JButton("삭제");
+		deleteBtn.addActionListener(new EdOutput(EdOutput.DELETE_OUTPUT, this.project, this.team, output));
+		btnList.add(deleteBtn);
 		add(btnList);
 	}
 }

@@ -4,11 +4,12 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class Output {
-	private ArrayList<File> file; //파일 목록
-	private String title; //주제
-	private ArrayList<Tag> tagList = new ArrayList<>();//부착 된 태그 목록
-	private String review;//메모
-	private double score;//평점
+	private ArrayList<File> file; // 파일 목록
+	private String title; // 주제
+	private ArrayList<Tag> tagList = new ArrayList<>();// 부착 된 태그 목록
+	private String review;// 메모
+	private double score;// 평점
+	private double maxScore;// 만점
 
 	public Output(ArrayList<File> file) {
 		this.file = file;
@@ -61,9 +62,18 @@ public class Output {
 		this.score = score;
 	}
 
+	public double getMaxScore() {
+		return maxScore;
+	}
+
+	public void setMaxScore(double maxScore) {
+		this.maxScore = maxScore;
+	}
+
 	@Override
 	public String toString() {
-		return "Output [file=" + file + ", title=" + title + ", tagList=" + tagList + ", review=" + review + ", score=" + score + "]";
+		return "Output [file=" + file + ", title=" + title + ", tagList=" + tagList + ", review=" + review + ", score="
+				+ score + ", maxScore=" + maxScore + "]";
 	}
-	
+
 }
