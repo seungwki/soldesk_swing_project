@@ -6,8 +6,8 @@ import java.util.List;
 public class Project {
 	private String name;
 	private String place;
-	//	private List<Team> teams = new ArrayList<>();
-	private ArrayList<Team> teams = new ArrayList<>();
+	private List<Team> teams = new ArrayList<>();
+	//	private ArrayList<Team> teams2 = new ArrayList<>();
 	private boolean isBookmark;
 
 	public String getPlace() {
@@ -47,14 +47,16 @@ public class Project {
 		this.name = name;
 	}
 
-	public ArrayList<Team> getTeams() {
-		//		public List<Team> getTeams() {//불변성 이슈
-		//		return List.copyOf(teams); //정렬 시도 시 불변성 이슈
-		return teams;
+	public List<Team> getTeams() {
+		return List.copyOf(teams); //정렬 시도 시 불변성 이슈
 	}
 
 	public void addTeam(Team team) {
 		teams.add(team);
+	}
+
+	public ArrayList<Team> getTeams2() {//정렬 시도 시 불변성 이슈로 걍 따로 만듦
+		return (ArrayList<Team>) teams;
 	}
 
 	public Team findTeamByStudent(Student s) {

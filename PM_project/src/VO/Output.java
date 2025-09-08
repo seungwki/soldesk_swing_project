@@ -5,9 +5,29 @@ import java.util.ArrayList;
 
 public class Output {
 	private ArrayList<File> file; //파일 목록
+	private String title; //파일 목록
 	private ArrayList<Tag> tagList = new ArrayList<>();//부착 된 태그 목록
 	private String review;//메모
 	private double score;//평점
+
+	public Output(ArrayList<File> file) {
+		this.file = file;
+		if (file.size() != 0 && title != null && title != "") {
+			title = file.get(0).getName();
+		}
+	}
+
+	public Output(String title) {
+		this.title = title;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
 
 	public ArrayList<File> getFile() {
 		return file;

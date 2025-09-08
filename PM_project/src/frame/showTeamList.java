@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import VO.Project;
@@ -24,6 +25,8 @@ public class showTeamList extends JPanel {
 		sessionListPanel.setBackground(new Color(0x1EDDFF));
 		sessionListPanel.setName("sessionListPanel");
 		add(sessionListPanel);
+		JLabel projectName = new JLabel(project.getName());
+		sessionListPanel.add(projectName);
 		//팀 담을 패널 생성, 부착
 		JPanel teamListPanel = new JPanel();
 		teamListPanel.setBackground(new Color(0xFFDD1E));
@@ -34,10 +37,10 @@ public class showTeamList extends JPanel {
 		for (int i = 1; i < 6; i++) {
 			teamMap.put(i, new ArrayList<Team>());
 		}
-		System.out.println("project name : " + project.getName());
-		for (int i = 0; i < project.getTeams().size(); i++) {
-			int degree = project.getTeams().get(i).getDegree();
-			teamMap.get(degree).add(project.getTeams().get(i));
+		//		System.out.println("project name : " + project.getName());
+		for (int i = 0; i < project.getTeams2().size(); i++) {
+			int degree = project.getTeams2().get(i).getDegree();
+			teamMap.get(degree).add(project.getTeams2().get(i));
 		}
 		//차수(degree)에 해당하는 팀 길이를 체크하고, size!=0이라면 차수 버튼을 추가
 		boolean isClicked = false;
@@ -56,16 +59,16 @@ public class showTeamList extends JPanel {
 		}
 
 		//차수가 5차 미만이라면->차수에 해당하는 팀 길이size==0이라면 차수 추가 버튼 만들기
-		//1~5까지 조회하면서 size 0인 array가 있다면 break하고 +버튼 추가하기
+		//		1~5까지 조회하면서 size 0인 array가 있다면 break하고 +버튼 추가하기
 		for (int i = 1; i < 6; i++) {
 			if (teamMap.get(i).size() == 0) {
 				JButton createBtn = new JButton("+");
 				sessionListPanel.add(createBtn);
 				createBtn.setName("addSession");
-				createBtn.addActionListener(new createSessionAction());
+				int degree = i;
+				createBtn.addActionListener(new createSessionAction(project, degree, teamMap));
 				break;
 			}
 		}
-
 	}
 }

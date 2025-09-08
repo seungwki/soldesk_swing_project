@@ -7,7 +7,7 @@ public class Team {
 	private String tName;
 	private int degree;
 	private List<Student> members = new ArrayList<>();
-	private Output output = new Output();
+	private Output output;
 
 	public Output getOutput() {
 		return output;
@@ -33,6 +33,7 @@ public class Team {
 	public List<Student> getMembers() {
 		return List.copyOf(members);
 	}
+
 	public List<Student> getMembers2() {//불변성 이슈
 		return members;
 	}
@@ -44,5 +45,4 @@ public class Team {
 	public boolean hasStudent(Student s) {
 		return members.contains(s);
 	}
-
 }
