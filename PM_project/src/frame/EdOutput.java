@@ -20,8 +20,9 @@ public class EdOutput implements ActionListener {
 			System.out.println("edit");
 		}
 		//삭제
-		if (input == 'd') {
-			System.out.println("delete");
-		}
+		//		if (input == 'd') {
+		//			System.out.println("delete");
+		//			
+		//		}
 	}
 }

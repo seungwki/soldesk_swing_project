@@ -72,11 +72,11 @@ public class OutputDetail extends JPanel {
 		JPanel btnList = new JPanel();
 		btnList.setLayout(new GridLayout(1, 0));
 		JButton editBtn = new JButton("수정");
-		JButton deleteBtn = new JButton("삭제");
 		editBtn.addActionListener(new EdOutput(EdOutput.EDIT_OUTPUT));
-		deleteBtn.addActionListener(new EdOutput(EdOutput.DELETE_OUTPUT));
 		btnList.add(editBtn);
-		btnList.add(deleteBtn);
+		//		JButton deleteBtn = new JButton("삭제");
+		//		deleteBtn.addActionListener(new EdOutput(EdOutput.DELETE_OUTPUT));
+		//		btnList.add(deleteBtn);
 		add(btnList);
 	}
 }

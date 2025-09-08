@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Output {
 	private ArrayList<File> file; //파일 목록
-	private String title; //파일 목록
+	private String title; //주제
 	private ArrayList<Tag> tagList = new ArrayList<>();//부착 된 태그 목록
 	private String review;//메모
 	private double score;//평점
