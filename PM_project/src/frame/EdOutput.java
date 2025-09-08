@@ -30,13 +30,11 @@ public class EdOutput implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// 수정
 		if (input == 'e') {
-			System.out.println("edit");
 		}
 		// 삭제
 		if (input == 'd') {
 			// TODO : 확인창 팝업 띄우고, yes라면 팀 삭제 진행
 			int confirm = JOptionPane.showConfirmDialog(null, team.getTName() + " 삭제 하시겠습니까?", "팀 삭제 확인", JOptionPane.OK_CANCEL_OPTION);
-			//			System.out.println(confirm);//OK->0
 			if (confirm == 0) {
 				for (int i = 0; i < project.getTeams2().size(); i++) {
 					if (project.getTeams2().get(i).getTName().equals(team.getTName()) && project.getTeams2().get(i).getDegree() == team.getDegree()) {
