@@ -6,13 +6,12 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import VO.Project;
-import VO.Student;
+import VO.Team;
 
 public class ShowTeamListAction implements ActionListener {
 	int degree;
@@ -38,14 +37,15 @@ public class ShowTeamListAction implements ActionListener {
 		//추가
 		for (int i = 0; i < project.getTeams2().size(); i++) {
 			if (project.getTeams2().get(i).getDegree() == degree) {
+				Team team = project.getTeams2().get(i);
 				JPanel tempPanel = new JPanel();
 				tempPanel.setLayout(new GridLayout(0, 1));//임시용
-				JLabel tempLabel = new JLabel(project.getTeams2().get(i).getTName());
-				JLabel tempLabel2 = new JLabel(project.getTeams2().get(i).getOutput().getTitle());
+				JLabel tempLabel = new JLabel(team.getTName());
+				JLabel tempLabel2 = new JLabel(team.getOutput().getTitle());
 				tempPanel.add(tempLabel);
 				tempPanel.add(tempLabel2);
 				tempPanel.setBackground(new Color(0xB4EEEE));
-				tempPanel.setName(project.getTeams2().get(i).getTName());
+				tempPanel.setName(team.getTName());
 				//임시용 학생 목록 출력
 				//				ArrayList<Student> temp = (ArrayList<Student>) project.getTeams().get(i).getMembers2();
 				//				for (int j = 0; j < temp.size(); j++) {
@@ -53,6 +53,7 @@ public class ShowTeamListAction implements ActionListener {
 				//					tempPanel.add(tempLabel2);
 				//				}
 				//임시학생목록 출력 끝
+				tempPanel.addMouseListener(new OutputDetailAction(project, team));
 				teamListPanel.add(tempPanel);
 			}
 		}

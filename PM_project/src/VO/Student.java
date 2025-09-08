@@ -1,6 +1,6 @@
 package VO;
 
-public class Student {
+public class Student implements Comparable<Student> {
 	private String sName;
 	private String sNum;
 	private String memo;
@@ -32,5 +32,10 @@ public class Student {
 
 	public void setmemo(String memo) {
 		this.memo = memo;
+	}
+
+	@Override
+	public int compareTo(Student o) {
+		return this.getsName().compareTo(o.getsName());
 	}
 }

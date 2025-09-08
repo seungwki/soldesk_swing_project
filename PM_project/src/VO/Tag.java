@@ -3,9 +3,9 @@ package VO;
 import java.awt.Color;
 
 public class Tag {
-	private String name;
-	private String remark;
-	private Color color;
+	private String name;//이름
+	private String remark;//설명 <<< 표시 안 됨
+	private Color color;//색
 
 	public Tag(String name, String remark, Color color) {
 		this.name = name;

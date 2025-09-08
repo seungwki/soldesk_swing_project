@@ -60,4 +60,10 @@ public class Output {
 	public void setScore(double score) {
 		this.score = score;
 	}
+
+	@Override
+	public String toString() {
+		return "Output [file=" + file + ", title=" + title + ", tagList=" + tagList + ", review=" + review + ", score=" + score + "]";
+	}
+	
 }

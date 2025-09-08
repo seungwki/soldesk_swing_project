@@ -58,7 +58,5 @@ public class createSessionAction implements ActionListener {
 		//TODO : 다시 그리기 호출
 		sessionListPanel.revalidate(); // 레이아웃 매니저에게 다시 배치하도록 요청
 		sessionListPanel.repaint(); // 다시 그리기
-
 	}
-
 }
