@@ -1,6 +1,7 @@
 package frame;
 
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.util.Collections;
 
@@ -49,6 +50,7 @@ public class OutputDetail extends JPanel {
 		}
 		// 메모
 		JPanel reviewPanel = new JPanel();
+		reviewPanel.setLayout(new FlowLayout());
 		JLabel tempReview = new JLabel(output.getReview());
 		reviewPanel.add(tempReview);
 		add(reviewPanel);
@@ -63,18 +65,21 @@ public class OutputDetail extends JPanel {
 		// 평점
 		JPanel scorePanel = new JPanel();
 		String score = String.format("%.2f", output.getScore());
+		String maxScore = String.format("/ %.2f", output.getMaxScore());
 		JLabel tempScore = new JLabel(score);
+		JLabel tempMaxScore = new JLabel(maxScore);
 		reviewPanel.add(tempScore);
+		reviewPanel.add(tempMaxScore);
 		add(scorePanel);
 		// TODO : 수정 버튼 구현
 		JPanel btnList = new JPanel();
 		btnList.setLayout(new GridLayout(1, 0));
 		JButton editBtn = new JButton("수정");
-		editBtn.addActionListener(new EdOutput(EdOutput.EDIT_OUTPUT, this.project, this.team, output));
+		editBtn.addActionListener(new CRUDOutput(CRUDOutput.EDIT_OUTPUT, this.project, this.team, output));
 		btnList.add(editBtn);
 		// TODO: 삭제 버튼 구현
 		JButton deleteBtn = new JButton("삭제");
-		deleteBtn.addActionListener(new EdOutput(EdOutput.DELETE_OUTPUT, this.project, this.team, output));
+		deleteBtn.addActionListener(new CRUDOutput(CRUDOutput.DELETE_OUTPUT, this.project, this.team, output));
 		btnList.add(deleteBtn);
 		add(btnList);
 	}

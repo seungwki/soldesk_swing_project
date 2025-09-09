@@ -12,12 +12,12 @@ import javax.swing.JPanel;
 import VO.Project;
 import VO.Team;
 
-public class createSessionAction implements ActionListener {
+public class SessionCreateAction implements ActionListener {
 	Project project;
 	int degree;
 	TreeMap<Integer, ArrayList<Team>> teamMap;
 
-	public createSessionAction(Project project, int degree, TreeMap<Integer, ArrayList<Team>> teamMap) {
+	public SessionCreateAction(Project project, int degree, TreeMap<Integer, ArrayList<Team>> teamMap) {
 		this.project = project;
 		this.degree = degree;
 		this.teamMap = teamMap;
@@ -51,7 +51,7 @@ public class createSessionAction implements ActionListener {
 				sessionListPanel.add(createBtn);
 				createBtn.setName("addSession");
 				int degree = i;
-				createBtn.addActionListener(new createSessionAction(project, degree, teamMap));
+				createBtn.addActionListener(new SessionCreateAction(project, degree, teamMap));
 				break;
 			}
 		}

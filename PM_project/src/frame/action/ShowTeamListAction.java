@@ -6,12 +6,17 @@ import java.awt.Container;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import VO.Project;
 import VO.Team;
+import frame.CRUDOutput;
 
 public class ShowTeamListAction implements ActionListener {
 	int degree;
@@ -40,23 +45,33 @@ public class ShowTeamListAction implements ActionListener {
 				Team team = project.getTeams2().get(i);
 				JPanel tempPanel = new JPanel();
 				tempPanel.setLayout(new GridLayout(0, 1));//임시용
-				JLabel tempLabel = new JLabel(team.getTName());
+				JLabel tempLabel1 = new JLabel(team.getTName());
 				JLabel tempLabel2 = new JLabel(team.getOutput().getTitle());
-				tempPanel.add(tempLabel);
+				JPanel tempTagList = new JPanel();
+				for (int j = 0; j < team.getOutput().getTagList().size(); j++) {
+					tempTagList.add(new JButton(team.getOutput().getTagList().get(i).getName()));
+				}
+				tempPanel.add(tempLabel1);
 				tempPanel.add(tempLabel2);
+				tempPanel.add(tempTagList);
 				tempPanel.setBackground(new Color(0xB4EEEE));
 				tempPanel.setName(team.getTName());
-				//임시용 학생 목록 출력
-				//				ArrayList<Student> temp = (ArrayList<Student>) project.getTeams().get(i).getMembers2();
-				//				for (int j = 0; j < temp.size(); j++) {
-				//					JLabel tempLabel2 = new JLabel(temp.get(j).getsName());
-				//					tempPanel.add(tempLabel2);
-				//				}
-				//임시학생목록 출력 끝
 				tempPanel.addMouseListener(new OutputDetailAction(project, team));
 				teamListPanel.add(tempPanel);
 			}
 		}
+		//팀 생성 버튼(사실 아웃풋만 생성하는거긴 함)버튼 추가
+		JLabel addTeamLabel = new JLabel("+");
+		JPanel addTeamPanel = new JPanel();
+		addTeamPanel.add(addTeamLabel);
+		teamListPanel.add(addTeamPanel);
+		addTeamPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				new CRUDOutput(CRUDOutput.CREATE_OUTPUT, project, null, null).actionPerformed(new ActionEvent(addTeamPanel, ActionEvent.ACTION_PERFORMED, "createOutput"));
+			}
+		});
+
 		teamListPanel.revalidate();
 		teamListPanel.repaint();
 	}//public void actionPerformed(ActionEvent e) {

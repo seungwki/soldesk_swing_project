@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import VO.Project;
 import VO.Team;
 import frame.action.ShowTeamListAction;
-import frame.action.createSessionAction;
+import frame.action.SessionCreateAction;
 
 public class showTeamList extends JPanel {
 	Project project;
@@ -42,6 +42,7 @@ public class showTeamList extends JPanel {
 			int degree = project.getTeams2().get(i).getDegree();
 			teamMap.get(degree).add(project.getTeams2().get(i));
 		}
+
 		//차수(degree)에 해당하는 팀 길이를 체크하고, size!=0이라면 차수 버튼을 추가
 		boolean isClicked = false;
 		for (int i = 1; i < 6; i++) {
@@ -66,9 +67,9 @@ public class showTeamList extends JPanel {
 				sessionListPanel.add(createBtn);
 				createBtn.setName("addSession");
 				int degree = i;
-				createBtn.addActionListener(new createSessionAction(project, degree, teamMap));
+				createBtn.addActionListener(new SessionCreateAction(project, degree, teamMap));
 				break;
 			}
 		}
-	}
+	}//생성자
 }

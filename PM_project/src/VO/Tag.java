@@ -3,14 +3,16 @@ package VO;
 import java.awt.Color;
 
 public class Tag {
-	private String name;//이름
-	private String remark;//설명 <<< 표시 안 됨
-	private Color color;//색
+	private String name;
+	private String remark;
+	private Color color;
+	private boolean bookmarked;
 
 	public Tag(String name, String remark, Color color) {
 		this.name = name;
 		this.remark = remark;
 		this.color = color;
+		this.bookmarked = false; // 기본값은 false
 	}
 
 	// --- Getter 메서드 ---
@@ -24,6 +26,14 @@ public class Tag {
 
 	public Color getColor() {
 		return color;
+	}
+
+	public boolean isBookmarked() {
+		return bookmarked;
+	}
+
+	public void setBookmarked(boolean bookmarked) {
+		this.bookmarked = bookmarked;
 	}
 
 	// --- Setter 메서드 ---

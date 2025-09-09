@@ -1,6 +1,9 @@
 package frame;
 
 import javax.swing.*;
+
+import VO.Data;
+
 import java.awt.*;
 
 public class BasicFrame extends JFrame {
@@ -8,6 +11,7 @@ public class BasicFrame extends JFrame {
 	private static JFrame instance;
 
 	private BasicFrame(JPanel jPanel) {
+		new Data();
 		//스크롤바 추가
 		JScrollPane scroll = new JScrollPane();
 		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
