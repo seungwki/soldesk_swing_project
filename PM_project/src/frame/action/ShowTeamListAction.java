@@ -41,8 +41,8 @@ public class ShowTeamListAction implements ActionListener {
 		}
 		//추가
 		for (int i = 0; i < project.getTeams2().size(); i++) {
-			if (project.getTeams2().get(i).getDegree() == degree) {
-				Team team = project.getTeams2().get(i);
+			Team team = project.getTeams2().get(i);
+			if (project.getTeams2().get(i).getDegree() == degree && team.getOutput() != null) {
 				JPanel tempPanel = new JPanel();
 				tempPanel.setLayout(new GridLayout(0, 1));//임시용
 				JLabel tempLabel1 = new JLabel(team.getTName());

@@ -673,11 +673,10 @@ public class Data {
 			}
 			StringTokenizer stk = new StringTokenizer(sb.toString(), "\n");
 			for (int i = 0; i < projectData.size(); i++) {
-				for (int j = 0; j < projectData.get(i).getTeams2().size(); j++) {
+				for (int j = 0; j < projectData.get(i).getTeams2().size() - 1; j++) {
+					//				for (int j = 0; j < projectData.get(i).getTeams2().size(); j++) {
 					if (stk.hasMoreTokens()) {
 						projectData.get(i).getTeams2().get(j).setOutput(new Output(stk.nextToken()));
-					} else {
-						projectData.get(i).getTeams2().get(j).setOutput(new Output(""));
 					}
 				}
 			} //산출물 입력 for
