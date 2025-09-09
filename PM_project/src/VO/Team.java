@@ -45,4 +45,10 @@ public class Team {
 	public boolean hasStudent(Student s) {
 		return members.contains(s);
 	}
+
+	@Override
+	public String toString() {
+		return tName;
+	}
+	
 }

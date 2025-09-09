@@ -95,21 +95,25 @@ public class CRUDOutput implements ActionListener {
 			JLabel tagSettingLabel = new JLabel("태그 설정");
 			//JList 2개 넣고 버튼 2개 넣고
 			tagSettingPanel.setLayout(new GridLayout(2, 1));
-			tagSettingPanel.add(tagSettingLabel);
 			JPanel tagListPanel = new JPanel();
 			tagListPanel.setLayout(new GridLayout(1, 3));
 			DefaultListModel<Tag> model = new DefaultListModel<>();
 			model.addAll(TagRepository.getOutputTags());
 			JList<Tag> leftJlist = new JList<Tag>(model);
-			tagListPanel.add(leftJlist);
 			JPanel middlePanel = new JPanel();
 			middlePanel.setLayout(new GridLayout(2, 1));
 			middlePanel.add(new JButton("추가\n>>>"));
 			middlePanel.add(new JButton("제거\n<<<"));
 			JList<Tag> rightJlist = new JList<Tag>();
+			tagSettingPanel.add(tagSettingLabel);
+			JScrollPane scrollLeft = new JScrollPane(leftJlist);
+			JScrollPane scrollRight = new JScrollPane(rightJlist);
+			tagListPanel.add(scrollLeft);
 			tagListPanel.add(middlePanel);
-			tagListPanel.add(rightJlist);
-			dialog.add(tagListPanel);
+			tagListPanel.add(scrollRight);
+			tagSettingPanel.add(tagListPanel);
+			scrollLeft.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			scrollRight.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			dialog.add(tagSettingPanel);
 
 			//점수(만점)

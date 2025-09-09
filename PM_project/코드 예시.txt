@@ -1,44 +1,4 @@
-import javax.swing.*;
-import java.awt.*;
-
-public class ModalDialogExample {
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("메인 창");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
-        frame.setLayout(new FlowLayout());
-
-        JButton btn = new JButton("모달창 열기");
-        frame.add(btn);
-
-        btn.addActionListener(e -> {
-            // JDialog 생성
-            JDialog dialog = new JDialog(frame, "모달 입력창", true); // ★ true → modal
-            dialog.setSize(300, 200);
-            dialog.setLayout(new FlowLayout());
-
-            JTextField inputField = new JTextField(15);
-            JButton okBtn = new JButton("확인");
-            JButton cancelBtn = new JButton("취소");
-
-            dialog.add(new JLabel("주제를 입력하세요:"));
-            dialog.add(inputField);
-            dialog.add(okBtn);
-            dialog.add(cancelBtn);
-
-            okBtn.addActionListener(ev -> {
-                String value = inputField.getText();
-                JOptionPane.showMessageDialog(dialog, "입력한 값: " + value);
-                dialog.dispose();
-            });
-
-            cancelBtn.addActionListener(ev -> dialog.dispose());
-
-            dialog.setLocationRelativeTo(frame);
-            dialog.setVisible(true);
-        });
-
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-    }
-}
+        // JTextArea를 JScrollPane에 추가
+        JScrollPane scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
