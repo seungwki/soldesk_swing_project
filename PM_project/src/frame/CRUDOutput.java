@@ -2,6 +2,10 @@ package frame;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,10 +57,7 @@ public class CRUDOutput implements ActionListener {
 			width = 600;
 			height = 450;
 			dialog.setSize(width, height);
-			//			dialog.setLayout(new FlowLayout());
 			dialog.setLayout(new GridLayout(0, 1));
-			// 생성
-			//			if (input == 'c') {
 			// 주제
 			JPanel titlePanel = new JPanel();
 			JLabel titleLabel = new JLabel("주제");
@@ -97,23 +98,90 @@ public class CRUDOutput implements ActionListener {
 			tagSettingPanel.setLayout(new GridLayout(2, 1));
 			JPanel tagListPanel = new JPanel();
 			tagListPanel.setLayout(new GridLayout(1, 3));
-			DefaultListModel<Tag> model = new DefaultListModel<>();
-			model.addAll(TagRepository.getOutputTags());
-			JList<Tag> leftJlist = new JList<Tag>(model);
+			DefaultListModel<Tag> modelLeft = new DefaultListModel<>();
+			DefaultListModel<Tag> modelRight = new DefaultListModel<>();
+			//			DefaultListModel<Tag> model = new DefaultListModel<>();
+			ArrayList<Tag> notContainTagList = new ArrayList<Tag>();
+			notContainTagList.addAll(TagRepository.getOutputTags());
+			if (input == CRUDOutput.EDIT_OUTPUT) {//수정이라면 대상이 가진 태그 목록을 가져와서 제외하고 leftJList에 채울 것
+				for (int i = 0; i < output.getTagList().size(); i++) {
+					if (notContainTagList.contains(output.getTagList().get(i))) {
+						notContainTagList.remove(output.getTagList().get(i));
+					}
+				}
+			}
+			modelLeft.addAll(notContainTagList);
+			JList<Tag> leftJlist = new JList<Tag>(modelLeft);
+			JList<Tag> rightJlist = new JList<Tag>(modelRight);
+			leftJlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			rightJlist.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			JPanel middlePanel = new JPanel();
 			middlePanel.setLayout(new GridLayout(2, 1));
-			middlePanel.add(new JButton("추가\n>>>"));
-			middlePanel.add(new JButton("제거\n<<<"));
-			JList<Tag> rightJlist = new JList<Tag>();
-			tagSettingPanel.add(tagSettingLabel);
+			JButton addTag = new JButton("추가\n→");
+			JButton removeTag = new JButton("제거\n←");
+			//추가 버튼 기능 구현
+			addTag.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Tag selectedTag = leftJlist.getSelectedValue();
+					modelRight.addElement(selectedTag);
+					modelLeft.removeElement(selectedTag);
+					//정렬
+					ArrayList<Tag> rightList = new ArrayList<Tag>();
+					for (int i = 0; i < modelRight.size(); i++) {
+						rightList.add(modelRight.get(i));
+					}
+					rightList.sort(new Comparator<Tag>() {
+						@Override
+						public int compare(Tag o1, Tag o2) {
+							return o2.getName().compareTo(o1.getName());
+						}
+					});
+					modelRight.removeAllElements();
+					modelRight.addAll(rightList);
+					leftJlist.revalidate();
+					leftJlist.repaint();
+					rightJlist.revalidate();
+					rightJlist.repaint();
+				}//actionPerformed
+			});//addActionListener
+			//제거 버튼 기능 구현
+			removeTag.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Tag selectedTag = rightJlist.getSelectedValue();
+					modelLeft.addElement(selectedTag);
+					modelRight.removeElement(selectedTag);
+					//정렬
+					ArrayList<Tag> leftList = new ArrayList<Tag>();
+					for (int i = 0; i < modelLeft.size(); i++) {
+						leftList.add(modelLeft.get(i));
+					}
+					leftList.sort(new Comparator<Tag>() {
+						@Override
+						public int compare(Tag o1, Tag o2) {
+							return o2.getName().compareTo(o1.getName());
+						}
+					});
+					modelLeft.removeAllElements();
+					modelLeft.addAll(leftList);
+					leftJlist.revalidate();
+					leftJlist.repaint();
+					rightJlist.revalidate();
+					rightJlist.repaint();
+				}//actionPerformed
+			});//addActionListener
 			JScrollPane scrollLeft = new JScrollPane(leftJlist);
 			JScrollPane scrollRight = new JScrollPane(rightJlist);
+			scrollLeft.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			scrollRight.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+			middlePanel.add(addTag);
+			middlePanel.add(removeTag);
+			tagSettingPanel.add(tagSettingLabel);
 			tagListPanel.add(scrollLeft);
 			tagListPanel.add(middlePanel);
 			tagListPanel.add(scrollRight);
 			tagSettingPanel.add(tagListPanel);
-			scrollLeft.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-			scrollRight.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 			dialog.add(tagSettingPanel);
 
 			//점수(만점)
