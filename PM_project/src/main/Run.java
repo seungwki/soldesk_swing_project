@@ -1,13 +1,15 @@
 package main;
 
-import javax.swing.JFrame;
-
-import frame.BasicFrame;
-import frame.LoginFrame;
+import VO.Data;
+import front_frame.ClassManager;
+import front_frame.DefaultFrame;
 
 public class Run {
 	public static void main(String[] args) {
-		JFrame frame = BasicFrame.getInstance(new LoginFrame());
-		frame.setVisible(true);
+		Data data = new Data();
+//		System.out.println(data.projectData.size());
+		DefaultFrame.getInstance(new ClassManager());
+		//		JFrame frame = BasicFrame.getInstance(new LoginFrame());
+		//		frame.setVisible(true);
 	}// main
 }

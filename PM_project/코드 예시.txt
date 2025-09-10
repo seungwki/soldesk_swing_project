@@ -2,3 +2,16 @@
         JScrollPane scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        
+        ActionListener action = e -> {
+    System.out.println("Action performed!");
+};
+
+panel.addMouseListener(new MouseAdapter() {
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (SwingUtilities.isLeftMouseButton(e)) {
+            action.actionPerformed(new ActionEvent(e.getSource(), ActionEvent.ACTION_PERFORMED, "clicked"));
+        }
+    }
+});

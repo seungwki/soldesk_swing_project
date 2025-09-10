@@ -48,7 +48,7 @@ public class ProjectList extends JPanel {
 			add(projectPanelList.get(i));
 		}
 		projectCreationPanel.addMouseListener(new projectCreationAction());
-	}
+	}//생성자
 
 	// 정렬
 	private static void sortProjectList() {
@@ -70,5 +70,5 @@ public class ProjectList extends JPanel {
 				}
 			}
 		});
-	}
+	}//sortProjectList
 }
