@@ -12,65 +12,87 @@ import frame.action.ShowTeamListAction;
 
 public class ClassManagerCard extends JPanel {
 	private Project project;
-	private Image bookmarkOn = new ImageIcon("resource\\image\\bookmark_on.png").getImage().getScaledInstance(30, 60, Image.SCALE_SMOOTH);// 즐찾on
+	private JLabel titleLabel;
+	private JLabel subLabel;
+	private Image bookmarkOn = new ImageIcon("resource\\image\\bookmark_on.png").getImage().getScaledInstance(30, 60, Image.SCALE_SMOOTH);
 
-	public Project getProject() {
-		return project;
-	}
-
-	public ClassManagerCard(Project project) {//생성자
+	public ClassManagerCard(Project project) {
 		this.project = project;
 
-		setOpaque(false); // 배경 투명 처리
-		setPreferredSize(new Dimension(450, 450));
+		setOpaque(false); // 배경 직접 그림
+		setPreferredSize(new Dimension(200, 120));
+		setLayout(new BorderLayout());
 
-		// 우클릭 팝업 메뉴 처리
+		// 제목 라벨
+		titleLabel = new JLabel(project != null ? project.getPlace() : "+", SwingConstants.CENTER);
+		titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 25));
+		titleLabel.setOpaque(false);
+		titleLabel.setName("title");
+		add(titleLabel, BorderLayout.CENTER);
+
+		// 부제목 라벨
+		subLabel = new JLabel(project != null ? project.getName() : "", SwingConstants.CENTER);
+		subLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+		subLabel.setOpaque(false);
+		subLabel.setName("subtitle");
+		subLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 8, 0));
+		add(subLabel, BorderLayout.SOUTH);
+
+		// 마우스 이벤트 그대로 유지
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				//좌클릭 시 project 건네면서 이동
 				if (SwingUtilities.isLeftMouseButton(e)) {
-					//팀 목록 보기로 이동
 					BasePage.changePage(new ClassManagerCardViewer(project));
 				}
-				//우클릭 시 팝업 띄움
 				if (SwingUtilities.isRightMouseButton(e)) {
 					JPopupMenu popupMenu = createPopupMenu();
 					popupMenu.show(e.getComponent(), e.getX(), e.getY());
 				}
-			}//mousePressed
-		});//addMouseListener(
-	}//생성자
+			}
+		});
+	}
 
-	//	private JPopupMenu createPopupMenu(Component source) {
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();
-		//즐겨찾기
 		JMenuItem favoriteItem = new JMenuItem(project.isBookmark() ? "즐겨찾기 해제" : "즐겨찾기");
 		favoriteItem.addActionListener(e -> {
 			project.setBookmark(!project.isBookmark());
 			repaint();
 		});
 		menu.add(favoriteItem);
-		//수정
+
 		JMenuItem editItem = new JMenuItem("수정");
 		editItem.addActionListener(e -> {
 			// 수정 기능
+			JTextField newTitle = new JTextField(20);
+			JTextField newSubtitle = new JTextField(10);
+			JPanel pane = new JPanel();
+			pane.add(new JLabel("이름 : "));
+			pane.add(newTitle);
+			pane.add(new JLabel("위치 : "));
+			pane.add(newSubtitle);
+			int result = JOptionPane.showConfirmDialog(null, pane, "수정", JOptionPane.OK_CANCEL_OPTION);
+			if (result == JOptionPane.OK_OPTION) {
+				if (!newSubtitle.getText().equals("")) {
+					titleLabel.setText(newSubtitle.getText());
+				}
+				if (!newTitle.getText().equals("")) {
+					subLabel.setText(newTitle.getText());
+				}
+			}
+			newTitle.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, KeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+			newTitle.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, KeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS));
+			newSubtitle.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, KeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+			newSubtitle.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, KeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS));
 		});
 		menu.add(editItem);
 
-		//삭제
 		JMenuItem deleteItem = new JMenuItem("삭제");
 		deleteItem.addActionListener(e -> {
-			// 삭제 기능
 			int result = JOptionPane.showConfirmDialog(null, project.getPlace() + "을(를) 삭제하시겠습니까?", "삭제 확인", JOptionPane.YES_NO_OPTION);
 			if (result == JOptionPane.YES_OPTION) {
-				ArrayList<Project> projectList = ClassManager.projectData;
-				for (int i = 0; i < projectList.size(); i++) {
-					if (projectList.get(i).getName().equals(project.getName())) {
-						projectList.remove(project);
-					}
-				}
+				ClassManager.projectData.remove(project);
 				DefaultFrame.getInstance(new ClassManager());
 			}
 		});
@@ -105,24 +127,6 @@ public class ClassManagerCard extends JPanel {
 		g2.setColor(new Color(180, 180, 180));
 		g2.draw(cardShape);
 
-		// 제목
-		g2.setColor(Color.BLACK);
-		g2.setFont(new Font("맑은 고딕", Font.BOLD, 25));
-		FontMetrics fm = g2.getFontMetrics();
-		int titleX = (w - fm.stringWidth(project != null ? project.getPlace() : "+")) / 2;
-		int titleY = (whiteHeight - fm.getHeight()) / 2 + fm.getAscent() + 5;
-		g2.drawString(project != null ? project.getPlace() : "+", titleX, titleY);
-
-		// 부제목
-		g2.setFont(new Font("맑은 고딕", Font.BOLD, 13));
-		fm = g2.getFontMetrics();
-		int blueY = whiteHeight;
-		int blueHeight = h - blueY;
-		int subX = (w - fm.stringWidth(project != null ? project.getName() : "")) / 2;
-		int subY = blueY + (blueHeight - fm.getHeight()) / 2 + fm.getAscent() + 1;
-		g2.drawString(project != null ? project.getName() : "", subX, subY);
-
-		// 북마크
 		if (project != null && project.isBookmark()) {
 			g2.drawImage(bookmarkOn, 10, 1, this);
 		}
