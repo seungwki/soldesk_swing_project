@@ -51,7 +51,7 @@ public class showTeamList extends JPanel {
 				tempDegreeBtn.setName(String.valueOf(i));
 				sessionListPanel.add(tempDegreeBtn);
 				//차수 버튼에 "차수에 해당하는 팀 목록들 가져오기" 기능 추가
-				tempDegreeBtn.addActionListener(new ShowTeamListAction(i, project));
+//				tempDegreeBtn.addActionListener(new ShowTeamListAction(i, project));
 				if (!isClicked) {
 					tempDegreeBtn.doClick();
 					isClicked = true;

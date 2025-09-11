@@ -1,8 +1,14 @@
 package front_ui;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import front_util.Theme;
 
@@ -11,13 +17,15 @@ public class FolderTab extends JPanel {
     private final String text;
     private final Color bgColor;
     private final Runnable onClick;
+    private boolean selected = false; // 0911 추가코드
 
     public FolderTab(String text, Color bgColor, int w, int h, Runnable onClick) {
         super(null);
         this.text = text;
         this.bgColor = bgColor;
         this.onClick = onClick;
-        setOpaque(false);
+        
+        setOpaque(false); 
         setSize(w, h);
 
         JLabel t = new JLabel(text, SwingConstants.CENTER);
@@ -33,14 +41,17 @@ public class FolderTab extends JPanel {
         });
     }
 
-    @Override protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    @Override 
+    protected void paintComponent(Graphics g) {
+    //super.paintComponent(g); // 0910 일단 생략으로 수정
         Graphics2D g2 = (Graphics2D) g.create();
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         int w = getWidth(), h = getHeight();
         int r = Theme.RADIUS_12;  // 상단 라운드 반경
-        g2.setColor(bgColor);
+        
+        Color fillColor = selected ? Theme.ACCENT_OUTPUT : Theme.TAB_OFF_BG;  // 선택된 탭은 노란색, 아닌 건 연한 회색
+        g2.setColor(fillColor); // 0911 변경
 
         java.awt.geom.Path2D p = new java.awt.geom.Path2D.Float();
         p.moveTo(0, h);
@@ -53,6 +64,16 @@ public class FolderTab extends JPanel {
         g2.fill(p);
 
         g2.dispose();
+        
+        super.paintComponent(g);
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+        repaint();
+    }
 }

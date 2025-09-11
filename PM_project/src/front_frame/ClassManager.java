@@ -58,6 +58,7 @@ public class ClassManager extends BasePage {
 	private void layoutCards() {
 		JPanel content = getContentPanel();
 		content.removeAll();
+		content.setName("ClassManager");
 		int cardWidth = 340, cardHeight = 130;
 		int gapX = 30, gapY = 20;
 		int x = 40, y = 20;

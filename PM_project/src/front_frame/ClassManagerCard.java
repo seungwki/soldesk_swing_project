@@ -18,11 +18,7 @@ public class ClassManagerCard extends JPanel {
 		return project;
 	}
 
-	public void setProject(Project project) {
-		this.project = project;
-	}
-
-	public ClassManagerCard(Project project) {
+	public ClassManagerCard(Project project) {//생성자
 		this.project = project;
 
 		setOpaque(false); // 배경 투명 처리
@@ -30,41 +26,40 @@ public class ClassManagerCard extends JPanel {
 
 		// 우클릭 팝업 메뉴 처리
 		addMouseListener(new MouseAdapter() {
-			ActionListener action = new ShowTeamListAction(1, project);
-
 			@Override
 			public void mousePressed(MouseEvent e) {
+				//좌클릭 시 project 건네면서 이동
 				if (SwingUtilities.isLeftMouseButton(e)) {
 					//팀 목록 보기로 이동
-					action.actionPerformed(new ActionEvent(e.getSource(), ActionEvent.ACTION_PERFORMED, "clicked"));
+					BasePage.changePage(new ClassManagerCardViewer(project));
 				}
+				//우클릭 시 팝업 띄움
 				if (SwingUtilities.isRightMouseButton(e)) {
 					JPopupMenu popupMenu = createPopupMenu();
 					popupMenu.show(e.getComponent(), e.getX(), e.getY());
-					//우클릭 메뉴 띄움
 				}
-			}
+			}//mousePressed
 		});//addMouseListener(
+	}//생성자
 
-	}
-
+	//	private JPopupMenu createPopupMenu(Component source) {
 	private JPopupMenu createPopupMenu() {
 		JPopupMenu menu = new JPopupMenu();
-
+		//즐겨찾기
 		JMenuItem favoriteItem = new JMenuItem(project.isBookmark() ? "즐겨찾기 해제" : "즐겨찾기");
 		favoriteItem.addActionListener(e -> {
 			project.setBookmark(!project.isBookmark());
 			repaint();
 		});
 		menu.add(favoriteItem);
-
+		//수정
 		JMenuItem editItem = new JMenuItem("수정");
 		editItem.addActionListener(e -> {
 			// 수정 기능
-			//			JOptionPane.showMessageDialog(this, title + " 수정하기");
 		});
 		menu.add(editItem);
 
+		//삭제
 		JMenuItem deleteItem = new JMenuItem("삭제");
 		deleteItem.addActionListener(e -> {
 			// 삭제 기능

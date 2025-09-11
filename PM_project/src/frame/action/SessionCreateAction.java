@@ -39,7 +39,7 @@ public class SessionCreateAction implements ActionListener {
 		newSession.setName(String.valueOf(degree));
 		teamMap.put(degree, new ArrayList<Team>());
 		//TODO : 기능 추가
-		newSession.addActionListener(new ShowTeamListAction(degree, project));
+//		newSession.addActionListener(new ShowTeamListAction(degree, project));
 		//TODO : 부착하고
 		sessionListPanel.add(newSession);
 		//TODO : teamMap에 빈 팀을 하나 넣을 것(안 그러면 벗어났을 때 생성 안 됨)

@@ -1,6 +1,9 @@
-package front_ui;
+package front_frame;
 
 import javax.swing.JPanel;
+
+import front_ui.FolderTab;
+import front_ui.TabSpec;
 
 //태그 관리 화면용 클래스
 public class TabsBar extends JPanel {

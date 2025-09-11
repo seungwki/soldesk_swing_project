@@ -3,7 +3,6 @@ package VO;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.StringTokenizer;
 
 public class Data {
@@ -150,7 +149,7 @@ public class Data {
 		projectData.get(7).addTeam(new Team("8반-4차-3팀", 4));
 		projectData.get(7).addTeam(new Team("8반-4차-4팀", 4));
 		//학생 추가
-		//		/*
+		//				/*
 		projectData.get(0).getTeams2().get(0).addMember(new Student("학생1", "010-9260-6175"));
 		projectData.get(0).getTeams2().get(1).addMember(new Student("학생2", "010-9353-8824"));
 		projectData.get(0).getTeams2().get(2).addMember(new Student("학생3", "010-7239-8639"));
@@ -663,7 +662,7 @@ public class Data {
 		projectData.get(7).getTeams2().get(13).addMember(new Student("학생510", "010-2542-3543"));
 		projectData.get(7).getTeams2().get(14).addMember(new Student("학생511", "010-7444-8122"));
 		projectData.get(7).getTeams2().get(15).addMember(new Student("학생512", "010-1781-6287"));
-		//		*/
+		//				*/
 		//산출물 추가
 		try (FileReader fr = new FileReader(new File("resource\\data\\outputList.txt"))) {
 			StringBuilder sb = new StringBuilder();
@@ -684,5 +683,6 @@ public class Data {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+
 	}//생성자
 }
