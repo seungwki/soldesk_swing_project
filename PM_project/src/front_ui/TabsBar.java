@@ -16,8 +16,8 @@ public class TabsBar extends JPanel {
 	public TabsBar(TabSpec[] specs, int tabW, int tabH) {
 		super(null);
 		setOpaque(false);
-		
-		this.tabSpecs = specs; 
+
+		this.tabSpecs = specs;
 		tabs = new FolderTab[specs.length];
 		for (int i = 0; i < specs.length; i++) {
 			int idx = i;
@@ -25,12 +25,11 @@ public class TabsBar extends JPanel {
 			add(tabs[i]);
 		}
 		setSize(tabW * specs.length, tabH);
-		
-		 // 초기 선택 상태 반영
-        setSelectedIndex(0, false);
+
+		// 초기 선택 상태 반영
+		setSelectedIndex(0, false);
 	}
 	// TabsBar 클래스 내부
-
 
 	public TabSpec getTabSpec(int index) {
 		return tabSpecs[index];

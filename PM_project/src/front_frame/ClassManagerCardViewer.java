@@ -1,5 +1,6 @@
 package front_frame;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,40 +12,47 @@ import front_ui.AutoGrowBox;
 import front_ui.FolderTab;
 import front_ui.TabSpec;
 import front_ui.TabsBar;
+import front_ui.TagListPanel;
 import front_util.Theme;
 
 public class ClassManagerCardViewer extends BasePage {
-
 	//백엔드 필드
 	private Project project;
 	TreeMap<Integer, ArrayList<Team>> teamMap = new TreeMap<Integer, ArrayList<Team>>();
 	boolean isClicked;
 	boolean isCreatable;
-
+	//프론트엔드 필드
+	//파일 모양의 내용 표기 할 공간
+	final int boxX = 19, boxW = 752, boxH = 460;
+	final int boxBaseY = 24; // 탭 기준 Y(탭은 이 기준 유지)
+	final int boxDrop = 12; // 박스/내용물만 아래로 내림
+	final int boxY = boxBaseY + boxDrop;
+	final int contentX = 16, contentY = 34;
+	final int contentW = boxW - contentX * 2;
+	final int contentH = boxH - contentY - 16;
+	//탭
 	private AutoGrowBox box;
+	private TagListPanel studentList, outputList;
 	private TabsBar tabs;
+	final int tabW = 100, tabH = 28;
+	final int tabBottom = boxBaseY + Theme.BORDER_THICK; // 내부 상단선
+	final int tabY = tabBottom - tabH;
+	private final int gap = 110;
+	//색
+	private static final Color BORDER_SELECTED = Theme.TAB_SELECTED;
+	private static final Color BORDER_UNSELECTED = Theme.TAB_UNSELECTED;
+	private static final Color TAG_LIST_BACKGROUND = Theme.TAB_UNSELECTED;
+	private static final Color TEAM_NAME_BACKGROUND = Theme.TAB_UNSELECTED;
+	//콘텐츠 담기는 곳
 	private List<TabContentPanel> contentPanels = new ArrayList<>();
 
-	private final int boxX = 10, boxW = 770, boxH = 380;
-	private final int tabW = 100, tabH = 30;
-	private final int tabY = 20;
-
-	private final int contentX = 15;
-	private final int contentY = tabY + tabH + 5; // 탭 바로 아래 5px 여백
-	private final int contentW = boxW - 2 * contentX;
-	private final int contentH = 350;
-
-	private final int gap = 110;
-
-	public ClassManagerCardViewer(Project project) {//생성자
+	//생성자
+	public ClassManagerCardViewer(Project project) {
 		//백엔드 필드
-		boolean isClicked = false;
 		this.project = project;
-
 		for (int i = 1; i < 6; i++) {
 			teamMap.put(i, new ArrayList<Team>());
 		}
-
 		for (int i = 0; i < project.getTeams2().size(); i++) {
 			int degree = project.getTeams2().get(i).getDegree();
 			teamMap.get(degree).add(project.getTeams2().get(i));
@@ -57,23 +65,15 @@ public class ClassManagerCardViewer extends BasePage {
 			}
 		}
 
-		// ── 박스 생성 (내용 영역) ─────────────────────
+		//프론트엔드 필드
+		// ── 박스(자동 확장형) ───────────────────────────── , 내용 추가 시 스크롤바 갱신
 		box = new AutoGrowBox();
-		box.setBounds(boxX, contentY, boxW, boxH);
-		box.setBorderColor(Theme.LIGHT_BORDER); // 연한 테두리
-		box.setBackground(Theme.TAB_UNSELECTED); // 연한 배경색 (탭 비선택 배경색과 동일)
-		box.setOpaque(true);
+		box.setBounds(boxX, boxY, boxW, boxH);
+		box.setBorderColor(Theme.LIGHT_BORDER);
 		getContentPanel().add(box);
-		// 탭 생성
+
+		//로직
 		initTabs(project);
-		// ── 뒤로가기 버튼 ─────────────────────
-		//		JButton backButton = new JButton("<");
-		//		backButton.setBounds(20, contentY + boxH + 20, 120, 30);
-		//		getContentPanel().add(backButton);
-		//		backButton.addActionListener(e -> {
-		//			DefaultFrame.getInstance(new ClassManager());
-		//		});
-		box.autoGrow();
 		refreshScroll();
 	}//생성자
 
@@ -84,35 +84,34 @@ public class ClassManagerCardViewer extends BasePage {
 		while (iter.hasNext()) {
 			int i = iter.next();
 			if (teamMap.get(i).size() != 0) {
-				System.out.println(i);
+				//				System.out.println(i);
 				arrayList.add(i);
 			}
 		}
 		TabSpec[] tabSpecs;
-		if (arrayList.size() < 5) {
+		//길이가 5보다 작다면 차수 생성 버튼을 추가
+		if (isCreatable) {
 			tabSpecs = new TabSpec[arrayList.size() + 1];
 			for (int i = 0; i < arrayList.size(); i++) {
 				tabSpecs[i] = new TabSpec(arrayList.get(i) + "차", Theme.TAB_UNSELECTED);
 			}
-			tabSpecs[arrayList.size()] = new TabSpec("+", Theme.TAB_OFF_BG);
+			tabSpecs[arrayList.size()] = new TabSpec("+", Theme.TAB_UNSELECTED);
 			tabs = new TabsBar(tabSpecs, tabW, tabH);
-		} else {
+		} else {//아니라면 차수만 생성
 			tabSpecs = new TabSpec[arrayList.size()];
 			for (int i = 0; i < arrayList.size(); i++) {
 				tabSpecs[i] = new TabSpec(arrayList.get(i) + "차", Theme.TAB_UNSELECTED);
 			}
 			tabs = new TabsBar(tabSpecs, tabW, tabH);
 		}
-		//
-
-		// 탭 위치 설정
+		//		// 탭 위치 설정
 		for (int i = 0; i < tabSpecs.length; i++) {
 			tabs.setTabLocation(i, boxX + i * gap, tabY);
 		}
 
-		int tabsRight = boxX + (tabSpecs.length - 1) * gap + tabW;
-		int tabsBottom = tabY + tabH;
-		tabs.setBounds(0, 0, tabsRight, tabsBottom);
+		//		int tabsRight = boxX + (tabSpecs.length - 1) * gap + tabW;
+		//		int tabsBottom = tabY + tabH;
+		//		tabs.setBounds(0, 0, tabsRight, tabsBottom);
 
 		getContentPanel().add(tabs);
 		getContentPanel().setComponentZOrder(tabs, 0);
@@ -126,79 +125,76 @@ public class ClassManagerCardViewer extends BasePage {
 			contentPanels.add(panel);
 			box.add(panel);
 		}
-
-		//		showTabContent(0);
-
-		// 탭 클릭 이벤트 처리
-		tabs.setOnChange(e -> {
-			if (e == tabs.getTabCount() - 1) {
-				addNewTab();
-				return;
-			}
-			showTabContent(e);
-			updateTabColors(e);
-		});
+		//		// 탭 클릭 이벤트 처리
+		//		tabs.setOnChange(e -> {
+		//			if (e == tabs.getTabCount() - 1) {
+		//				addNewTab();
+		//				return;
+		//			}
+		//			showTabContent(e);
+		//			updateTabColors(e);
+		//		});
 	}//initTabs
 
-	private void addNewTab() {
-		int currentCount = tabs.getTabCount() - 1;
-		String newTabTitle = (currentCount + 1) + "차";
-		TabSpec[] newTabs;
-		if (currentCount < 4) {
-			newTabs = new TabSpec[currentCount + 2];
-		} else {
-			newTabs = new TabSpec[currentCount + 1];
-		}
-		for (int i = 0; i < currentCount; i++) {
-			newTabs[i] = tabs.getTabSpec(i);
-		} //이럴거면 arrayList를 써야지
-		newTabs[currentCount] = new TabSpec(newTabTitle, Theme.TAB_UNSELECTED);
-		if (currentCount < 4) {
-			newTabs[currentCount + 1] = new TabSpec("+", Theme.TAB_UNSELECTED);
-		}
+	//	private void addNewTab() {
+	//		int currentCount = tabs.getTabCount() - 1;
+	//		String newTabTitle = (currentCount + 1) + "차";
+	//		TabSpec[] newTabs;
+	//		if (currentCount < 4) {
+	//			newTabs = new TabSpec[currentCount + 2];
+	//		} else {
+	//			newTabs = new TabSpec[currentCount + 1];
+	//		}
+	//		for (int i = 0; i < currentCount; i++) {
+	//			newTabs[i] = tabs.getTabSpec(i);
+	//		} //이럴거면 arrayList를 썼어야지
+	//		newTabs[currentCount] = new TabSpec(newTabTitle, Theme.TAB_UNSELECTED);
+	//		if (currentCount < 4) {
+	//			newTabs[currentCount + 1] = new TabSpec("+", Theme.TAB_UNSELECTED);
+	//		}
+	//
+	//		getContentPanel().remove(tabs);
+	//
+	//		tabs = new TabsBar(newTabs, tabW, tabH);
+	//		for (int i = 0; i < newTabs.length; i++) {
+	//			tabs.setTabLocation(i, boxX + i * gap, tabY);
+	//		}
+	//		int tabsRight = boxX + (newTabs.length - 1) * gap + tabW;
+	//		tabs.setBounds(0, 0, tabsRight, tabY + tabH);
+	//
+	//		getContentPanel().add(tabs);
+	//		getContentPanel().setComponentZOrder(tabs, 0);
+	//		getContentPanel().setComponentZOrder(box, 1);
+	//
+	//		TabContentPanel newPanel = createContentPanel(newTabTitle + " 내용");
+	//		contentPanels.add(newPanel);
+	//		box.add(newPanel);
+	//
+	//		showTabContent(currentCount);
+	//
+	//		tabs.setOnChange(selected -> {
+	//			if (selected == tabs.getTabCount() - 1) {
+	//				addNewTab();
+	//				return;
+	//			}
+	//			showTabContent(selected);
+	//			updateTabColors(selected);
+	//		});
+	//
+	//		tabs.setSelectedIndex(currentCount, true);
+	//
+	//		updateTabColors(currentCount);
+	//
+	//		getContentPanel().revalidate();
+	//		getContentPanel().repaint();
+	//	}//addNewTab
 
-		getContentPanel().remove(tabs);
-
-		tabs = new TabsBar(newTabs, tabW, tabH);
-		for (int i = 0; i < newTabs.length; i++) {
-			tabs.setTabLocation(i, boxX + i * gap, tabY);
-		}
-		int tabsRight = boxX + (newTabs.length - 1) * gap + tabW;
-		tabs.setBounds(0, 0, tabsRight, tabY + tabH);
-
-		getContentPanel().add(tabs);
-		getContentPanel().setComponentZOrder(tabs, 0);
-		getContentPanel().setComponentZOrder(box, 1);
-
-		TabContentPanel newPanel = createContentPanel(newTabTitle + " 내용");
-		contentPanels.add(newPanel);
-		box.add(newPanel);
-
-		showTabContent(currentCount);
-
-		tabs.setOnChange(selected -> {
-			if (selected == tabs.getTabCount() - 1) {
-				addNewTab();
-				return;
-			}
-			showTabContent(selected);
-			updateTabColors(selected);
-		});
-
-		tabs.setSelectedIndex(currentCount, true);
-
-		updateTabColors(currentCount);
-
-		getContentPanel().revalidate();
-		getContentPanel().repaint();
-	}//addNewTab
-
-	private void showTabContent(int index) {
-		for (int i = 0; i < contentPanels.size(); i++) {
-			contentPanels.get(i).setVisible(i == index);
-		}
-		getContentPanel().repaint();
-	}//showTabContent
+	//	private void showTabContent(int index) {
+	//		for (int i = 0; i < contentPanels.size(); i++) {
+	//			contentPanels.get(i).setVisible(i == index);
+	//		}
+	//		getContentPanel().repaint();
+	//}//showTabContent
 
 	private TabContentPanel createContentPanel(String labelText) {
 		TabContentPanel panel = new TabContentPanel();
@@ -211,12 +207,12 @@ public class ClassManagerCardViewer extends BasePage {
 		return panel;
 	}//createContentPanel
 
-	// 선택된 탭만 노란색, 나머지 회색으로 색상 변경
-	private void updateTabColors(int selectedIndex) {
-		for (int i = 0; i < tabs.getTabCount(); i++) {
-			FolderTab tab = tabs.getTab(i);
-			tab.setSelected(i == selectedIndex);
-		}
-		tabs.repaint();
-	}//updateTabColors
+	//	// 선택된 탭만 노란색, 나머지 회색으로 색상 변경
+	//	private void updateTabColors(int selectedIndex) {
+	//		for (int i = 0; i < tabs.getTabCount(); i++) {
+	//			FolderTab tab = tabs.getTab(i);
+	//			tab.setSelected(i == selectedIndex);
+	//		}
+	//		tabs.repaint();
+	//	}//updateTabColors
 }

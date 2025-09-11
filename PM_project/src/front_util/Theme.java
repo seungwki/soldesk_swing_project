@@ -5,9 +5,6 @@ import java.awt.Color;
 import java.awt.Font;
 
 public final class Theme {
-	//	private Theme() {
-	//	}
-
 	// Base colors
 	public static final Color BLUE = new Color(0x4E74DE);
 	public static final Color LIGHT_BORDER = new Color(0xE6EDF9); // 연한 파랑 테두리 톤
@@ -16,6 +13,8 @@ public final class Theme {
 	public static final Color ACCENT_OUTPUT = new Color(0xF1C40F); // 산출물 강조색(노랑)
 	public static final Color TAB_SELECTED = new Color(0xDBE4F3); // 팀 목록 탭 색1(채도낮은 어두운 파랑)
 	public static final Color TAB_UNSELECTED = new Color(0xFFFFFF); // 탭 목록 탭색2(흰 색)
+	public static final Color TAG_LIST_BACKGROUND = new Color(0xCCCCCC); // 팀 목록 탭 색1(채도낮은 어두운 파랑)
+	public static final Color TEAM_NAME_BACKGROUND = new Color(0xAAAAAA); // 탭 목록 탭색2(흰 색)
 
 	// Fonts
 	public static final Font FONT_14_BOLD = new Font("맑은 고딕", Font.BOLD, 14);
