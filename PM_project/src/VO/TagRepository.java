@@ -33,13 +33,16 @@ public class TagRepository {
 
 		// 기본 학생 태그
 		addOrReuseStudentTag("우수", "성적이 우수한 학생", Color.BLUE, oldTags);
-		addOrReuseStudentTag("주의", "행동 주의 필요", Color.RED, oldTags);
-		addOrReuseStudentTag("신입", "신규 등록 학생", Color.ORANGE, oldTags);
-
+		addOrReuseStudentTag("주의", "관심 필요", Color.RED, oldTags);
+		addOrReuseStudentTag("신입", "3개월 이내의 학생", Color.ORANGE, oldTags);
+		addOrReuseStudentTag("차량", "대중 교통,차량 이용", Color.lightGray, oldTags);
+		addOrReuseStudentTag("도보", "도보 이동", Color.PINK, oldTags);
 		// 기본 산출물 태그
-		addOrReuseOutputTag("완료", "작업 완료됨", Color.GREEN, oldTags);
-		addOrReuseOutputTag("검토필요", "검토 필요함", Color.YELLOW, oldTags);
-		addOrReuseOutputTag("미완", "아직 미완성", Color.DARK_GRAY, oldTags);
+		addOrReuseOutputTag("완료", "작업 완료됨", Color.blue, oldTags);
+		addOrReuseOutputTag("검토필요", "검토 필요함", Color.red, oldTags);
+		addOrReuseOutputTag("미완", "아직 미완성", Color.ORANGE, oldTags);
+		addOrReuseOutputTag("수작", "훌륭함", Color.ORANGE, oldTags);
+		addOrReuseOutputTag("보통", "평범함", Color.ORANGE, oldTags);
 	}
 
 	private static void addOrReuseStudentTag(String name, String remark, Color color, List<Tag> oldTags) {
