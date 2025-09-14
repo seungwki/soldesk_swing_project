@@ -15,12 +15,16 @@ public final class Theme {
 	public static final Color TAB_UNSELECTED = new Color(0xFFFFFF); // 탭 목록 탭색2(흰 색)
 	public static final Color TAG_LIST_BACKGROUND = new Color(0xCCCCCC); // 팀 목록 탭 색1(채도낮은 어두운 파랑)
 	public static final Color TEAM_NAME_BACKGROUND = new Color(0xAAAAAA); // 탭 목록 탭색2(흰 색)
-
 	// Fonts
 	public static final Font FONT_14_BOLD = new Font("맑은 고딕", Font.BOLD, 14);
 	public static final Font FONT_16 = new Font("맑은 고딕", Font.PLAIN, 16);
-
 	// Metrics //Matrix...?
 	public static final int RADIUS_12 = 12;
 	public static final int BORDER_THICK = 12;
+	// ─ Tabs (TagManager 전용 팔레트) ─
+	public static final java.awt.Color TAB_STUDENT_BG = new java.awt.Color(0xE6ECF6); // 학생 탭
+	public static final java.awt.Color TAB_OUTPUT_BG = new java.awt.Color(0xA7C3FF); // 산출물 탭
+	// 테두리 색
+	public static final java.awt.Color BORDER_STUDENT = TAB_STUDENT_BG;
+	public static final java.awt.Color BORDER_OUTPUT = TAB_OUTPUT_BG;
 }

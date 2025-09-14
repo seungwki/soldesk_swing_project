@@ -27,11 +27,19 @@ public class ClassManager extends BasePage {
 	public ClassManager() {
 		super(new front_ui.TopBar.OnMenuClick() {
 			@Override
-			public void onClass() {DefaultFrame.getInstance(new ClassManager());}
+			public void onClass() {
+				DefaultFrame.getInstance(new ClassManager());
+			}
+
 			@Override
-			public void onStudent() {DefaultFrame.getInstance(new StudentManager());}
+			public void onStudent() {
+				DefaultFrame.getInstance(new StudentManager());
+			}
+
 			@Override
-			public void onTag() {DefaultFrame.getInstance(new TagManager());}
+			public void onTag() {
+				DefaultFrame.getInstance(new TagManager());
+			}
 		});
 		sortProjectList();
 		getTopBar().selectOnly("class");

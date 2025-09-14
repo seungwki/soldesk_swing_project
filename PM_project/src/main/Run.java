@@ -11,6 +11,6 @@ public class Run {
 		//		System.out.println(data.projectData.size());
 		//		DefaultFrame.getInstance(new ClassManager());//나중엔 로그인 프레임으로 바꿔야됨
 		DefaultFrame.getInstance(new LoginFrame());
-//		frame.setVisible(true);
+		//		frame.setVisible(true);
 	}// main
 }
