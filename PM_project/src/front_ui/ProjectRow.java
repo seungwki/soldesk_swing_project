@@ -16,10 +16,20 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.Border;
 
 import VO.Output;
+import VO.Team;
 import front_util.Theme;
 
 public class ProjectRow extends JPanel {
 	private Output output;
+	private Team team;
+
+	public Team getTeam() {
+		return team;
+	}
+
+	public void setTeam(Team team) {
+		this.team = team;
+	}
 
 	public Output getOutput() {
 		return output;

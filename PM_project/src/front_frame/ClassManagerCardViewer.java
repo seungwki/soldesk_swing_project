@@ -165,8 +165,17 @@ public class ClassManagerCardViewer extends BasePage {
 				ProjectRow row = new ProjectRow(contentX, y, contentW, team.getOutput());
 				row.setOutputTitle(team.getOutput() != null ? team.getOutput().getTitle() : "");
 				row.setTeamTitle(team.getTName());
+				row.setTeam(team);
 				rows.add(row);
 				box.add(row);
+				row.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						if (team.getOutput() == null)
+							return;
+						BasePage.changePage(new TeamDetailViewer(team));
+					}
+				});
 				y += row.getPreferredHeight() + gapY;
 			}
 		}
@@ -256,6 +265,6 @@ public class ClassManagerCardViewer extends BasePage {
 
 		getContentPanel().revalidate();
 		getContentPanel().repaint();
-	}
+	}//handleAddNewDegree
 
 }
