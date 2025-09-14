@@ -202,7 +202,7 @@ public class ClassManagerCardViewer extends BasePage {
 				row.setOutputTitle(team.getOutput() != null ? team.getOutput().getTitle() : "");
 				row.setTeamTitle(team.getTName());
 				// ✅ 꼭 추가해보세요 (보이지 않을 수 있음)
-//				row.setBounds(contentX, y, contentW, row.getPreferredHeight());
+				//				row.setBounds(contentX, y, contentW, row.getPreferredHeight());
 				System.out.println("check 1");
 				rows.add(row);
 				System.out.println("check 2");
@@ -216,6 +216,84 @@ public class ClassManagerCardViewer extends BasePage {
 		box.repaint();
 	}
 
-	private void handleAddNewDegree() {//새 차수 생성
+	//새 차수 생성
+	private void handleAddNewDegree() {
+		// 현재 차수 수
+		int currentCount = teamMap.size();
+
+		// 최대 5차까지 허용
+		if (currentCount >= 5) {
+			System.out.println("최대 5차까지만 생성할 수 있습니다.");
+			// 이미 5차까지 있으면 아무 동작 안 함
+			return;
+		}
+
+		// 새 차수 번호 = 가장 큰 key + 1
+		int newDegree = teamMap.isEmpty() ? 1 : teamMap.lastKey() + 1;
+
+		// 빈 팀 리스트로 추가
+		teamMap.put(newDegree, new ArrayList<>());
+
+		// 차수 리스트 새로 구성
+		List<Integer> degreeList = new ArrayList<>(teamMap.keySet());
+		degreeList.sort(Integer::compareTo);
+
+		// "+" 탭 포함 여부 결정
+		boolean addPlusTab = degreeList.size() < 5;
+
+		// 탭 스펙 구성
+		int specCount = degreeList.size() + (addPlusTab ? 1 : 0);
+		TabSpec[] newSpecs = new TabSpec[specCount];
+
+		for (int i = 0; i < degreeList.size(); i++) {
+			newSpecs[i] = new TabSpec(degreeList.get(i) + "차", UNSELECT_COLOR);
+			newSpecs[i].setDegree(String.valueOf(degreeList.get(i)));
+		}
+
+		if (addPlusTab) {
+			newSpecs[specCount - 1] = new TabSpec("+", UNSELECT_COLOR);
+			newSpecs[specCount - 1].setDegree("+");
+		}
+
+		// 기존 탭 제거
+		getContentPanel().remove(tabs);
+
+		// 새 TabsBar 생성
+		tabs = new TabsBar(newSpecs, tabW, tabH);
+		final int gap = 110;
+		for (int i = 0; i < newSpecs.length; i++) {
+			tabs.setTabLocation(i, boxX + i * gap, tabY);
+		}
+		int tabsRight = boxX + (newSpecs.length - 1) * gap + tabW;
+		int tabsBottom = tabY + tabH;
+		tabs.setBounds(0, 0, tabsRight, tabsBottom);
+
+		// 탭 클릭 콜백 재등록
+		tabs.setOnChange(idx -> {
+			if (addPlusTab && idx == tabs.getTabCount() - 1) {
+				// 마지막 탭이 "+"일 경우
+				handleAddNewDegree();
+				return;
+			}
+			selectedTab = idx;
+			handleTabClicked(idx);
+			applyTabSelection();
+		});
+
+		// 새로 추가된 차수를 자동 선택
+		int newTabIndex = degreeList.indexOf(newDegree);
+		tabs.setSelectedIndex(newTabIndex, true);
+		selectedTab = newTabIndex;
+		handleTabClicked(newTabIndex);
+		applyTabSelection();
+
+		// 새 탭 적용
+		getContentPanel().add(tabs);
+		getContentPanel().setComponentZOrder(tabs, 0);
+		getContentPanel().setComponentZOrder(box, 1);
+
+		getContentPanel().revalidate();
+		getContentPanel().repaint();
 	}
+
 }
