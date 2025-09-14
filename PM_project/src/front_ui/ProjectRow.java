@@ -101,7 +101,7 @@ public class ProjectRow extends JPanel {
 		panelJo.setBackground(JO_PANEL_BG);
 		panelJo.setBounds(leftWidth + H_GAP, 0, JO_WIDTH, OUTPUT_H + V_GAP + TAG_H);
 		panelJo.setBorder(roundBorder);
-		lbJo = new JLabel("1조", JLabel.CENTER);
+		lbJo = new JLabel("", JLabel.CENTER);
 		lbJo.setFont(new Font("맑은 고딕", Font.BOLD, 16));
 		lbJo.setBounds(0, 0, JO_WIDTH, panelJo.getHeight());
 		panelJo.add(lbJo);

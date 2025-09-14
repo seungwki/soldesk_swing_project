@@ -124,8 +124,6 @@ public class ClassManagerCardViewer extends BasePage {
 		// 탭 선택 동작 //TODO 2
 		tabs.setOnChange(idx -> {
 			if (idx == tabs.getTabCount() - 1) {
-				//				//차수 생성
-				//				tabs.setSelectedIndex(selectedTab, true);
 				handleAddNewDegree();
 				return;
 			}
@@ -134,21 +132,6 @@ public class ClassManagerCardViewer extends BasePage {
 			applyTabSelection();
 		});
 		tabs.setSelectedIndex(0, true); // 최초 1차 선택
-		//		applyTabSelection();
-
-		//		 ── 프로젝트 행 생성 ─────────────────────
-		// 배치 기준: "앞으로는 여기 위에 배치하세요" 요청 → y = contentY - 20, gap = 20  // ★ 추가
-		//		int y = contentY - 20, gapY = 20;
-		//		for (int i = 0; i < project.getTeams2().size(); i++) {
-		//			ProjectRow row = new ProjectRow(contentX, y, contentW, project.getTeams2().get(i).getOutput());
-		//			row.setOutputTitle(row.getOutput() != null ? row.getOutput().getTitle() : "");
-		//			row.setTeamTitle(project.getTeams2().get(i).getTName());
-		//			//			row.setTagChips(dummyTags(i < 2 ? 4 : 0));
-		//			rows.add(row);
-		//			box.add(row);
-		//			y += row.getPreferredHeight() + gapY;
-		//		}
-
 		box.autoGrow();
 		refreshScroll();
 	}
@@ -164,24 +147,6 @@ public class ClassManagerCardViewer extends BasePage {
 		getContentPanel().repaint();
 	}
 
-	// ★ 추가: 간단 더미 태그 (TagChip(String, Color, Color, int, int) 에 맞춤)
-	//143
-	//	private List<TagChip> dummyTags(int n) {
-	//		List<TagChip> list = new ArrayList<>();
-	//		final int h = 28; // 칩 높이 (ProjectRow의 태그 높이와 어울리게)
-	//		final int minW = 60; // 최소 폭
-	//		final int pad = 20; // 좌우 여백 보정
-	//		final Color chipBg = new Color(0xDAE3F3); // 밝은 파랑 계열
-	//		final Color chipFg = new Color(0x3A4764); // 어두운 텍스트
-	//
-	//		for (int i = 0; i < n; i++) {
-	//			String label = "태그" + (i + 1);
-	//			// 대략적 폭 계산(문자 수 기반) — 실제 폰트폭 대신 간단 계산
-	//			int w = Math.max(minW, pad + label.length() * 14);
-	//			list.add(new TagChip(label, chipBg, chipFg, w, h));
-	//		}
-	//		return list;
-	//	}
 	private void handleTabClicked(int idx) {
 		String degreeStr = tabs.getTabSpec(idx).getDegree();
 		//		if (degreeStr.equals("+")) {
@@ -197,20 +162,19 @@ public class ClassManagerCardViewer extends BasePage {
 		for (int i = 0; i < project.getTeams2().size(); i++) {
 			Team team = project.getTeams2().get(i);
 			if (degree == team.getDegree()) {
-				System.out.println(team);
 				ProjectRow row = new ProjectRow(contentX, y, contentW, team.getOutput());
 				row.setOutputTitle(team.getOutput() != null ? team.getOutput().getTitle() : "");
 				row.setTeamTitle(team.getTName());
-				// ✅ 꼭 추가해보세요 (보이지 않을 수 있음)
-				//				row.setBounds(contentX, y, contentW, row.getPreferredHeight());
-				System.out.println("check 1");
 				rows.add(row);
-				System.out.println("check 2");
 				box.add(row);
-				System.out.println("check 3");
 				y += row.getPreferredHeight() + gapY;
 			}
 		}
+		ProjectRow row = new ProjectRow(contentX, y, contentW, null);
+		row.setOutputTitle("+");
+		rows.add(row);
+		box.add(row);
+		y += row.getPreferredHeight() + gapY;
 		box.autoGrow();
 		box.revalidate();
 		box.repaint();
@@ -223,8 +187,6 @@ public class ClassManagerCardViewer extends BasePage {
 
 		// 최대 5차까지 허용
 		if (currentCount >= 5) {
-			System.out.println("최대 5차까지만 생성할 수 있습니다.");
-			// 이미 5차까지 있으면 아무 동작 안 함
 			return;
 		}
 

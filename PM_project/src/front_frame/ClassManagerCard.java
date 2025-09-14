@@ -38,7 +38,7 @@ public class ClassManagerCard extends JPanel {
 		subLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 8, 0));
 		add(subLabel, BorderLayout.SOUTH);
 
-		// 마우스 이벤트 그대로 유지
+		// 마우스 이벤트
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
