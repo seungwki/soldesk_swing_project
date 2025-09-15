@@ -1,34 +1,177 @@
+// front_ui/ProjectRow.java
 package front_ui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.border.AbstractBorder;
-import javax.swing.border.Border;
 
 import VO.Output;
 import VO.Team;
-import front_util.Theme;
 
 public class ProjectRow extends JPanel {
 	private Output output;
+
+	// 크기
+	private static final int OUTPUT_H = 48;
+	private static final int TAG_H = 36;
+	private static final int V_GAP = 0;
+	private static final int PAD = 8;
+	private static final int JO_WIDTH = 180;
+	private static final int H_GAP = 0;
+	private static final int R = 12;
+
+	// 팔레트: 태그=회색, 조이름=더 어두운 회색
+	private static final Color OUTPUT_BG = new Color(0xF7F9FF);
+	private static final Color TAG_BG = new Color(0xE5E7EB); // 회색(연)
+	private static final Color JO_BG = new Color(0xD1D5DB); // 회색(더 어두움)
+
+	private int leftWidth;
 	private Team team;
 
-	public Team getTeam() {
-		return team;
+	private JPanel panelOutput, panelTag, panelJo;
+	private JLabel lbOutput, lbJo;
+
+	public ProjectRow() {
+		super(null);
+		setOpaque(false);
 	}
 
-	public void setTeam(Team team) {
-		this.team = team;
+	public ProjectRow(int x, int y, int contentW, Output output) {
+		this();
+		build(contentW);
+		setBounds(x, y, contentW, getPreferredHeight());
+		this.output = output;
+	}
+
+	public static ProjectRow createDefault(int contentX, int contentY, int contentW) {
+		return new ProjectRow(contentX, contentY, contentW, null);
+	}
+
+	public int getPreferredHeight() {
+		return OUTPUT_H + V_GAP + TAG_H;
+	}
+
+	private void build(int contentW) {
+		leftWidth = contentW - JO_WIDTH - H_GAP;
+		if (leftWidth < 150)
+			leftWidth = 150;
+
+		panelOutput = new JPanel(null);
+		panelOutput.setOpaque(false);
+		panelOutput.setBounds(0, 0, leftWidth, OUTPUT_H);
+		lbOutput = new JLabel("", JLabel.LEFT);
+		lbOutput.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+		lbOutput.setForeground(Color.DARK_GRAY);
+		lbOutput.setBounds(PAD, PAD, leftWidth - PAD * 2, OUTPUT_H - PAD * 2);
+		panelOutput.add(lbOutput);
+		add(panelOutput);
+
+		panelJo = new JPanel(null);
+		panelJo.setOpaque(false);
+		panelJo.setBounds(leftWidth + H_GAP, 0, JO_WIDTH, getPreferredHeight());
+		lbJo = new JLabel("", JLabel.CENTER);
+		lbJo.setFont(new Font("맑은 고딕", Font.BOLD, 14));
+		lbJo.setForeground(Color.DARK_GRAY);
+		lbJo.setBounds(0, 0, JO_WIDTH, getPreferredHeight());
+		panelJo.add(lbJo);
+		add(panelJo);
+
+		panelTag = new JPanel(null);
+		panelTag.setOpaque(false);
+		panelTag.setBounds(0, OUTPUT_H + V_GAP, leftWidth, TAG_H);
+		//        setTagChips(dummyTags(5));
+		add(panelTag);
+
+		setSize(contentW, getPreferredHeight());
+	}
+
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		Graphics2D g2 = (Graphics2D) g.create();
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+		int h = getPreferredHeight();
+
+		Shape leftShape = new RoundRectangle2D.Float(0, 0, leftWidth, h, R, R);
+		g2.setClip(leftShape);
+		g2.setColor(TAG_BG);
+		g2.fillRect(0, 0, leftWidth, h);
+		g2.setColor(OUTPUT_BG);
+		g2.fillRect(0, 0, leftWidth, OUTPUT_H);
+		g2.setClip(null);
+		g2.setColor(TAG_BG);
+		g2.fillRect(leftWidth - R, OUTPUT_H, R, h - OUTPUT_H);
+		g2.setColor(OUTPUT_BG);
+		g2.fillRect(leftWidth - R, 0, R, OUTPUT_H);
+
+		g2.setColor(JO_BG);
+		g2.fillRoundRect(leftWidth + H_GAP, 0, JO_WIDTH, h, R, R);
+		g2.fillRect(leftWidth + H_GAP, 0, R, h);
+
+		g2.dispose();
+	}
+
+	public void setOutputTitle(String title) {
+		lbOutput.setText(title == null ? "" : title);
+	}
+
+	public void setTeamTitle(String teamTitle) {
+		lbJo.setText(teamTitle == null ? "" : teamTitle);
+	}
+
+	public void setTagChips(List<TagChip> chips) {
+		panelTag.removeAll();
+		int leftW = panelTag.getWidth();
+		final int CHIP_H = 28;
+		int cx = PAD, cy = (TAG_H - CHIP_H) / 2, cg = 8;
+		if (chips != null) {
+			for (TagChip chip : chips) {
+				chip.setSize(chip.getWidth(), CHIP_H);
+				chip.setLocation(cx, cy);
+				panelTag.add(chip);
+				cx += chip.getWidth() + cg;
+				if (cx + 64 > leftW - PAD)
+					break;
+			}
+		}
+		panelTag.revalidate();
+		panelTag.repaint();
+	}
+
+	//    private List<TagChip> dummyTags(int n) {
+	//        List<TagChip> list = new ArrayList<>();
+	//        for (int i = 0; i < n; i++) {
+	//            String txt = "태그" + (i + 1);
+	//            int w = Math.min(140, 52 + txt.length() * 10);
+	//            list.add(new TagChip(txt, new Color(0xF7F9FF), new Color(0x324B93), w, 28));
+	//        }
+	//        return list;
+	//    }
+	// front_ui/ProjectRow.java  (마지막 버전에 아래만 추가)
+	private Runnable onClick;
+
+	public void setOnClick(Runnable r) {
+		this.onClick = r;
+		this.setCursor(java.awt.Cursor.getPredefinedCursor(java.awt.Cursor.HAND_CURSOR));
+		if (getMouseListeners().length == 0) {
+			addMouseListener(new java.awt.event.MouseAdapter() {
+				@Override
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					if (onClick != null && e.getButton() == 1)
+						onClick.run();
+				}
+			});
+		}
 	}
 
 	public Output getOutput() {
@@ -39,171 +182,11 @@ public class ProjectRow extends JPanel {
 		this.output = output;
 	}
 
-	// layout
-	private static final int OUTPUT_H = 72;
-	private static final int TAG_H = 40;
-	//	private static final int V_GAP = 8;
-	private static final int V_GAP = 0;
-	private static final int PAD = 10;
-	private static final int JO_WIDTH = 180;
-
-	// 붙여달라는 요청 → 0으로 고정
-	private static final int H_GAP = 0;
-
-	// colors (태그가 더 어둡고, 조가 그보다 더 어둡게)
-	private static final Color TAG_PANEL_BG = new Color(0xB7C7FF);
-	private static final Color JO_PANEL_BG = new Color(0x9FB3FF);
-	private static final Color CHIP_BG = new Color(0xEAF0FF);
-	private static final Color CHIP_FG = new Color(0x31409F);
-
-	// child refs
-	private JPanel panelOutput;
-	private JPanel panelTag;
-	private JPanel panelJo;
-	private JLabel lbOutput;
-	private JLabel lbJo;
-
-	public ProjectRow() {
-		super(null);
-		setLayout(null);
-		setOpaque(false);
+	public Team getTeam() {
+		return team;
 	}
 
-	// 배치용 ctor: new ProjectRow(contentX, rowY, contentW)
-	public ProjectRow(int x, int y, int contentW, Output output) {
-		setLayout(null);
-		setOpaque(false);
-		this.output = output;
-		build(contentW);
-		setBounds(x, y, contentW, getPreferredHeight());
-	}
-
-	//	public static ProjectRow createDefault(int contentX, int contentY, int contentW) {
-	//		return new ProjectRow(contentX, contentY, contentW);
-	//	}
-
-	public int getPreferredHeight() {
-		return OUTPUT_H + V_GAP + TAG_H;
-	}
-
-	private void build(int contentW) {
-		int leftWidth = contentW - JO_WIDTH - H_GAP;
-		if (leftWidth < 150)
-			leftWidth = 150;
-
-		Border roundBorder = new RoundedLineBorder(Theme.LIGHT_BORDER, Theme.RADIUS_12);
-
-		// 산출물 패널 (흰색 X, 테두리색과 일치하도록 배경을 Theme.TAB_SELECTED로)
-		panelOutput = new JPanel(null);
-		panelOutput.setOpaque(true);
-		panelOutput.setBackground(Theme.TAB_STUDENT_BG); // 선택 탭과 동일 톤
-		panelOutput.setBounds(0, 0, leftWidth, OUTPUT_H);
-		panelOutput.setBorder(roundBorder);
-		lbOutput = new JLabel("산출물 이름", JLabel.LEFT);
-		lbOutput.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		lbOutput.setBounds(PAD, PAD, leftWidth - PAD * 2, OUTPUT_H - PAD * 2);
-		panelOutput.add(lbOutput);
-		add(panelOutput);
-
-		// 조 패널 (산출물 패널 우측에 딱 붙음)
-		panelJo = new JPanel(null);
-		panelJo.setOpaque(true);
-		panelJo.setBackground(JO_PANEL_BG);
-		panelJo.setBounds(leftWidth + H_GAP, 0, JO_WIDTH, OUTPUT_H + V_GAP + TAG_H);
-		panelJo.setBorder(roundBorder);
-		lbJo = new JLabel("", JLabel.CENTER);
-		lbJo.setFont(new Font("맑은 고딕", Font.BOLD, 16));
-		lbJo.setBounds(0, 0, JO_WIDTH, panelJo.getHeight());
-		panelJo.add(lbJo);
-		add(panelJo);
-
-		// 태그 패널 (폭을 산출물 패널과 동일)
-		panelTag = new JPanel(null);
-		panelTag.setOpaque(true);
-		panelTag.setBackground(TAG_PANEL_BG);
-		panelTag.setBounds(0, OUTPUT_H + V_GAP, leftWidth, TAG_H);
-		panelTag.setBorder(roundBorder);
-		//		setTagChips(dummyTags(5)); // 기본 더미
-		add(panelTag);
-
-		setSize(contentW, getPreferredHeight());
-	}
-
-	// ====== 외부에서 쓰던 세터들 ======
-	public void setOutputTitle(String title) {
-		lbOutput.setText(title == null ? "" : title);
-		lbOutput.revalidate();
-		lbOutput.repaint();
-	}
-
-	public void setTeamTitle(String teamTitle) {
-		lbJo.setText(teamTitle == null ? "" : teamTitle);
-		lbJo.revalidate();
-		lbJo.repaint();
-	}
-
-	public void setTagChips(List<TagChip> chips) {
-		panelTag.removeAll();
-
-		int leftWidth = panelTag.getWidth();
-		int cx = PAD, cy = (TAG_H - 28) / 2;
-		int cg = 8;
-
-		if (chips != null) {
-			for (int i = 0; i < chips.size(); i++) {
-				TagChip chip = chips.get(i);
-				chip.setLocation(cx, cy);
-				panelTag.add(chip);
-				cx += chip.getWidth() + cg;
-				if (cx + 80 > leftWidth - PAD)
-					break; // 한 줄 넘치면 컷
-			}
-		}
-		panelTag.revalidate();
-		panelTag.repaint();
-	}
-
-	// ====== 더미 태그 생성 ======
-	private List<TagChip> dummyTags(int n) {
-		List<TagChip> list = new ArrayList<>();
-		for (int i = 0; i < n; i++) {
-			String txt = "태그" + (i + 1);
-			int w = Math.min(140, 56 + txt.length() * 14);
-			list.add(new TagChip(txt, CHIP_BG, CHIP_FG, w, 28));
-		}
-		return list;
-	}
-
-	// ====== 내부 라운드 라인 보더 (Theme에 의존 안 함) ======
-	private static class RoundedLineBorder extends AbstractBorder {
-		private final Color color;
-		private final int radius;
-		private final int thickness = 1;
-
-		RoundedLineBorder(Color color, int radius) {
-			this.color = color;
-			this.radius = radius;
-		}
-
-		@Override
-		public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) {
-			Graphics2D g2 = (Graphics2D) g.create();
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g2.setColor(color);
-			int w = width - 1, h = height - 1;
-			g2.drawRoundRect(x, y, w, h, radius, radius);
-			g2.dispose();
-		}
-
-		@Override
-		public Insets getBorderInsets(Component c) {
-			return new Insets(thickness, thickness, thickness, thickness);
-		}
-
-		@Override
-		public Insets getBorderInsets(Component c, Insets insets) {
-			insets.left = insets.right = insets.top = insets.bottom = thickness;
-			return insets;
-		}
+	public void setTeam(Team team) {
+		this.team = team;
 	}
 }

@@ -52,8 +52,8 @@ public class ShowTeamListAction implements ActionListener {
 	private TabsBar tabs;
 	final int boxBaseY = 24; // 탭 기준 Y(탭은 이 기준 유지)
 	private AutoGrowBox box;
-	private static final Color SELECTED = Theme.TAB_SELECTED;
-	private static final Color UNSELECTED = Theme.TAB_UNSELECTED;
+//	private static final Color SELECTED = Theme.TAB_SELECTED;
+//	private static final Color UNSELECTED = Theme.TAB_UNSELECTED;
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -66,7 +66,7 @@ public class ShowTeamListAction implements ActionListener {
 		// ── 박스(자동 확장형) ───────────────────────────── , 내용 추가 시 스크롤바 갱신
 		box = new AutoGrowBox();
 //		box.setBounds(boxX, boxY, boxW, boxH);
-		box.setBorderColor(UNSELECTED);
+//		box.setBorderColor(UNSELECTED);
 		//		getContentPanel().add(box);
 		teamListPanel.add(box);
 
@@ -81,7 +81,7 @@ public class ShowTeamListAction implements ActionListener {
 		}
 		TabSpec[] tabSpec = new TabSpec[teamMapKeyArray.size()];
 		for (int i = 0; i < tabSpec.length; i++) {
-			tabSpec[i] = new TabSpec(teamMapKeyArray.get(i) + "차", UNSELECTED);
+//			tabSpec[i] = new TabSpec(teamMapKeyArray.get(i) + "차", UNSELECTED);
 			//			project.getTeams2().get(i).get;//차수 조회해서 채워넣을 것
 		}
 		tabs = new TabsBar(tabSpec, tabW, tabH);

@@ -26,8 +26,6 @@ public class ClassManagerCardViewer extends BasePage {
 	//백엔드 데이터
 	private Project project;
 	private TreeMap<Integer, ArrayList<Team>> teamMap = new TreeMap<Integer, ArrayList<Team>>();
-	private boolean isClicked;
-	private boolean isCreatable;
 	// ── 레이아웃 상수(기존 값 유지) ─────────────────────────────────────────────
 	final int boxX = 19, boxW = 752, boxH = 460;
 	final int boxBaseY = 24; // 탭 기준 Y(탭은 이 기준 유지)
@@ -113,6 +111,7 @@ public class ClassManagerCardViewer extends BasePage {
 		final int gap = 110;
 		for (int i = 0; i < tabSpecs.length; i++) {
 			tabs.setTabLocation(i, boxX + i * gap, tabY);
+			tabs.getTab(i).setName(String.valueOf(i));
 		}
 		int tabsRight = boxX + (tabSpecs.length - 1) * gap + tabW;
 		int tabsBottom = tabY + tabH;
@@ -148,7 +147,9 @@ public class ClassManagerCardViewer extends BasePage {
 	}
 
 	private void handleTabClicked(int idx) {
-		String degreeStr = tabs.getTabSpec(idx).getDegree();
+		String degreeStr = tabs.getTab(idx).getDegree();
+		if (degreeStr == null)
+			return;
 		//		if (degreeStr.equals("+")) {
 		//			return;
 		//		}
