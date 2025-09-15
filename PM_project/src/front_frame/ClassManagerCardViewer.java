@@ -37,6 +37,7 @@ public class ClassManagerCardViewer extends BasePage {
 
 	// 탭
 	private TabsBar tabs;
+	private TabSpec[] tabSpecs;
 	final int tabW = 100, tabH = 28;
 	final int tabBottom = boxBaseY + Theme.BORDER_THICK; // 내부 상단선
 	final int tabY = tabBottom - tabH;
@@ -95,6 +96,7 @@ public class ClassManagerCardViewer extends BasePage {
 
 		// 탭 스펙 구성 (플러스 탭을 포함할지 결정)
 		TabSpec[] tabSpecs = new TabSpec[degreeList.size() + (addPlusTab ? 1 : 0)];
+		this.tabSpecs = tabSpecs;
 		for (int i = 0; i < degreeList.size(); i++) {
 			tabSpecs[i] = new TabSpec(degreeList.get(i) + "차", UNSELECT_COLOR);
 			tabSpecs[i].setDegree(String.valueOf(degreeList.get(i)));
@@ -188,7 +190,7 @@ public class ClassManagerCardViewer extends BasePage {
 					public void mouseClicked(MouseEvent e) {
 						if (team.getOutput() == null)
 							return;
-						BasePage.changePage(new TeamDetailViewer(team));
+						BasePage.changePage(new TeamDetailViewer(team, project, tabSpecs));
 					}
 				});
 				y += row.getPreferredHeight() + gapY;

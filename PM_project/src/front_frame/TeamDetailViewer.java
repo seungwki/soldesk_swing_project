@@ -1,191 +1,156 @@
+// front_frame/ProjectDetailPage.java
 package front_frame;
 
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
-import java.util.List;
+import java.awt.Color;
+import java.awt.Font;
 
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
+import VO.Project;
 import VO.Team;
-import VO.Student;
-import VO.Output;
-import VO.Tag;
+import front_ui.AutoGrowBox;
+import front_ui.ChipsLine;
+import front_ui.FileListPanel;
+import front_ui.FolderTab;
+import front_ui.ProjectInfo;
+import front_ui.TabSpec;
+import front_ui.TabsBar;
+import front_ui.TopBar;
+import front_util.Theme;
 
-public class TeamDetailViewer extends JPanel {
+public class TeamDetailViewer extends BasePage {
+	final int boxX = 19, boxW = 752, boxH = 460;
+	final int boxBaseY = 24, boxDrop = 12, boxY = boxBaseY + boxDrop;
+	final int contentX = 24, contentW = boxW - contentX * 2;
+
+	private final AutoGrowBox box = new AutoGrowBox();
+	private final TabsBar tabs;
+
+	private static final Color SELECT_COLOR = new Color(0xAFC2F5);
+	private static final Color UNSELECT_COLOR = Color.WHITE;
+	private int selectedTab;
 	private Team team;
+	private Project project;
+	private TabSpec[] tabSpecArr;
 
-	public TeamDetailViewer(Team team) {
+	public TeamDetailViewer(Team team, Project project, TabSpec[] tabSpecArr) {
+		super(new TopBar.OnMenuClick() {
+			@Override
+			public void onClass() {
+				DefaultFrame.getInstance(new ClassManager());
+			}
+
+			@Override
+			public void onStudent() {
+				DefaultFrame.getInstance(new StudentManager());
+			}
+
+			@Override
+			public void onTag() {
+				DefaultFrame.getInstance(new TagManager());
+			}
+		});
+		getTopBar().selectOnly("class");
 		this.team = team;
-		setLayout(null);
-		setBackground(Color.WHITE);
+		this.project = project;
+		this.tabSpecArr = tabSpecArr;
 
+		// 내용 상자: 콘텐츠 패널에 추가
+		box.setBounds(boxX, boxY, boxW, boxH);
+		box.setBorderColor(SELECT_COLOR);
+		getContentPanel().add(box);
+
+		// 탭: 콘텐츠 패널에 추가(탭이 위로 오도록 Z-순서 지정)
+		TabSpec[] specs = this.tabSpecArr;
+		tabs = new TabsBar(specs, 100, 28);
+		int gap = 110, tabY = boxBaseY + Theme.BORDER_THICK - 28;
+		for (int i = 0; i < specs.length; i++)
+			tabs.setTabLocation(i, boxX + i * gap, tabY);
+		tabs.setBounds(0, 0, boxX + (specs.length - 1) * gap + 100, tabY + 28);
+		getContentPanel().add(tabs);
+
+		// ===== 본문 =====
 		int y = 20;
 
-		JLabel subjectLabel = new JLabel("주제 : " + team.getOutput().getTitle());
-		subjectLabel.setFont(new Font("맑은 고딕", Font.BOLD, 20));
-		subjectLabel.setBounds(20, y, 600, 30);
-		add(subjectLabel);
+		JLabel title = new JLabel("주제 : " + team.getOutput().getTitle());
+		title.setFont(new Font("맑은 고딕", Font.BOLD, 18));
+		title.setBounds(contentX, y, contentW, 28);
+		box.add(title);
+		y += 34;
 
-		y += 40;
+		JPanel hr = new JPanel();
+		hr.setBackground(Theme.TAB_OFF_LINE);
+		hr.setBounds(contentX, y, contentW, 2);
+		box.add(hr);
+		y += 10;
 
 		JLabel teamLabel = new JLabel("팀 명 : " + team.getTName());
-		teamLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
-		teamLabel.setBounds(20, y, 400, 30);
-		add(teamLabel);
+		teamLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
+		teamLabel.setBounds(contentX, y, contentW, 24);
+		box.add(teamLabel);
+		y += 32;
 
-		y += 40;
+		ChipsLine membersLine = new ChipsLine();
+		membersLine.setBounds(contentX, y, contentW, 40);
+		//		membersLine.setChips(team.getMembers2(), new Color(0xE5E7EB), new Color(0x334155), 28, 8);
+		box.add(membersLine);
+		y += 48;
 
-		JLabel memberLabel = new JLabel("조원 : ");
-		memberLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
-		memberLabel.setBounds(20, y, 100, 30);
-		add(memberLabel);
+		JLabel filesLabel = new JLabel("파일 목록");
+		filesLabel.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+		filesLabel.setBounds(contentX, y, contentW, 24);
+		box.add(filesLabel);
+		y += 28;
 
-		int memberX = 80;
-		for (Student m : team.getMembers2()) {
-			JLabel mLabel = new JLabel(m.getsName());
-			mLabel.setOpaque(true);
-			mLabel.setBackground(new Color(180, 200, 255));
-			mLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-			mLabel.setBounds(memberX, y, 80, 30);
-			mLabel.setHorizontalAlignment(SwingConstants.CENTER);
-			add(mLabel);
-			memberX += 90;
-		}
+		FileListPanel files = new FileListPanel(contentW, 32, 8);
+		//		files.setBounds(contentX, y, contentW, files.getPreferredHeight(info.files.size()));
+		//		files.setFiles(info.files);
+		box.add(files);
+		y += files.getHeight() + 18;
 
-		y += 50;
+		JLabel tagTitle = new JLabel("<태그>");
+		tagTitle.setFont(new Font("맑은 고딕", Font.BOLD, 16));
+		tagTitle.setBounds(contentX, y, contentW, 24);
+		box.add(tagTitle);
+		y += 28;
 
-		JLabel fileLabel = new JLabel("파일 목록");
-		fileLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
-		fileLabel.setBounds(20, y, 200, 30);
-		add(fileLabel);
+		ChipsLine tags = new ChipsLine();
+		tags.setBounds(contentX, y, contentW, 40);
+		//		tags.setChips(info.tags, new Color(0xE5E7EB), new Color(0x1F2937), 28, 8);
+		box.add(tags);
 
-		y += 30;
+		box.autoGrow();
+		refreshScroll();
 
-		JTextArea fileArea = new JTextArea();
-		fileArea.setEditable(false);
-		fileArea.setFont(new Font("맑은 고딕", Font.PLAIN, 14));
-		JScrollPane fileScroll = new JScrollPane(fileArea);
-		fileScroll.setBounds(20, y, 400, 100);
-		add(fileScroll);
-
-		if (team.getOutput().getFile() != null) {
-			for (File file : team.getOutput().getFile()) {
-				fileArea.append(file.getName() + "\n");
-			}
-		}
-
-		y += 120;
-
-		JLabel tagLabel = new JLabel("<태그>");
-		tagLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 18));
-		tagLabel.setBounds(20, y, 100, 30);
-		add(tagLabel);
-
-		int tagX = 100;
-		for (Tag tag : team.getOutput().getTagList()) {
-			JLabel tagChip = new JLabel(tag.getName());
-			tagChip.setOpaque(true);
-			tagChip.setFont(new Font("맑은 고딕", Font.PLAIN, 13));
-			tagChip.setHorizontalAlignment(SwingConstants.CENTER);
-			tagChip.setBounds(tagX, y, 70, 30);
-
-			// 색상 구분
-			if (tag.getColor().equals("blue")) {
-				tagChip.setBackground(new Color(180, 200, 255));
-			} else if (tag.getColor().equals("green")) {
-				tagChip.setBackground(new Color(170, 255, 170));
-			} else if (tag.getColor().equals("orange")) {
-				tagChip.setBackground(new Color(255, 200, 100));
-			} else if (tag.getColor().equals("red")) {
-				tagChip.setBackground(new Color(255, 120, 120));
-			} else {
-				tagChip.setBackground(Color.LIGHT_GRAY);
-			}
-
-			add(tagChip);
-			tagX += 80;
-		}
-
-		JButton addTagBtn = new JButton("+");
-		addTagBtn.setBounds(tagX, y, 45, 30);
-		add(addTagBtn);
+		tabs.setOnChange(idx -> {
+			this.selectedTab = idx;
+			applyTabSelection();
+		});
+		tabs.setSelectedIndex(this.selectedTab, false);
+		applyTabSelection();
 	}
-}
 
-//public class TeamDetailViewer extends BasePage {
-//    private Team team;
-//
-//    public TeamDetailViewer(Team team) {
-//        super(new TopBar.OnMenuClick() {
-//            @Override
-//            public void onClass() {
-//                DefaultFrame.getInstance(new ClassManager());
-//            }
-//
-//            @Override
-//            public void onStudent() {
-//                DefaultFrame.getInstance(new StudentManager());
-//            }
-//
-//            @Override
-//            public void onTag() {
-//                DefaultFrame.getInstance(new TagManager());
-//            }
-//        });
-//        this.team = team;
-//
-//        getTopBar().selectOnly("class");
-//
-//        initUI();
-//    }
-//
-//    private void initUI() {
-//        JPanel panel = getContentPanel();
-//        panel.setLayout(null);
-//
-//        // 제목
-//        JLabel titleLabel = new JLabel("팀 세부 정보", SwingConstants.CENTER);
-//        titleLabel.setFont(new Font("맑은 고딕", Font.BOLD, 24));
-//        titleLabel.setBounds(50, 20, 400, 40);
-//        panel.add(titleLabel);
-//
-//        // 팀명 출력
-//        JLabel teamNameLabel = new JLabel("팀명: " + team.getTName());
-//        teamNameLabel.setBounds(50, 80, 400, 30);
-//        panel.add(teamNameLabel);
-//
-//        // 주제 출력
-//        JLabel topicLabel = new JLabel("주제: " + team.getOutput().getTitle());
-//        topicLabel.setBounds(50, 120, 400, 30);
-//        panel.add(topicLabel);
-//
-//        // 파일 목록
-//        JTextArea fileArea = new JTextArea();
-//        fileArea.setEditable(false);
-//        fileArea.setBounds(50, 160, 400, 120);
-//        fileArea.setText(getFileListText());
-//        panel.add(fileArea);
-//
-//        // 🟨 뒤로가기 버튼 추가
-//        JButton backButton = new JButton("뒤로가기");
-//        backButton.setBounds(50, 300, 120, 30);
-//        backButton.addActionListener(e -> {
-//            // 🔁 이전 페이지로 이동
-//            if (team.getProject() != null) {
-//                BasePage.changePage(new ClassManagerCardViewer(team.getProject()));
-//            } else {
-//                // 예외 처리 또는 메시지
-//                JOptionPane.showMessageDialog(null, "프로젝트 정보를 찾을 수 없습니다.");
-//            }
-//        });
-//        panel.add(backButton);
-//    }
-//
-//    private String getFileListText() {
-//        if (team.getOutput() == null || team.getOutput().getFileList() == null) return "";
-//        StringBuilder sb = new StringBuilder();
-//        for (String file : team.getOutput().getFileList()) {
-//            sb.append(file).append("\n");
-//        }
-//        return sb.toString();
-//    }
-//}
+	private void applyTabSelection() {
+		for (int i = 0; i < tabs.getTabCount(); i++) {
+			FolderTab t = tabs.getTab(i);
+			boolean sel = (i == selectedTab);
+			t.setTabColors(sel ? SELECT_COLOR : null, !sel ? UNSELECT_COLOR : null, SELECT_COLOR, null);
+			t.setSelected(sel);
+		}
+		tabs.repaint();
+	}
+
+	// 추가: 공통 탭 팩토리
+	private TabsBar makePhaseTabs(int x, int y) {
+		TabSpec[] specs = { new TabSpec("1차", Color.WHITE), new TabSpec("2차", Color.WHITE), new TabSpec("3차", Color.WHITE), new TabSpec("4차", Color.WHITE), new TabSpec("5차", Color.WHITE) };
+		TabsBar tb = new TabsBar(specs, 100, 28);
+		int gap = 110;
+		for (int i = 0; i < specs.length; i++)
+			tb.setTabLocation(i, x + i * gap, y);
+		tb.setBounds(0, 0, x + (specs.length - 1) * gap + 100, y + 28);
+		return tb;
+	}
+	// 사용처: tabs = makePhaseTabs(boxX, boxBaseY + Theme.BORDER_THICK - 28);
+
+}
