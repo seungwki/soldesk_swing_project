@@ -3,22 +3,11 @@ package front_frame;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.TreeMap;
+import java.util.*;
 
 import VO.Project;
 import VO.Team;
-import front_ui.AutoGrowBox;
-import front_ui.FolderTab;
-import front_ui.ProjectRow;
-import front_ui.TabSpec;
-import front_ui.TabsBar;
-import front_ui.TagChip; // 태그 칩 존재 가정
-import front_ui.TopBar;
+import front_ui.*;
 import front_util.Theme;
 
 // 수업관리 카드 안의 뷰어(껍데기 화면)  // ★ 기존 주석 유지
@@ -26,37 +15,30 @@ public class ClassManagerCardViewer extends BasePage {
 	//백엔드 데이터
 	private Project project;
 	private TreeMap<Integer, ArrayList<Team>> teamMap = new TreeMap<Integer, ArrayList<Team>>();
-	private boolean isClicked;
-	private boolean isCreatable;
 	// ── 레이아웃 상수(기존 값 유지) ─────────────────────────────────────────────
-	final int boxX = 19, boxW = 752, boxH = 460;
-	final int boxBaseY = 24; // 탭 기준 Y(탭은 이 기준 유지)
-	final int boxDrop = 12; // 박스/내용물만 아래로 내림
-	final int boxY = boxBaseY + boxDrop;
 
+	final int boxX = 19, boxW = 752, boxH = 460;
+	final int boxBaseY = 24, boxDrop = 12, boxY = boxBaseY + boxDrop;
 	final int contentX = 16, contentY = 34;
 	final int contentW = boxW - contentX * 2;
-	final int contentH = boxH - contentY - 16;
+	final int contentH = boxH - contentY - 16;//차이 있음
 
 	// 탭
+	private AutoGrowBox box;
 	private TabsBar tabs;
 	final int tabW = 100, tabH = 28;
-	final int tabBottom = boxBaseY + Theme.BORDER_THICK; // 내부 상단선
+	final int tabBottom = boxBaseY + Theme.BORDER_THICK;
 	final int tabY = tabBottom - tabH;
-	private int selectedTab = 0; // ★ 추가: 현재 선택 탭
+//	private final int gap = 110;
+	int selectedTab = 0;
 
-	private AutoGrowBox box;
+	// 팔레트
+	private static final Color SELECT_COLOR = new Color(0xAFC2F5);
+	private static final Color UNSELECT_COLOR = Color.WHITE;
 
-	// 컬러 (요구안: 선택=박스 테두리색 / 비선택=흰색)
-	private static final Color SELECT_COLOR = Theme.BORDER_STUDENT;
-	private static final Color UNSELECT_COLOR = Color.WHITE; // ★ 추가
+	// 행들
+	final List<ProjectRow> rows = new ArrayList<>();
 
-	// 더미 데이터
-	private final List<ProjectRow> rows = new ArrayList<>(); // ★ 추가
-
-	// Card에서 호출되는 기존 시그니처와 호환
-
-	// 내부에서 사용(직접 테스트용)
 	public ClassManagerCardViewer(Project project) {
 		super(new TopBar.OnMenuClick() {
 			@Override
@@ -77,13 +59,14 @@ public class ClassManagerCardViewer extends BasePage {
 		getTopBar().selectOnly("class");
 
 		this.project = project;
-		// ── 박스(자동 확장형) ─────────────────────────────
+		// 파일 박스
 		box = new AutoGrowBox();
 		box.setBounds(boxX, boxY, boxW, boxH);
-		box.setBorderColor(SELECT_COLOR); // ★ 추가: 선택 색과 동일
+		box.setBorderColor(SELECT_COLOR);
+		box.setBackground(SELECT_COLOR);
 		getContentPanel().add(box);
 
-		// ── 탭 바(1차~5차 +) ────────────────────────────//
+		// 탭 바
 		//팀 가져와서 차수 별로 맵에 넣기
 		for (Team team : project.getTeams2()) {
 			int degree = team.getDegree();
@@ -121,7 +104,7 @@ public class ClassManagerCardViewer extends BasePage {
 		getContentPanel().setComponentZOrder(tabs, 0);
 		getContentPanel().setComponentZOrder(box, 1);
 
-		// 탭 선택 동작 //TODO 2
+		// 탭 클릭
 		tabs.setOnChange(idx -> {
 			if (idx == tabs.getTabCount() - 1) {
 				handleAddNewDegree();
@@ -131,20 +114,23 @@ public class ClassManagerCardViewer extends BasePage {
 			handleTabClicked(idx);
 			applyTabSelection();
 		});
-		tabs.setSelectedIndex(0, true); // 최초 1차 선택
+		tabs.setSelectedIndex(0, true);
+		applyTabSelection();
 		box.autoGrow();
 		refreshScroll();
 	}
 
-	// ★ 추가: 탭/박스 색 동기화(선택 탭=파란색, 비선택=흰색)
+	// 선택 탭 색 반영
 	private void applyTabSelection() {
 		for (int i = 0; i < tabs.getTabCount(); i++) {
 			FolderTab t = tabs.getTab(i);
 			boolean sel = (i == selectedTab);
-			t.setSelected(sel); // FolderTab은 setSelected만 사용
+			t.setTabColors(sel ? SELECT_COLOR : null, !sel ? UNSELECT_COLOR : null, SELECT_COLOR, null);
+			t.setSelected(sel);
 		}
-		box.setBorderColor(SELECT_COLOR); // 박스 테두리 고정색(요구사항)
-		getContentPanel().repaint();
+		box.setBorderColor(SELECT_COLOR);
+		box.setBackground(SELECT_COLOR);
+		tabs.repaint();
 	}
 
 	private void handleTabClicked(int idx) {
@@ -173,7 +159,7 @@ public class ClassManagerCardViewer extends BasePage {
 					public void mouseClicked(MouseEvent e) {
 						if (team.getOutput() == null)
 							return;
-						BasePage.changePage(new TeamDetailViewer(team));
+						BasePage.changePage(new TeamDetailViewer(team, selectedTab));
 					}
 				});
 				y += row.getPreferredHeight() + gapY;

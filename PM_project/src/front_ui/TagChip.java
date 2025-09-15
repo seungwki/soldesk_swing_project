@@ -1,9 +1,15 @@
+// front_ui/TagChip.java
 package front_ui;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 
 import javax.swing.JPanel;
-//태그 관리 화면용 클래스
+
 public class TagChip extends JPanel {
     private final String text;
     private final Color bg, fg;
@@ -22,7 +28,7 @@ public class TagChip extends JPanel {
         g2.setColor(bg);
         g2.fillRoundRect(0, 0, getWidth(), getHeight(), getHeight(), getHeight());
         g2.setColor(fg);
-        Font f = new Font("맑은 고딕", Font.BOLD, 16);
+        Font f = new Font("맑은 고딕", Font.BOLD, 14); // 16 → 14
         g2.setFont(f);
         FontMetrics fm = g2.getFontMetrics();
         int tx = (getWidth()-fm.stringWidth(text))/2;

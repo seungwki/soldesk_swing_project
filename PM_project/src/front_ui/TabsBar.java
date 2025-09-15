@@ -1,5 +1,7 @@
 package front_ui;
 
+import java.awt.Dimension;
+
 import javax.swing.JPanel;
 
 //태그 관리 화면용 클래스
@@ -29,11 +31,6 @@ public class TabsBar extends JPanel {
 		// 초기 선택 상태 반영
 		setSelectedIndex(0, false);
 	}
-	// TabsBar 클래스 내부
-
-	public TabSpec getTabSpec(int index) {
-		return tabSpecs[index];
-	}
 
 	// TabsBar 클래스 내부에 추가 , 0910 승민쓰 추가 코드
 	public int getTabCount() {
@@ -41,7 +38,9 @@ public class TabsBar extends JPanel {
 	}
 
 	public void setTabLocation(int index, int x, int y) {
-		tabs[index].setLocation(x, y);
+		FolderTab t = tabs[index];
+		Dimension d = t.getPreferredSize();
+		t.setBounds(x, y, d.width, d.height); // ← 위치+크기 동시 지정
 	}
 
 	public void setOnChange(OnChange cb) {

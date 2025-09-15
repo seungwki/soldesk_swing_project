@@ -1,0 +1,26 @@
+//차수 정렬
+		Iterator<Integer> iter = teamMap.keySet().iterator();
+		ArrayList<Integer> arrayList = new ArrayList<Integer>();
+		while (iter.hasNext()) {
+			int i = iter.next();
+			if (teamMap.get(i).size() != 0) {
+				//				System.out.println(i);
+				arrayList.add(i);
+			}
+		}
+		TabSpec[] tabSpecs;
+		//길이가 5보다 작다면 차수 생성 버튼을 추가
+		if (isCreatable) {
+			tabSpecs = new TabSpec[arrayList.size() + 1];
+			for (int i = 0; i < arrayList.size(); i++) {
+				tabSpecs[i] = new TabSpec(arrayList.get(i) + "차", Theme.TAB_UNSELECTED);
+			}
+			tabSpecs[arrayList.size()] = new TabSpec("+", Theme.TAB_UNSELECTED);
+			tabs = new TabsBar(tabSpecs, tabW, tabH);
+		} else {//아니라면 차수만 생성
+			tabSpecs = new TabSpec[arrayList.size()];
+			for (int i = 0; i < arrayList.size(); i++) {
+				tabSpecs[i] = new TabSpec(arrayList.get(i) + "차", Theme.TAB_UNSELECTED);
+			}
+			tabs = new TabsBar(tabSpecs, tabW, tabH);
+		}
