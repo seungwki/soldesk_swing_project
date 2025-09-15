@@ -41,6 +41,11 @@ public class TabsBar extends JPanel {
 		FolderTab t = tabs[index];
 		Dimension d = t.getPreferredSize();
 		t.setBounds(x, y, d.width, d.height); // ← 위치+크기 동시 지정
+//		System.out.println(t);
+//		System.out.println("x : " + x);
+//		System.out.println("y : " + y);
+//		System.out.println("w : " + d.width);
+//		System.out.println("h : " + d.height);
 	}
 
 	public void setOnChange(OnChange cb) {
@@ -53,6 +58,8 @@ public class TabsBar extends JPanel {
 		selectedIndex = index;
 		if (notify && onChange != null)
 			onChange.onChange(selectedIndex);
+		
+		System.out.println(selectedIndex);
 	}
 
 	public int getSelectedIndex() {

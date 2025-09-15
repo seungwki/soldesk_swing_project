@@ -71,9 +71,9 @@ public class ClassManagerCardViewer extends BasePage {
 		for (Team team : project.getTeams2()) {
 			int degree = team.getDegree();
 			teamMap.computeIfAbsent(degree, k -> new ArrayList<>()).add(team);
-			teamMap.get(degree).add(team);
+			//			teamMap.get(degree).add(team);
 		}
-//		TabSpec[] tabSpecs = new TabSpec[degreeList.size() + 1];
+		//		TabSpec[] tabSpecs = new TabSpec[degreeList.size() + 1];
 		ArrayList<Integer> degreeList = new ArrayList<Integer>();
 		Iterator<Integer> degreeIter = teamMap.keySet().iterator();
 		while (degreeIter.hasNext()) {
@@ -94,6 +94,8 @@ public class ClassManagerCardViewer extends BasePage {
 		tabSpecs[tabSpecs.length - 1] = new TabSpec("+", UNSELECT_COLOR);
 		tabSpecs[tabSpecs.length - 1].setDegree("+");
 		tabs = new TabsBar(tabSpecs, tabW, tabH);
+		getContentPanel().add(tabs);
+		tabs.setLayout(null);
 
 		final int gap = 110;
 		for (int i = 0; i < tabSpecs.length; i++) {
@@ -102,7 +104,6 @@ public class ClassManagerCardViewer extends BasePage {
 		int tabsRight = boxX + (tabSpecs.length - 1) * gap + tabW;
 		int tabsBottom = tabY + tabH;
 		tabs.setBounds(0, 0, tabsRight, tabsBottom);
-		getContentPanel().add(tabs);
 		getContentPanel().setComponentZOrder(box, 1);
 		getContentPanel().setComponentZOrder(tabs, 0);
 
@@ -117,10 +118,11 @@ public class ClassManagerCardViewer extends BasePage {
 			applyTabSelection();
 		});
 		tabs.setSelectedIndex(0, true);
+		//		tabs.setVisible(true);
 		applyTabSelection();
 		box.autoGrow();
 		refreshScroll();
-	}
+	}//생성자
 
 	// 선택 탭 색 반영
 	private void applyTabSelection() {
@@ -133,7 +135,7 @@ public class ClassManagerCardViewer extends BasePage {
 		box.setBorderColor(SELECT_COLOR);
 		box.setBackground(SELECT_COLOR);
 		tabs.repaint();
-	}
+	}//applyTabSelection
 
 	private void handleTabClicked(int idx) {
 		String degreeStr = tabs.getTabSpec(idx).getDegree();
@@ -165,7 +167,7 @@ public class ClassManagerCardViewer extends BasePage {
 					}
 				});
 				y += row.getPreferredHeight() + gapY;
-			}
+			} //if
 		}
 		ProjectRow row = new ProjectRow(contentX, y, contentW, null);
 		row.setOutputTitle("+");
@@ -175,7 +177,7 @@ public class ClassManagerCardViewer extends BasePage {
 		box.autoGrow();
 		box.revalidate();
 		box.repaint();
-	}
+	}//handleTabClicked
 
 	//새 차수 생성
 	private void handleAddNewDegree() {
@@ -218,8 +220,9 @@ public class ClassManagerCardViewer extends BasePage {
 		getContentPanel().remove(tabs);
 
 		// 새 TabsBar 생성
-		tabs = new TabsBar(newSpecs, tabW, tabH);
 		final int gap = 110;
+		tabs = new TabsBar(newSpecs, tabW, tabH);
+		System.out.println(newSpecs.length);
 		for (int i = 0; i < newSpecs.length; i++) {
 			tabs.setTabLocation(i, boxX + i * gap, tabY);
 		}
@@ -248,8 +251,8 @@ public class ClassManagerCardViewer extends BasePage {
 
 		// 새 탭 적용
 		getContentPanel().add(tabs);
-		getContentPanel().setComponentZOrder(tabs, 0);
-		getContentPanel().setComponentZOrder(box, 1);
+		getContentPanel().setComponentZOrder(tabs, 1);
+		getContentPanel().setComponentZOrder(box, 0);
 
 		getContentPanel().revalidate();
 		getContentPanel().repaint();

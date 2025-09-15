@@ -65,7 +65,7 @@ public class ProjectRow extends JPanel {
 		panelOutput = new JPanel(null);
 		panelOutput.setOpaque(false);
 		panelOutput.setBounds(0, 0, leftWidth, OUTPUT_H);
-		lbOutput = new JLabel("산출물 이름", JLabel.LEFT);
+		lbOutput = new JLabel("", JLabel.LEFT);
 		lbOutput.setFont(new Font("맑은 고딕", Font.BOLD, 14));
 		lbOutput.setForeground(Color.DARK_GRAY);
 		lbOutput.setBounds(PAD, PAD, leftWidth - PAD * 2, OUTPUT_H - PAD * 2);
@@ -151,16 +151,6 @@ public class ProjectRow extends JPanel {
 		}
 		panelTag.revalidate();
 		panelTag.repaint();
-	}
-
-	private List<TagChip> dummyTags(int n) {
-		List<TagChip> list = new ArrayList<>();
-		for (int i = 0; i < n; i++) {
-			String txt = "태그" + (i + 1);
-			int w = Math.min(140, 52 + txt.length() * 10);
-			list.add(new TagChip(txt, new Color(0xF7F9FF), new Color(0x324B93), w, 28));
-		}
-		return list;
 	}
 
 	// front_ui/ProjectRow.java  (마지막 버전에 아래만 추가)
