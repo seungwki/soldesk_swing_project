@@ -58,4 +58,7 @@ public class TabsBar extends JPanel {
 	public FolderTab getTab(int index) {
 		return tabs[index];
 	}
+	public FolderTab[] getTab() {
+		return tabs;
+	}
 }

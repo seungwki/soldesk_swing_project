@@ -31,8 +31,7 @@ public class BasePage extends JPanel {
 		content = new BlueContentPanel();
 		content.setLayout(null);
 
-		scrollPane = new JScrollPane(content, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
-				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane = new JScrollPane(content, ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setBounds(0, topH, WIDTH, HEIGHT - topH);
 		scrollPane.setBorder(null);
 		scrollPane.setOpaque(true);
@@ -79,16 +78,15 @@ public class BasePage extends JPanel {
 		int viewportH = scrollPane.getViewport().getExtentSize().height;
 		int viewportW = scrollPane.getViewport().getExtentSize().width;
 
-//		int bottomPadding = 100;
+		//		int bottomPadding = 100;
 		int newH = Math.max(viewportH + 1, maxY + CONTENT_BOTTOM_PADDING);
 		int newW = Math.max(viewportW, maxW);
 
 		content.setPreferredSize(new Dimension(newW, newH));
 		content.revalidate();
 		content.repaint();
-	}
+	}//refreshScroll
 
-	// 0909 승민이가 추가한 코드
 	public void setScrollBarVisible(boolean visible) {
 		if (visible) {
 			scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
@@ -152,20 +150,16 @@ public class BasePage extends JPanel {
 			g2.setColor(THUMB);
 			g2.fillRoundRect(x, y, w, h, R, R);
 			g2.dispose();
-		}//paintThumb
-	}
-	// 💡 화면 전환용 정적 메서드 추가 // 0910 승민쓰 추가코드
+		}
+	}//VisibleScrollBarUI 
+
 	public static void changePage(JPanel newPage) {
 		// 현재 Swing 트리에서 최상위 JFrame을 찾아 contentPane을 교체
 		Window window = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
-		if (window instanceof JFrame) {
-			JFrame frame = (JFrame) window;
-			frame.setContentPane(newPage);
-			frame.revalidate();
-			frame.repaint();
-		} else {
-			System.err.println("changePage 오류: 현재 활성 윈도우가 JFrame이 아닙니다.");
-		}
-	}
+		JFrame frame = (JFrame) window;
+		frame.setContentPane(newPage);
+		frame.revalidate();
+		frame.repaint();
+	}//changePage
 
 }

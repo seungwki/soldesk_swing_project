@@ -3,7 +3,6 @@ package front_frame;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -52,9 +51,6 @@ public class ClassManagerCardViewer extends BasePage {
 	// 더미 데이터
 	private final List<ProjectRow> rows = new ArrayList<>(); // ★ 추가
 
-	// Card에서 호출되는 기존 시그니처와 호환
-
-	// 내부에서 사용(직접 테스트용)
 	public ClassManagerCardViewer(Project project) {
 		super(new TopBar.OnMenuClick() {
 			@Override
@@ -78,40 +74,48 @@ public class ClassManagerCardViewer extends BasePage {
 		// ── 박스(자동 확장형) ─────────────────────────────
 		box = new AutoGrowBox();
 		box.setBounds(boxX, boxY, boxW, boxH);
-		box.setBorderColor(SELECT_COLOR); // ★ 추가: 선택 색과 동일
+		box.setBorderColor(SELECT_COLOR);
+		box.setBackground(SELECT_COLOR);
 		getContentPanel().add(box);
 
 		// ── 탭 바(1차~5차 +) ────────────────────────────//
-		//팀 가져와서 차수 별로 맵에 넣기
+		// 팀 가져와서 차수 별로 맵에 넣기
 		for (Team team : project.getTeams2()) {
 			int degree = team.getDegree();
+			// ---------- 수정: 중복 추가 제거 ----------
 			teamMap.computeIfAbsent(degree, k -> new ArrayList<>()).add(team);
-			teamMap.get(degree).add(team);
 		}
-		TabSpec[] tabSpecs = new TabSpec[teamMap.keySet().size() + 1];
-		ArrayList<Integer> degreeList = new ArrayList<Integer>();
-		Iterator<Integer> degreeIter = teamMap.keySet().iterator();
-		while (degreeIter.hasNext()) {
-			degreeList.add(degreeIter.next());
-		}
-		degreeList.sort(new Comparator<Integer>() {
-			@Override
-			public int compare(Integer o1, Integer o2) {
-				return o1 - o2;
-			}
-		});
+
+		// degreeList 정렬
+		ArrayList<Integer> degreeList = new ArrayList<Integer>(teamMap.keySet());
+		degreeList.sort(Integer::compareTo);
+
+		// "+" 탭 포함 여부 (최대 5차)
+		boolean addPlusTab = degreeList.size() < 5;
+
+		// 탭 스펙 구성 (플러스 탭을 포함할지 결정)
+		TabSpec[] tabSpecs = new TabSpec[degreeList.size() + (addPlusTab ? 1 : 0)];
 		for (int i = 0; i < degreeList.size(); i++) {
 			tabSpecs[i] = new TabSpec(degreeList.get(i) + "차", UNSELECT_COLOR);
 			tabSpecs[i].setDegree(String.valueOf(degreeList.get(i)));
 		}
-		tabSpecs[tabSpecs.length - 1] = new TabSpec("+", UNSELECT_COLOR);
-		tabSpecs[tabSpecs.length - 1].setDegree("+");
+		if (addPlusTab) {
+			tabSpecs[tabSpecs.length - 1] = new TabSpec("+", UNSELECT_COLOR);
+			tabSpecs[tabSpecs.length - 1].setDegree("+");
+		}
+
 		tabs = new TabsBar(tabSpecs, tabW, tabH);
 
 		final int gap = 110;
 		for (int i = 0; i < tabSpecs.length; i++) {
 			tabs.setTabLocation(i, boxX + i * gap, tabY);
-			tabs.getTab(i).setName(String.valueOf(i));
+			// ---------- 수정: 탭의 식별용 name 을 '차수 숫자' 혹은 "+" 로 설정 ----------
+			if (addPlusTab && i == tabSpecs.length - 1) {
+				tabs.getTab(i).setName("+");
+			} else {
+				// degreeList와 인덱스가 동일하게 매핑됨을 이용
+				tabs.getTab(i).setName(String.valueOf(degreeList.get(i)));
+			}
 		}
 		int tabsRight = boxX + (tabSpecs.length - 1) * gap + tabW;
 		int tabsBottom = tabY + tabH;
@@ -120,41 +124,51 @@ public class ClassManagerCardViewer extends BasePage {
 		getContentPanel().setComponentZOrder(tabs, 0);
 		getContentPanel().setComponentZOrder(box, 1);
 
-		// 탭 선택 동작 //TODO 2
+		// 탭 선택 동작 
 		tabs.setOnChange(idx -> {
-			if (idx == tabs.getTabCount() - 1) {
+			// 마지막 탭이 "+"라면 새 차수 추가
+			if (addPlusTab && idx == tabs.getTabCount() - 1) {
 				handleAddNewDegree();
 				return;
 			}
 			selectedTab = idx;
-			handleTabClicked(idx);
-			applyTabSelection();
+			handleTabClicked(idx);//n차 탭 클릭 시 동작
+			applyTabSelection();//색 변경
 		});
-		tabs.setSelectedIndex(0, true); // 최초 1차 선택
+		tabs.setSelectedIndex(0, true); // 최초 1차 선택 (OnChange가 호출되어 처리됨)
+		// 시각적 선택 상태 보정
+		applyTabSelection();
+
 		box.autoGrow();
 		refreshScroll();
-	}
+	}//생성자
 
-	// ★ 추가: 탭/박스 색 동기화(선택 탭=파란색, 비선택=흰색)
 	private void applyTabSelection() {
 		for (int i = 0; i < tabs.getTabCount(); i++) {
 			FolderTab t = tabs.getTab(i);
 			boolean sel = (i == selectedTab);
+			t.setTabColors(sel ? SELECT_COLOR : null, !sel ? UNSELECT_COLOR : null, SELECT_COLOR, null);
 			t.setSelected(sel); // FolderTab은 setSelected만 사용
 		}
 		box.setBorderColor(SELECT_COLOR); // 박스 테두리 고정색(요구사항)
 		getContentPanel().repaint();
-	}
+	}//applyTabSelection
 
 	private void handleTabClicked(int idx) {
-		String degreeStr = tabs.getTab(idx).getDegree();
+		// 탭의 name을 차수 숫자 문자열 또는 "+" 로 설정했으므로 여기서 읽어온다.
+		String degreeStr = tabs.getTab(idx).getName();
 		if (degreeStr == null)
 			return;
-		//		if (degreeStr.equals("+")) {
-		//			return;
-		//		}
+		if (degreeStr.equals("+")) {
+			return;
+		}
 
-		int degree = Integer.parseInt(degreeStr);
+		int degree;
+		try {
+			degree = Integer.parseInt(degreeStr);
+		} catch (NumberFormatException ex) {
+			return;
+		}
 
 		box.removeAll();
 		rows.clear();
@@ -235,6 +249,12 @@ public class ClassManagerCardViewer extends BasePage {
 		final int gap = 110;
 		for (int i = 0; i < newSpecs.length; i++) {
 			tabs.setTabLocation(i, boxX + i * gap, tabY);
+			// ---------- 수정: 새로 만든 탭에도 name 설정 ----------
+			if (addPlusTab && i == newSpecs.length - 1) {
+				tabs.getTab(i).setName("+");
+			} else {
+				tabs.getTab(i).setName(String.valueOf(degreeList.get(i)));
+			}
 		}
 		int tabsRight = boxX + (newSpecs.length - 1) * gap + tabW;
 		int tabsBottom = tabY + tabH;
@@ -248,12 +268,14 @@ public class ClassManagerCardViewer extends BasePage {
 				return;
 			}
 			selectedTab = idx;
-			handleTabClicked(idx);
+			handleTabClicked(idx);//n차 탭을 클릭했을 때 동작
 			applyTabSelection();
 		});
 
 		// 새로 추가된 차수를 자동 선택
 		int newTabIndex = degreeList.indexOf(newDegree);
+		if (newTabIndex < 0)
+			newTabIndex = 0;
 		tabs.setSelectedIndex(newTabIndex, true);
 		selectedTab = newTabIndex;
 		handleTabClicked(newTabIndex);
