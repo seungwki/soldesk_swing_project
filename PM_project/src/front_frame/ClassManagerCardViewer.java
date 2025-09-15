@@ -29,7 +29,7 @@ public class ClassManagerCardViewer extends BasePage {
 	final int tabW = 100, tabH = 28;
 	final int tabBottom = boxBaseY + Theme.BORDER_THICK;
 	final int tabY = tabBottom - tabH;
-//	private final int gap = 110;
+	//	private final int gap = 110;
 	int selectedTab = 0;
 
 	// 팔레트
@@ -73,17 +73,19 @@ public class ClassManagerCardViewer extends BasePage {
 			teamMap.computeIfAbsent(degree, k -> new ArrayList<>()).add(team);
 			teamMap.get(degree).add(team);
 		}
-		TabSpec[] tabSpecs = new TabSpec[teamMap.keySet().size() + 1];
+//		TabSpec[] tabSpecs = new TabSpec[degreeList.size() + 1];
 		ArrayList<Integer> degreeList = new ArrayList<Integer>();
 		Iterator<Integer> degreeIter = teamMap.keySet().iterator();
 		while (degreeIter.hasNext()) {
 			degreeList.add(degreeIter.next());
 		}
+		TabSpec[] tabSpecs = new TabSpec[degreeList.size() + 1];
 		degreeList.sort(new Comparator<Integer>() {
 			@Override
 			public int compare(Integer o1, Integer o2) {
 				return o1 - o2;
 			}
+			//			TabSpec[] tabSpecs = new TabSpec[teamMap.keySet().size() + 1];
 		});
 		for (int i = 0; i < degreeList.size(); i++) {
 			tabSpecs[i] = new TabSpec(degreeList.get(i) + "차", UNSELECT_COLOR);
@@ -101,8 +103,8 @@ public class ClassManagerCardViewer extends BasePage {
 		int tabsBottom = tabY + tabH;
 		tabs.setBounds(0, 0, tabsRight, tabsBottom);
 		getContentPanel().add(tabs);
-		getContentPanel().setComponentZOrder(tabs, 0);
 		getContentPanel().setComponentZOrder(box, 1);
+		getContentPanel().setComponentZOrder(tabs, 0);
 
 		// 탭 클릭
 		tabs.setOnChange(idx -> {

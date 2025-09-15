@@ -1,6 +1,7 @@
 package VO;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Team {
@@ -50,5 +51,26 @@ public class Team {
 	public String toString() {
 		return tName;
 	}
-	
+
+	//통합용
+	/** 수정 전용: 팀원 전체 반환 (수정이 필요한 코드에서만 사용) */
+	public List<Student> membersMutable() {
+		return members;
+	}
+
+	/** 수정 전용: 여러 명 추가 */
+	public void addMembers(Collection<Student> list) {
+		members.addAll(list);
+	}
+
+	/** 수정 전용: 한 명 제거 */
+	public boolean removeMember(Student s) {
+		return members.remove(s);
+	}
+
+	/** 수정 전용: 모두 이동 후 비우기 */
+	public void moveAllMembersTo(Team dest) {
+		dest.members.addAll(this.members);
+		this.members.clear();
+	}
 }
