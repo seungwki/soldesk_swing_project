@@ -132,7 +132,7 @@ public class TeamDetailViewer extends BasePage {
 				tagNameList.add(team.getOutput().getTagList().get(i).getName());
 			}
 		}
-		tags.setChips(tagNameList, new Color(0xE5E7EB), new Color(0x1F2937), 28, 8);
+		tags.setChips(team.getOutput().getTagList(), 28, 8);
 		box.add(tags);
 
 		box.autoGrow();
