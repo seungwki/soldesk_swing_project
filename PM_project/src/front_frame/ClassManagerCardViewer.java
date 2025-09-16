@@ -1,21 +1,25 @@
 package front_frame;
 
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dialog;
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
+import javax.swing.JDialog;
+import javax.swing.SwingUtilities;
+
 import VO.Project;
 import VO.Team;
 import front_ui.AutoGrowBox;
-import front_ui.ChipsLine;
 import front_ui.FolderTab;
 import front_ui.ProjectRow;
 import front_ui.TabSpec;
 import front_ui.TabsBar;
-import front_ui.TagChip; // 태그 칩 존재 가정
 import front_ui.TopBar;
 import front_util.Theme;
 
@@ -168,7 +172,6 @@ public class ClassManagerCardViewer extends BasePage {
 	}//applyTabSelection
 
 	private void handleTabClicked(int idx) {
-		// 탭의 name을 차수 숫자 문자열 또는 "+" 로 설정했으므로 여기서 읽어온다.
 		String degreeStr = tabs.getTab(idx).getName();
 		if (degreeStr == null)
 			return;
@@ -207,11 +210,23 @@ public class ClassManagerCardViewer extends BasePage {
 				y += row.getPreferredHeight() + gapY;
 			}
 		}
-		ProjectRow row = new ProjectRow(contentX, y, contentW, null);
-		row.setOutputTitle("+");
-		rows.add(row);
-		box.add(row);
-		y += row.getPreferredHeight() + gapY;
+		ProjectRow newTeamrow = new ProjectRow(contentX, y, contentW, null);
+		newTeamrow.setOutputTitle("+");
+		rows.add(newTeamrow);
+		box.add(newTeamrow);
+
+		newTeamrow.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				Window parentWindow = SwingUtilities.getWindowAncestor(newTeamrow);
+				DataInputDialog dialog = new DataInputDialog(parentWindow, project);
+				dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL); // 모달 다이얼로그
+				dialog.setLocationRelativeTo(parentWindow); // parent 중앙에 위치
+				dialog.setVisible(true);
+			}
+		});
+
+		y += newTeamrow.getPreferredHeight() + gapY;
 		box.autoGrow();
 		box.revalidate();
 		box.repaint();

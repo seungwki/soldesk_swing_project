@@ -5,8 +5,11 @@ import java.awt.Font;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import VO.Project;
 import VO.Team;
@@ -23,10 +26,8 @@ public class TeamDetailViewer extends BasePage {
 	final int boxX = 19, boxW = 752, boxH = 460;
 	final int boxBaseY = 24, boxDrop = 12, boxY = boxBaseY + boxDrop;
 	final int contentX = 24, contentW = boxW - contentX * 2;
-
 	private final AutoGrowBox box = new AutoGrowBox();
 	private final TabsBar tabs;
-
 	private static final Color SELECT_COLOR = new Color(0xAFC2F5);
 	private static final Color UNSELECT_COLOR = Color.WHITE;
 	private int selectedTab;
@@ -55,7 +56,8 @@ public class TeamDetailViewer extends BasePage {
 		this.thisOutputDegree = team.getDegree();
 
 		// 내용 상자: 콘텐츠 패널에 추가
-		box.setBounds(boxX, boxY, boxW, boxH);
+		box.setBottomPadding(0);
+		box.setBounds(boxX, boxY, boxW, boxH-60);
 		box.setBorderColor(SELECT_COLOR);
 		getContentPanel().add(box);
 
@@ -135,7 +137,7 @@ public class TeamDetailViewer extends BasePage {
 		}
 		tags.setChips(team.getOutput().getTagList(), 28, 8);
 		box.add(tags);
-		
+
 		// 점수 라벨 추가
 		JLabel scoreLabel = new JLabel("점수 : " + team.getOutput().getScore() + " / " + team.getOutput().getMaxScore() + " 점");
 		scoreLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 22));
@@ -147,28 +149,32 @@ public class TeamDetailViewer extends BasePage {
 		final int startX = (boxW - totalButtonWidth) / 2;
 		JButton modifyButton = new JButton("수정");
 		JButton deleteButton = new JButton("삭제");
-		modifyButton.setBounds(startX, y + 80, 100, 32);
 		modifyButton.setBorderPainted(false);
 		modifyButton.setFocusPainted(false);
 		modifyButton.setBackground(new Color(0xAFC2F5)); // 밝은 파란색
-		modifyButton.setForeground(Color.WHITE);
+		modifyButton.setFont(new Font(null, Font.BOLD, 16));
+		modifyButton.setBounds(startX, y + 80, 100, 32);
 		deleteButton.setBounds(startX + 100 + 10, y + 80, 100, 32);
 		deleteButton.setBorderPainted(false);
 		deleteButton.setFocusPainted(false);
 		deleteButton.setBackground(new Color(0xAFC2F5));
-		deleteButton.setForeground(Color.WHITE);
+		deleteButton.setFont(new Font(null, Font.BOLD, 16));
 		box.add(modifyButton);
 		box.add(deleteButton);
-		
+
 		//수정 버튼 기능 추가
 		modifyButton.addActionListener(e -> {
 			System.out.println("수정");
 		});
 		//삭제 버튼 기능 추가
 		deleteButton.addActionListener(e -> {
-			System.out.println("삭제");
+			int delete = JOptionPane.showConfirmDialog(null, "삭제하시겠습니까?", "삭제 확인", JOptionPane.OK_CANCEL_OPTION);
+			if (delete == JOptionPane.OK_OPTION) {
+				project.getTeams2().remove(team);
+				BasePage.changePage(new ClassManagerCardViewer(project, thisOutputDegree - 1));
+			}
 		});
-		
+
 		box.autoGrow();
 		refreshScroll();
 

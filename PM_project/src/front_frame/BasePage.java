@@ -153,13 +153,30 @@ public class BasePage extends JPanel {
 		}
 	}//VisibleScrollBarUI 
 
+	//	public static void changePage(JPanel newPage) {
+	//		// 현재 Swing 트리에서 최상위 JFrame을 찾아 contentPane을 교체
+	//		Window window = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
+	//		JFrame frame = (JFrame) window;
+	//		frame.setContentPane(newPage);
+	//		frame.revalidate();
+	//		frame.repaint();
+	//	}//changePage
+
 	public static void changePage(JPanel newPage) {
-		// 현재 Swing 트리에서 최상위 JFrame을 찾아 contentPane을 교체
-		Window window = KeyboardFocusManager.getCurrentKeyboardFocusManager().getActiveWindow();
-		JFrame frame = (JFrame) window;
-		frame.setContentPane(newPage);
-		frame.revalidate();
-		frame.repaint();
-	}//changePage
+		JFrame frame = null;//JDialog 이후 실행이 안 되서 변경
+		for (Window window : Window.getWindows()) {
+			if (window instanceof JFrame) {
+				frame = (JFrame) window;
+				if (frame.isVisible()) {
+					break;
+				}
+			}
+		}
+		if (frame != null) {
+			frame.setContentPane(newPage);
+			frame.revalidate();
+			frame.repaint();
+		}
+	}
 
 }
