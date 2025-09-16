@@ -68,12 +68,13 @@ public class UserManager {
 	// ---- 현재 사용자 프로필 이미지 경로 ----
 	// (클래스패스 기준. 파일시스템 쓰면 경로 로더만 바꾸면 됨)
 	public String getCurrentProfileImagePath() {
-	    User u = getCurrentUser();
-	    String g = (u == null || u.getGender() == null) ? "비공개" : u.getGender();
-	    return switch (g) {
-	        case "남" -> "profile_male.png";
-	        case "여" -> "profile_female.png";
-	        default   -> "profile_secret.png";
-	    };
-	}
+		User u = getCurrentUser();
+		String g = (u == null || u.getGender() == null) ? "비공개" : u.getGender();
+		return "profile_secret.png";
+	};
+	//	    return switch (g) {
+	//	    case "남" -> "profile_male.png";
+	//	    case "여" -> "profile_female.png";
+	//	    default   -> "profile_secret.png";
+	//	    };}
 }
