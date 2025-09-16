@@ -1,7 +1,9 @@
 package front_frame;
 
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Font;
+import java.awt.Window;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -57,7 +59,7 @@ public class TeamDetailViewer extends BasePage {
 
 		// 내용 상자: 콘텐츠 패널에 추가
 		box.setBottomPadding(0);
-		box.setBounds(boxX, boxY, boxW, boxH-60);
+		box.setBounds(boxX, boxY, boxW, boxH - 60);
 		box.setBorderColor(SELECT_COLOR);
 		getContentPanel().add(box);
 
@@ -113,7 +115,7 @@ public class TeamDetailViewer extends BasePage {
 		ArrayList<String> fileNameList = new ArrayList<String>();
 		if (team.getOutput().getFile() != null) {
 			files.setBounds(contentX, y, contentW, files.getPreferredHeight(team.getOutput().getFile().size()));
-			for (int i = 0; i < specs.length; i++) {
+			for (int i = 0; i < team.getOutput().getFile().size(); i++) {
 				fileNameList.add(team.getOutput().getFile().get(i).getName());
 			}
 		}
@@ -164,7 +166,11 @@ public class TeamDetailViewer extends BasePage {
 
 		//수정 버튼 기능 추가
 		modifyButton.addActionListener(e -> {
-			System.out.println("수정");
+			//			Window parentWindow = SwingUtilities.getWindowAncestor(newTeamrow);
+			DataInputDialog dialog = new DataInputDialog(null, project, team, team.getDegree());
+			dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL); // 모달 다이얼로그
+			//			dialog.setLocationRelativeTo(parentWindow); // parent 중앙에 위치
+			dialog.setVisible(true);
 		});
 		//삭제 버튼 기능 추가
 		deleteButton.addActionListener(e -> {

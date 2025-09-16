@@ -3,6 +3,7 @@ package VO;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class Data {
@@ -685,7 +686,10 @@ public class Data {
 		}
 		//태그 추가
 		projectData.get(0).getTeams2().get(0).getOutput().getTagList().add(TagRepository.getOutputTags().get(0));
-		projectData.get(0).getTeams2().get(0).getOutput().getTagList().add(TagRepository.getOutputTags().get(1));
 		projectData.get(0).getTeams2().get(0).getOutput().getTagList().add(TagRepository.getOutputTags().get(2));
 	}//생성자
+
+	public List<Project> getProjects() {
+		return projectData;
+	}
 }

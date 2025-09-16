@@ -216,7 +216,7 @@ public class ClassManagerCardViewer extends BasePage {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				Window parentWindow = SwingUtilities.getWindowAncestor(newTeamrow);
-				DataInputDialog dialog = new DataInputDialog(parentWindow, project);
+				DataInputDialog dialog = new DataInputDialog(parentWindow, project, null, degree);
 				dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL); // 모달 다이얼로그
 				dialog.setLocationRelativeTo(parentWindow); // parent 중앙에 위치
 				dialog.setVisible(true);
