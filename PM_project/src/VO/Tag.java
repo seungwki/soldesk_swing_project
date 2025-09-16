@@ -52,7 +52,6 @@ public class Tag {
 	// --- 디버깅용 toString() ---
 	@Override
 	public String toString() {
-		//		return "TagData{name='" + name + "', remark='" + remark + "', color=" + color + "}";
 		return name;
 	}
 }

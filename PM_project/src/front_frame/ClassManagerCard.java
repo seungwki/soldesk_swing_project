@@ -4,11 +4,8 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
-
 import javax.swing.*;
-
 import VO.Project;
-import frame.action.ShowTeamListAction;
 
 public class ClassManagerCard extends JPanel {
 	private Project project;
