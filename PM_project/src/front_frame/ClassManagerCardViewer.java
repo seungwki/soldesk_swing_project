@@ -52,6 +52,19 @@ public class ClassManagerCardViewer extends BasePage {
 	// 더미 데이터
 	private final List<ProjectRow> rows = new ArrayList<>(); // ★ 추가
 
+	public ClassManagerCardViewer(Project project, int selectedTabIndex) {
+	    this(project); // 기존 생성자 호출
+
+	    // 선택 탭 인덱스가 유효하면 적용
+	    if (selectedTabIndex >= 0 && selectedTabIndex < tabs.getTabCount()) {
+	        selectedTab = selectedTabIndex;
+	        tabs.setSelectedIndex(selectedTabIndex, true);  // 시각적 선택
+	        handleTabClicked(selectedTabIndex);             // 해당 차수 팀 목록 표시
+	        applyTabSelection();                            // 탭 색상 적용
+	    }
+	}
+
+
 	public ClassManagerCardViewer(Project project) {
 		super(new TopBar.OnMenuClick() {
 			@Override

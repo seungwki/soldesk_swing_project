@@ -65,8 +65,10 @@ public class TeamDetailViewer extends BasePage {
 		TabSpec[] specs = this.tabSpecArr;
 		tabs = new TabsBar(specs, 100, 28);
 		int gap = 110, tabY = boxBaseY + Theme.BORDER_THICK - 28;
-		for (int i = 0; i < specs.length; i++)
+		for (int i = 0; i < specs.length; i++) {
 			tabs.setTabLocation(i, boxX + i * gap, tabY);
+			tabs.getTab(i).setName(String.valueOf(i+1));
+			}
 		tabs.setBounds(0, 0, boxX + (specs.length - 1) * gap + 100, tabY + 28);
 		getContentPanel().add(tabs);
 
@@ -126,7 +128,21 @@ public class TeamDetailViewer extends BasePage {
 		tabs.setOnChange(idx -> {
 			this.selectedTab = idx;
 			applyTabSelection();
+
+			String degreeStr = tabs.getTab(idx).getName();
+			System.out.println("degreeStr  >>" + degreeStr);
+			if (degreeStr == null || degreeStr.equals("+"))
+				return;
+
+			try {
+				int degree = Integer.parseInt(degreeStr);
+				// 선택한 차수의 팀 목록 화면으로 완전히 이동
+				BasePage.changePage(new ClassManagerCardViewer(project, idx));
+			} catch (NumberFormatException ex) {
+				return;
+			}
 		});
+
 		tabs.setSelectedIndex(this.selectedTab, false);
 		applyTabSelection();
 	}
@@ -146,8 +162,9 @@ public class TeamDetailViewer extends BasePage {
 		TabSpec[] specs = { new TabSpec("1차", Color.WHITE), new TabSpec("2차", Color.WHITE), new TabSpec("3차", Color.WHITE), new TabSpec("4차", Color.WHITE), new TabSpec("5차", Color.WHITE) };
 		TabsBar tb = new TabsBar(specs, 100, 28);
 		int gap = 110;
-		for (int i = 0; i < specs.length; i++)
+		for (int i = 0; i < specs.length; i++) {
 			tb.setTabLocation(i, x + i * gap, y);
+		}
 		tb.setBounds(0, 0, x + (specs.length - 1) * gap + 100, y + 28);
 		return tb;
 	}
