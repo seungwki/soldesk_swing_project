@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -134,7 +135,40 @@ public class TeamDetailViewer extends BasePage {
 		}
 		tags.setChips(team.getOutput().getTagList(), 28, 8);
 		box.add(tags);
-
+		
+		// 점수 라벨 추가
+		JLabel scoreLabel = new JLabel("점수 : " + team.getOutput().getScore() + " / " + team.getOutput().getMaxScore() + " 점");
+		scoreLabel.setFont(new Font("맑은 고딕", Font.PLAIN, 22));
+		// y 좌표를 조정하여 적절한 위치에 배치합니다.
+		scoreLabel.setBounds(contentX, y + 40, contentW, 24);
+		box.add(scoreLabel);
+		// 버튼 추가
+		final int totalButtonWidth = 100 + 10 + 100;
+		final int startX = (boxW - totalButtonWidth) / 2;
+		JButton modifyButton = new JButton("수정");
+		JButton deleteButton = new JButton("삭제");
+		modifyButton.setBounds(startX, y + 80, 100, 32);
+		modifyButton.setBorderPainted(false);
+		modifyButton.setFocusPainted(false);
+		modifyButton.setBackground(new Color(0xAFC2F5)); // 밝은 파란색
+		modifyButton.setForeground(Color.WHITE);
+		deleteButton.setBounds(startX + 100 + 10, y + 80, 100, 32);
+		deleteButton.setBorderPainted(false);
+		deleteButton.setFocusPainted(false);
+		deleteButton.setBackground(new Color(0xAFC2F5));
+		deleteButton.setForeground(Color.WHITE);
+		box.add(modifyButton);
+		box.add(deleteButton);
+		
+		//수정 버튼 기능 추가
+		modifyButton.addActionListener(e -> {
+			System.out.println("수정");
+		});
+		//삭제 버튼 기능 추가
+		deleteButton.addActionListener(e -> {
+			System.out.println("삭제");
+		});
+		
 		box.autoGrow();
 		refreshScroll();
 
