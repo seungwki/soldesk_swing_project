@@ -119,63 +119,60 @@ public class FrameTeamM extends JPanel {
 			Integer selectedDeg = (Integer) orderCombo.getSelectedItem();
 			String selectedTeamName = (String) teamCombo.getSelectedItem();
 
-			JDialog dlg = new JDialog(SwingUtilities.getWindowAncestor(this), "학생 추가",
-					Dialog.ModalityType.APPLICATION_MODAL);
+			JDialog dlg = new JDialog(SwingUtilities.getWindowAncestor(this), "학생 추가", Dialog.ModalityType.APPLICATION_MODAL);
 			dlg.setLayout(new BorderLayout());
 
-			makeStudent panel = new makeStudent(data.getProjects(), current, selectedDeg, selectedTeamName, null, 
-					result -> {
+			makeStudent panel = new makeStudent(data.getProjects(), current, selectedDeg, selectedTeamName, null, result -> {
 
-						// === 1) 미배정으로 저장 (팀/차수 없이 추가 체크) ===
-						boolean noTeam = (result.degree == null) || (result.teamName == null)
-								|| result.teamName.isBlank();
+				// === 1) 미배정으로 저장 (팀/차수 없이 추가 체크) ===
+				boolean noTeam = (result.degree == null) || (result.teamName == null) || result.teamName.isBlank();
 
-						if (noTeam) {
-							// 팀/차수 없이 추가 → 프로젝트 '미배정'으로만 저장
-							result.project.addUnassigned(result.student);
+				if (noTeam) {
+					// 팀/차수 없이 추가 → 프로젝트 '미배정'으로만 저장
+					result.project.addUnassigned(result.student);
 
-							// 현재 화면은 특정 팀 테이블이므로, 테이블 내용은 그대로일 수 있음
-							if (result.project == pj) {
-								// 콤보/테이블 강제 변경 없이 화면만 안정적으로 갱신하고 싶다면 필요 시 호출
-								renderStudentsTable(pj, orderCombo, teamCombo);
-							}
+					// 현재 화면은 특정 팀 테이블이므로, 테이블 내용은 그대로일 수 있음
+					if (result.project == pj) {
+						// 콤보/테이블 강제 변경 없이 화면만 안정적으로 갱신하고 싶다면 필요 시 호출
+						renderStudentsTable(pj, orderCombo, teamCombo);
+					}
 
-							dlg.dispose();
-							JOptionPane.showMessageDialog(this, "학생이 '미배정'으로 추가되었습니다.");
-							return;
-						}
+					dlg.dispose();
+					JOptionPane.showMessageDialog(this, "학생이 '미배정'으로 추가되었습니다.");
+					return;
+				}
 
-						// === 2) 팀에 배정해서 저장 ===
-						int degree = result.degree; // 0차 금지: makeStudent에서 1차 이상만 노출/선택되므로 신뢰
-						String teamNm = result.teamName.trim();
+				// === 2) 팀에 배정해서 저장 ===
+				int degree = result.degree; // 0차 금지: makeStudent에서 1차 이상만 노출/선택되므로 신뢰
+				String teamNm = result.teamName.trim();
 
-						// 팀 찾거나 생성
-						Team target = null;
-						for (Team t : result.project.getTeams()) {
-							if (t.getdegree() == degree && t.getTName().equals(teamNm)) {
-								target = t;
-								break;
-							}
-						}
-						if (target == null) {
-							target = new Team(teamNm, degree);
-							result.project.addTeam(target);
-						}
-						target.addMember(result.student);
+				// 팀 찾거나 생성
+				Team target = null;
+				for (Team t : result.project.getTeams()) {
+					if (t.getDegree() == degree && t.getTName().equals(teamNm)) {
+						target = t;
+						break;
+					}
+				}
+				if (target == null) {
+					target = new Team(teamNm, degree);
+					result.project.addTeam(target);
+				}
+				target.addMember(result.student);
 
-						// '미배정'에 남아있을 수 있으니 제거
-						result.project.removeUnassigned(result.student);
+				// '미배정'에 남아있을 수 있으니 제거
+				result.project.removeUnassigned(result.student);
 
-						// 같은 프로젝트를 보고 있으면 UI 갱신
-						if (result.project == pj) {
-							// 팀/차수 보장(단, 0차/POOL은 쓰지 않으므로 그대로 사용 가능)
-							ensureDegreeAndTeamShown(pj, orderCombo, teamCombo, degree, teamNm);
-							renderStudentsTable(pj, orderCombo, teamCombo);
-						}
+				// 같은 프로젝트를 보고 있으면 UI 갱신
+				if (result.project == pj) {
+					// 팀/차수 보장(단, 0차/POOL은 쓰지 않으므로 그대로 사용 가능)
+					ensureDegreeAndTeamShown(pj, orderCombo, teamCombo, degree, teamNm);
+					renderStudentsTable(pj, orderCombo, teamCombo);
+				}
 
-						dlg.dispose();
-						JOptionPane.showMessageDialog(this, "학생이 팀에 추가되었습니다: " + teamNm + " (" + degree + "차)");
-					});
+				dlg.dispose();
+				JOptionPane.showMessageDialog(this, "학생이 팀에 추가되었습니다: " + teamNm + " (" + degree + "차)");
+			});
 
 			dlg.add(panel, BorderLayout.CENTER);
 			dlg.pack();
@@ -192,15 +189,14 @@ public class FrameTeamM extends JPanel {
 				return;
 			}
 
-			JDialog dlg = new JDialog(SwingUtilities.getWindowAncestor(this), "팀 추가",
-					Dialog.ModalityType.APPLICATION_MODAL);
+			JDialog dlg = new JDialog(SwingUtilities.getWindowAncestor(this), "팀 추가", Dialog.ModalityType.APPLICATION_MODAL);
 			dlg.setLayout(new BorderLayout());
 
 			makeTeam panel = new makeTeam(data.getProjects(), current, selectedDeg, result -> {
 				// 1) 팀 찾기 또는 생성
 				Team target = null;
 				for (Team t : result.project.getTeams()) {
-					if (t.getTName().equals(result.teamName) && t.getdegree() == result.degree) {
+					if (t.getTName().equals(result.teamName) && t.getDegree() == result.degree) {
 						target = t;
 						break;
 					}
@@ -254,7 +250,7 @@ public class FrameTeamM extends JPanel {
 		sldg.removeAllItems();
 		java.util.Set<Integer> set = new java.util.TreeSet<>();
 		for (Team t : pj.getTeams()) {
-			int deg = t.getdegree();
+			int deg = t.getDegree();
 			if (deg >= 1)
 				set.add(deg); // ★ 0차 숨김
 		}
@@ -274,7 +270,7 @@ public class FrameTeamM extends JPanel {
 		// 팀명 수집 후 정렬(Optional)
 		List<String> names = new ArrayList<>();
 		for (Team t : pj.getTeams())
-			if (t.getdegree() == d)
+			if (t.getDegree() == d)
 				names.add(t.getTName());
 		names.sort(String::compareTo);
 		for (String name : names)
@@ -294,7 +290,7 @@ public class FrameTeamM extends JPanel {
 			return;
 
 		for (Team t : pj.getTeams()) {
-			if (t.getdegree() == selectedDeg && selectedTeamName.equals(t.getTName())) {
+			if (t.getDegree() == selectedDeg && selectedTeamName.equals(t.getTName())) {
 				List<Student> members = t.getMembers();
 				for (int i = 0; i < members.size(); i++) {
 					Student s = members.get(i);
@@ -308,8 +304,7 @@ public class FrameTeamM extends JPanel {
 	}
 
 	/* 차수/팀 콤보에 특정 값이 보이도록 보장 */
-	private void ensureDegreeAndTeamShown(Project pj, JComboBox<Integer> sldg, JComboBox<String> sltm, int degree,
-			String teamName) {
+	private void ensureDegreeAndTeamShown(Project pj, JComboBox<Integer> sldg, JComboBox<String> sltm, int degree, String teamName) {
 		// 차수 보장
 		boolean hasDeg = false;
 		for (int i = 0; i < sldg.getItemCount(); i++) {
@@ -344,8 +339,7 @@ public class FrameTeamM extends JPanel {
 		}
 
 		@Override
-		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-				int row, int column) {
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			setText(value == null ? "" : value.toString());
 			return this;
 		}
@@ -378,12 +372,10 @@ public class FrameTeamM extends JPanel {
 				int modelRow = table.convertRowIndexToModel(viewRow);
 				String name = String.valueOf(model.getValueAt(modelRow, COL_NAME));
 				String phone = String.valueOf(model.getValueAt(modelRow, COL_PHONE));
-				String memo0 = String.valueOf(
-						model.getValueAt(modelRow, COL_MEMO) == null ? "" : model.getValueAt(modelRow, COL_MEMO));
+				String memo0 = String.valueOf(model.getValueAt(modelRow, COL_MEMO) == null ? "" : model.getValueAt(modelRow, COL_MEMO));
 
 				// 학생 상세 다이얼로그
-				JDialog dlg = new JDialog(SwingUtilities.getWindowAncestor(table), "학생 상세페이지",
-						Dialog.ModalityType.APPLICATION_MODAL);
+				JDialog dlg = new JDialog(SwingUtilities.getWindowAncestor(table), "학생 상세페이지", Dialog.ModalityType.APPLICATION_MODAL);
 				dlg.setLayout(new BorderLayout(10, 10));
 
 				// 소속 테이블: 다이얼로그 지역 모델/테이블 (전역 공유 금지)
@@ -405,7 +397,7 @@ public class FrameTeamM extends JPanel {
 				for (Team tt : pj.getTeams()) {
 					for (Student ss : tt.getMembers()) {
 						if (name.equals(ss.getsName()) && phone.equals(ss.getsNum())) {
-							localBelongModel.addRow(new Object[] { tt.getTName() + " " + tt.getdegree() + "차" });
+							localBelongModel.addRow(new Object[] { tt.getTName() + " " + tt.getDegree() + "차" });
 						}
 					}
 				}
@@ -439,14 +431,13 @@ public class FrameTeamM extends JPanel {
 								}
 								Team target = null;
 								for (Team t : pj.getTeams()) {
-									if (t.getTName().equals(teamNm) && (degVal < 0 || t.getdegree() == degVal)) {
+									if (t.getTName().equals(teamNm) && (degVal < 0 || t.getDegree() == degVal)) {
 										target = t;
 										break;
 									}
 								}
 								if (target != null) {
-									JOptionPane.showMessageDialog(dlg,
-											"이동: " + teamNm + " (" + (degVal < 0 ? "?" : degVal) + "차)");
+									JOptionPane.showMessageDialog(dlg, "이동: " + teamNm + " (" + (degVal < 0 ? "?" : degVal) + "차)");
 									// TODO: 실제 화면 전환 로직 연결
 								} else {
 									JOptionPane.showMessageDialog(dlg, "팀을 찾을 수 없습니다: " + cell);

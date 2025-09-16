@@ -1,15 +1,7 @@
-// front_ui/TagChip.java
 package front_ui;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-
+import java.awt.*;
 import javax.swing.JPanel;
-
 import VO.Student;
 
 public class TagChip extends JPanel {
@@ -23,6 +15,10 @@ public class TagChip extends JPanel {
 		this.fg = fg;
 		setOpaque(false);
 		setSize(w, h);
+	}
+
+	public String getText() {
+		return text;
 	}
 
 	public TagChip(String text, Color bg, int w, int h) {

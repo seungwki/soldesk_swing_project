@@ -1,12 +1,28 @@
 package front_frame;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.util.List;
-import javax.swing.*;
+
+import javax.swing.JColorChooser;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import VO.Tag;
 import VO.TagRepository;
-import front_ui.*;
+import front_ui.AutoGrowBox;
+import front_ui.TabSpec;
+import front_ui.TagListPanel;
+import front_ui.TagRow;
+import front_ui.TopBar;
 import front_util.Theme;
 
 public class TagManager extends BasePage {
