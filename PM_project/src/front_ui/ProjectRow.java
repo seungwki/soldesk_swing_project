@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import VO.Output;
+import VO.Tag;
 import VO.Team;
 
 public class ProjectRow extends JPanel {
@@ -47,9 +48,9 @@ public class ProjectRow extends JPanel {
 
 	public ProjectRow(int x, int y, int contentW, Output output) {
 		this();
+		this.output = output;
 		build(contentW);
 		setBounds(x, y, contentW, getPreferredHeight());
-		this.output = output;
 	}
 
 	public static ProjectRow createDefault(int contentX, int contentY, int contentW) {
@@ -88,7 +89,9 @@ public class ProjectRow extends JPanel {
 		panelTag = new JPanel(null);
 		panelTag.setOpaque(false);
 		panelTag.setBounds(0, OUTPUT_H + V_GAP, leftWidth, TAG_H);
-		//        setTagChips(dummyTags(5));
+		if (output != null) {
+			setTagChips(output.getTagList());
+		}
 		add(panelTag);
 
 		setSize(contentW, getPreferredHeight());
@@ -129,13 +132,21 @@ public class ProjectRow extends JPanel {
 		lbJo.setText(teamTitle == null ? "" : teamTitle);
 	}
 
-	public void setTagChips(List<TagChip> chips) {
+	//	public void setTagChips(List<TagChip> chips) {
+	public void setTagChips(List<Tag> tagList) {
 		panelTag.removeAll();
 		int leftW = panelTag.getWidth();
 		final int CHIP_H = 28;
 		int cx = PAD, cy = (TAG_H - CHIP_H) / 2, cg = 8;
-		if (chips != null) {
-			for (TagChip chip : chips) {
+		if (tagList != null) {
+			ArrayList<TagChip> tagchipList = new ArrayList<TagChip>();
+			for (int i = 0; i < tagList.size(); i++) {
+				Tag tempTag = tagList.get(i);
+				String txt = tempTag.getName();
+				int w = Math.min(140, 52 + txt.length() * 10);
+				tagchipList.add(new TagChip(txt, tempTag.getColor(), w, 28));
+			}
+			for (TagChip chip : tagchipList) {
 				chip.setSize(chip.getWidth(), CHIP_H);
 				chip.setLocation(cx, cy);
 				panelTag.add(chip);

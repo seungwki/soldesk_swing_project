@@ -683,6 +683,9 @@ public class Data {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		//태그 추가
+		projectData.get(0).getTeams2().get(0).getOutput().getTagList().add(TagRepository.getOutputTags().get(0));
+		projectData.get(0).getTeams2().get(0).getOutput().getTagList().add(TagRepository.getOutputTags().get(1));
+		projectData.get(0).getTeams2().get(0).getOutput().getTagList().add(TagRepository.getOutputTags().get(2));
 	}//생성자
 }

@@ -126,7 +126,13 @@ public class TeamDetailViewer extends BasePage {
 
 		ChipsLine tags = new ChipsLine();
 		tags.setBounds(contentX, y, contentW, 40);
-		//		tags.setChips(info.tags, new Color(0xE5E7EB), new Color(0x1F2937), 28, 8);
+		ArrayList<String> tagNameList = new ArrayList<String>();
+		if (team.getOutput().getTagList() != null) {
+			for (int i = 0; i < team.getOutput().getTagList().size(); i++) {
+				tagNameList.add(team.getOutput().getTagList().get(i).getName());
+			}
+		}
+		tags.setChips(tagNameList, new Color(0xE5E7EB), new Color(0x1F2937), 28, 8);
 		box.add(tags);
 
 		box.autoGrow();
@@ -135,12 +141,9 @@ public class TeamDetailViewer extends BasePage {
 		tabs.setOnChange(idx -> {
 			this.selectedTab = idx;
 			applyTabSelection();
-
 			String degreeStr = tabs.getTab(idx).getName();
-			System.out.println("degreeStr  >>" + degreeStr);
 			if (degreeStr == null || degreeStr.equals("+"))
 				return;
-
 			try {
 				int degree = Integer.parseInt(degreeStr);
 				// 선택한 차수의 팀 목록 화면으로 완전히 이동

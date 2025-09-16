@@ -4,14 +4,13 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 
 import VO.Project;
 import VO.Team;
 import front_ui.AutoGrowBox;
+import front_ui.ChipsLine;
 import front_ui.FolderTab;
 import front_ui.ProjectRow;
 import front_ui.TabSpec;
@@ -53,17 +52,16 @@ public class ClassManagerCardViewer extends BasePage {
 	private final List<ProjectRow> rows = new ArrayList<>(); // ★ 추가
 
 	public ClassManagerCardViewer(Project project, int selectedTabIndex) {
-	    this(project); // 기존 생성자 호출
+		this(project); // 기존 생성자 호출
 
-	    // 선택 탭 인덱스가 유효하면 적용
-	    if (selectedTabIndex >= 0 && selectedTabIndex < tabs.getTabCount()) {
-	        selectedTab = selectedTabIndex;
-	        tabs.setSelectedIndex(selectedTabIndex, true);  // 시각적 선택
-	        handleTabClicked(selectedTabIndex);             // 해당 차수 팀 목록 표시
-	        applyTabSelection();                            // 탭 색상 적용
-	    }
+		// 선택 탭 인덱스가 유효하면 적용
+		if (selectedTabIndex >= 0 && selectedTabIndex < tabs.getTabCount()) {
+			selectedTab = selectedTabIndex;
+			tabs.setSelectedIndex(selectedTabIndex, true); // 시각적 선택
+			handleTabClicked(selectedTabIndex); // 해당 차수 팀 목록 표시
+			applyTabSelection(); // 탭 색상 적용
+		}
 	}
-
 
 	public ClassManagerCardViewer(Project project) {
 		super(new TopBar.OnMenuClick() {
@@ -217,7 +215,7 @@ public class ClassManagerCardViewer extends BasePage {
 		box.autoGrow();
 		box.revalidate();
 		box.repaint();
-	}
+	}//handleTabClicked
 
 	//새 차수 생성
 	private void handleAddNewDegree() {
