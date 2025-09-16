@@ -23,10 +23,10 @@ public final class Theme {
 	public static final int BORDER_THICK = 12;
 
 	// ─ Tabs (TagManager 전용 팔레트) ─
-	public static final java.awt.Color TAB_STUDENT_BG = new java.awt.Color(0xE6ECF6); // 학생 탭
-	public static final java.awt.Color TAB_OUTPUT_BG = new java.awt.Color(0xA7C3FF); // 산출물 탭
+		public static final java.awt.Color TAB_STUDENT_BG = new java.awt.Color(0xE6ECF6); // 학생 탭
+		public static final java.awt.Color TAB_OUTPUT_BG = new java.awt.Color(0xA7C3FF); // 산출물 탭
 
 	// 테두리 색
-	public static final java.awt.Color BORDER_STUDENT = TAB_STUDENT_BG;
-	public static final java.awt.Color BORDER_OUTPUT = TAB_OUTPUT_BG;
+		public static final java.awt.Color BORDER_STUDENT = TAB_STUDENT_BG;
+		public static final java.awt.Color BORDER_OUTPUT = TAB_OUTPUT_BG;
 }
