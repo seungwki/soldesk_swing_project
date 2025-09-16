@@ -1,8 +1,8 @@
-// front_frame/ProjectDetailPage.java
 package front_frame;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -13,7 +13,6 @@ import front_ui.AutoGrowBox;
 import front_ui.ChipsLine;
 import front_ui.FileListPanel;
 import front_ui.FolderTab;
-import front_ui.ProjectInfo;
 import front_ui.TabSpec;
 import front_ui.TabsBar;
 import front_ui.TopBar;
@@ -30,9 +29,8 @@ public class TeamDetailViewer extends BasePage {
 	private static final Color SELECT_COLOR = new Color(0xAFC2F5);
 	private static final Color UNSELECT_COLOR = Color.WHITE;
 	private int selectedTab;
-	private Team team;
-	private Project project;
 	private TabSpec[] tabSpecArr;
+	private int thisOutputDegree;
 
 	public TeamDetailViewer(Team team, Project project, TabSpec[] tabSpecArr) {
 		super(new TopBar.OnMenuClick() {
@@ -52,9 +50,8 @@ public class TeamDetailViewer extends BasePage {
 			}
 		});
 		getTopBar().selectOnly("class");
-		this.team = team;
-		this.project = project;
 		this.tabSpecArr = tabSpecArr;
+		this.thisOutputDegree = team.getDegree();
 
 		// 내용 상자: 콘텐츠 패널에 추가
 		box.setBounds(boxX, boxY, boxW, boxH);
@@ -67,8 +64,8 @@ public class TeamDetailViewer extends BasePage {
 		int gap = 110, tabY = boxBaseY + Theme.BORDER_THICK - 28;
 		for (int i = 0; i < specs.length; i++) {
 			tabs.setTabLocation(i, boxX + i * gap, tabY);
-			tabs.getTab(i).setName(String.valueOf(i+1));
-			}
+			tabs.getTab(i).setName(String.valueOf(i + 1));
+		}
 		tabs.setBounds(0, 0, boxX + (specs.length - 1) * gap + 100, tabY + 28);
 		getContentPanel().add(tabs);
 
@@ -95,7 +92,11 @@ public class TeamDetailViewer extends BasePage {
 
 		ChipsLine membersLine = new ChipsLine();
 		membersLine.setBounds(contentX, y, contentW, 40);
-		//		membersLine.setChips(team.getMembers2(), new Color(0xE5E7EB), new Color(0x334155), 28, 8);
+		ArrayList<String> stdNameList = new ArrayList<String>();
+		for (int i = 0; i < team.getMembers2().size(); i++) {
+			stdNameList.add(team.getMembers2().get(i).getsName());
+		}
+		membersLine.setChips(stdNameList, new Color(0xE5E7EB), new Color(0x334155), 28, 8);
 		box.add(membersLine);
 		y += 48;
 
@@ -106,8 +107,14 @@ public class TeamDetailViewer extends BasePage {
 		y += 28;
 
 		FileListPanel files = new FileListPanel(contentW, 32, 8);
-		//		files.setBounds(contentX, y, contentW, files.getPreferredHeight(info.files.size()));
-		//		files.setFiles(info.files);
+		ArrayList<String> fileNameList = new ArrayList<String>();
+		if (team.getOutput().getFile() != null) {
+			files.setBounds(contentX, y, contentW, files.getPreferredHeight(team.getOutput().getFile().size()));
+			for (int i = 0; i < specs.length; i++) {
+				fileNameList.add(team.getOutput().getFile().get(i).getName());
+			}
+		}
+		files.setFiles(fileNameList);
 		box.add(files);
 		y += files.getHeight() + 18;
 
@@ -150,24 +157,10 @@ public class TeamDetailViewer extends BasePage {
 	private void applyTabSelection() {
 		for (int i = 0; i < tabs.getTabCount(); i++) {
 			FolderTab t = tabs.getTab(i);
-			boolean sel = (i == selectedTab);
+			boolean sel = (i == thisOutputDegree - 1);
 			t.setTabColors(sel ? SELECT_COLOR : null, !sel ? UNSELECT_COLOR : null, SELECT_COLOR, null);
 			t.setSelected(sel);
 		}
 		tabs.repaint();
 	}
-
-	// 추가: 공통 탭 팩토리
-	private TabsBar makePhaseTabs(int x, int y) {
-		TabSpec[] specs = { new TabSpec("1차", Color.WHITE), new TabSpec("2차", Color.WHITE), new TabSpec("3차", Color.WHITE), new TabSpec("4차", Color.WHITE), new TabSpec("5차", Color.WHITE) };
-		TabsBar tb = new TabsBar(specs, 100, 28);
-		int gap = 110;
-		for (int i = 0; i < specs.length; i++) {
-			tb.setTabLocation(i, x + i * gap, y);
-		}
-		tb.setBounds(0, 0, x + (specs.length - 1) * gap + 100, y + 28);
-		return tb;
-	}
-	// 사용처: tabs = makePhaseTabs(boxX, boxBaseY + Theme.BORDER_THICK - 28);
-
 }
