@@ -1,28 +1,17 @@
 package front_frame;
 
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
-
-import VO.Output;
-import VO.Project;
-import VO.Team;
-
 import java.awt.*;
-import java.io.File;
-import java.util.ArrayList;
 
-public class DataInputDialog extends JDialog {
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class new_dial extends JDialog {
 	private JTextField txtSubject, txtTeamName, txtScore;
 	private JComboBox<String> comboTeamList;
 	private JTextArea txtFilePath;
 	private JList<String> listTagAdd, listTagList;
 	private DefaultListModel<String> modelTagAdd, modelTagList;
 	private JButton btnLoadFile, btnAddTag, btnRemoveTag, btnSave, btnCancel;
-	private Project project;
-	private Team team;
-	private Output output;
 	// 고정 크기
 	private static final Dimension DIALOG_SIZE = new Dimension(600, 700);
 	// 팔레트
@@ -38,11 +27,7 @@ public class DataInputDialog extends JDialog {
 	private static final int FIELD_H = 32; // 텍스트필드/콤보 높이
 	private static final int SCORE_H = 22; // 점수칸 높이
 
-	public DataInputDialog(Window parent, Project project) {
-		this(parent, project, null);
-	}
-
-	public DataInputDialog(Window parent, Project project, Team team) {
+	public new_dial(Window parent) {
 		super(parent, "새 데이터 입력", ModalityType.APPLICATION_MODAL);
 
 		setPreferredSize(DIALOG_SIZE);
@@ -50,6 +35,7 @@ public class DataInputDialog extends JDialog {
 		setSize(DIALOG_SIZE);
 		getContentPane().setBackground(BG_FRAME);
 		getContentPane().setLayout(new BorderLayout());
+
 		// 중앙 카드
 		JPanel card = new JPanel(new GridBagLayout()) {
 			@Override
@@ -74,35 +60,6 @@ public class DataInputDialog extends JDialog {
 		c.insets = new Insets(6, 6, 6, 6);
 		c.anchor = GridBagConstraints.WEST;
 		c.fill = GridBagConstraints.HORIZONTAL;
-		//======= BACK ========
-		this.project = project;
-		this.team = team;
-//		if (team.getOutput() != null) {
-//			this.output = team.getOutput();
-//		}
-		//주제(title), 팀 목록, 팀 이름, 파일, 태그<<이거 좀 골때림, 점수, 최대 점수
-		String title;
-		DefaultListModel<String> teamListModel;
-		String teamName;
-		DefaultListModel<String> fileListModel;
-		DefaultListModel<String> leftTagListModel;
-		DefaultListModel<String> rightTagListModel;
-		double score;
-		double maxScore;
-
-		if (output != null) {
-			title = output.getTitle();
-			score = output.getScore();
-			maxScore = output.getMaxScore();
-			//fileList
-			ArrayList<File> fileList = new ArrayList<>();
-			//tagList
-		}
-		if (team != null) {
-			teamName = team.getTName();
-		}
-		//저장 로직
-		//======= BACK ========
 
 		// 주제
 		c.gridx = 0;

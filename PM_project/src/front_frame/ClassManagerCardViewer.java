@@ -212,9 +212,6 @@ public class ClassManagerCardViewer extends BasePage {
 		}
 		ProjectRow newTeamrow = new ProjectRow(contentX, y, contentW, null);
 		newTeamrow.setOutputTitle("+");
-		rows.add(newTeamrow);
-		box.add(newTeamrow);
-
 		newTeamrow.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -225,6 +222,8 @@ public class ClassManagerCardViewer extends BasePage {
 				dialog.setVisible(true);
 			}
 		});
+		rows.add(newTeamrow);
+		box.add(newTeamrow);
 
 		y += newTeamrow.getPreferredHeight() + gapY;
 		box.autoGrow();
