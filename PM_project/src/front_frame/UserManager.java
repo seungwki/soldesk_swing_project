@@ -70,11 +70,13 @@ public class UserManager {
 	public String getCurrentProfileImagePath() {
 		User u = getCurrentUser();
 		String g = (u == null || u.getGender() == null) ? "비공개" : u.getGender();
-		return "profile_secret.png";
-	};
-	//	    return switch (g) {
-	//	    case "남" -> "profile_male.png";
-	//	    case "여" -> "profile_female.png";
-	//	    default   -> "profile_secret.png";
-	//	    };}
+		switch (g) {
+		case "남":
+			return "profile_male.png";
+		case "여":
+			return "profile_female.png";
+		default:
+			return "profile_secret.png";
+		}
+	}
 }

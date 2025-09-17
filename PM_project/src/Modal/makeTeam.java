@@ -32,10 +32,7 @@ import VO.Student;
 import VO.Team;
 
 /**
- * 팀 생성/삭제 모달 패널 (생성/삭제 차수 분리, 미배정 기반)
- * - 상단: 수업 / (생성) 차수/팀명 / (삭제) 차수/팀
- * - 중앙: 미배정(좌) ↔ 선택 인원(우) 이동
- * - 하단: 저장 / 팀 삭제
+ * 팀 생성/삭제 모달 패널 (생성/삭제 차수 분리, 미배정 기반) - 상단: 수업 / (생성) 차수/팀명 / (삭제) 차수/팀 - 중앙: 미배정(좌) ↔ 선택 인원(우) 이동 - 하단: 저장 / 팀 삭제
  */
 public class makeTeam extends JPanel {
 
@@ -309,7 +306,8 @@ public class makeTeam extends JPanel {
 			@Override
 			public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
 				super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-				if (value instanceof Student s) {
+				if (value instanceof Student) {
+					Student s = (Student) value; // instanceof 검사 후 캐스팅
 					setText(s.getsName() + "  (" + s.getsNum() + ")");
 				}
 				return this;
