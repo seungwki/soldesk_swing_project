@@ -1,5 +1,5 @@
 // front_frame/TeamDetailViewer.java
-package front_frame;
+package main;
 
 import java.awt.Color;
 import java.awt.Dialog;

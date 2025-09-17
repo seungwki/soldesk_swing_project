@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dialog;
 import java.awt.Window;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.TreeMap;
 
 import javax.swing.JDialog;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import VO.Project;
@@ -49,7 +52,8 @@ public class ClassManagerCardViewer extends BasePage {
 	private AutoGrowBox box;
 
 	// 컬러 (요구안: 선택=박스 테두리색 / 비선택=흰색)
-	private static final Color SELECT_COLOR = Theme.BORDER_STUDENT;
+	//	private static final Color SELECT_COLOR = Theme.BORDER_STUDENT;
+	private static final Color SELECT_COLOR = new Color(0xAFC2F5);
 	private static final Color UNSELECT_COLOR = Color.WHITE; // ★ 추가
 
 	// 더미 데이터
@@ -158,13 +162,35 @@ public class ClassManagerCardViewer extends BasePage {
 
 		box.autoGrow();
 		refreshScroll();
+		JScrollPane sp = (JScrollPane) SwingUtilities.getAncestorOfClass(JScrollPane.class, getContentPanel());
+
+		if (sp != null) {
+			sp.setBorder(null);
+			sp.setViewportBorder(null);
+
+			Runnable fitWidth = () -> {
+				int vw = sp.getViewport().getExtentSize().width; // 스크롤바 제외한 가로
+				int bw = Math.max(0, vw - boxX * 2); // 좌우 여백(boxX)만큼 뺌
+				box.setBounds(boxX, boxY, bw, box.getHeight()); // 오른쪽 여백이 왼쪽과 동일해짐
+				box.revalidate();
+				box.repaint();
+			};
+
+			fitWidth.run(); // 초기 1회
+			sp.getViewport().addComponentListener(new ComponentAdapter() {
+				@Override
+				public void componentResized(ComponentEvent e) {
+					fitWidth.run();
+				}
+			});
+		}
 	}//생성자
 
 	private void applyTabSelection() {
 		for (int i = 0; i < tabs.getTabCount(); i++) {
 			FolderTab t = tabs.getTab(i);
 			boolean sel = (i == selectedTab);
-			t.setTabColors(sel ? SELECT_COLOR : null, !sel ? UNSELECT_COLOR : null, SELECT_COLOR, null);
+			t.setTabColors(sel ? SELECT_COLOR : Theme.BORDER_STUDENT, !sel ? UNSELECT_COLOR : null, SELECT_COLOR, null);
 			t.setSelected(sel); // FolderTab은 setSelected만 사용
 		}
 		box.setBorderColor(SELECT_COLOR); // 박스 테두리 고정색(요구사항)
@@ -316,5 +342,4 @@ public class ClassManagerCardViewer extends BasePage {
 		getContentPanel().revalidate();
 		getContentPanel().repaint();
 	}//handleAddNewDegree
-
 }

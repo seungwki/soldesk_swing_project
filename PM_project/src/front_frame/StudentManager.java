@@ -92,9 +92,9 @@ public class StudentManager extends BasePage {
 		this.data = sharedData;
 		//		this.data = new Data();
 		projects = data.getProjects();
-		if (projects.isEmpty())
-			throw new IllegalStateException("데이터가 비어있습니다.");
-		this.pj = projects.get(0); // 기본 선택
+		if (!projects.isEmpty())
+			this.pj = projects.get(0); // 기본 선택
+		//			throw new IllegalStateException("데이터가 비어있습니다.");
 
 		getTopBar().selectOnly("student");
 
@@ -737,8 +737,24 @@ public class StudentManager extends BasePage {
 									}
 								}
 								if (target != null) {
-									JOptionPane.showMessageDialog(dlg, "이동: " + teamNm + " (" + (degVal < 0 ? "?" : degVal) + "차)");
-									// TODO: 실제 화면 전환 로직 연결
+									//JOptionPane.showMessageDialog(dlg, "이동: " + teamNm + " (" + (degVal < 0 ? "?" : degVal) + "차)");
+									// === 실제 상세보기로 이동 ===
+									dlg.dispose(); // 상세 다이얼로그 닫기
+									java.util.Set<Integer> degreeSet = new java.util.TreeSet<>();
+									for (Team tt : pj.getTeams()) {
+										int d = tt.getDegree(); // 주의: getdegree() / getDegree() 중 프로젝트에 맞춰 사용
+										if (d >= 1)
+											degreeSet.add(d);
+									}
+									java.util.List<Integer> degrees = new java.util.ArrayList<>(degreeSet);
+									front_ui.TabSpec[] specs = new front_ui.TabSpec[degrees.size()];
+									for (int i = 0; i < degrees.size(); i++) {
+										specs[i] = new front_ui.TabSpec(degrees.get(i) + "차", java.awt.Color.WHITE);
+										specs[i].setDegree(String.valueOf(degrees.get(i)));
+									}
+
+									// 페이지 전환
+									BasePage.changePage(new TeamDetailViewer(target, pj, specs));
 								} else {
 									JOptionPane.showMessageDialog(dlg, "팀을 찾을 수 없습니다: " + cell);
 								}

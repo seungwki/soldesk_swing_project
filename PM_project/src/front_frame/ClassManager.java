@@ -14,10 +14,12 @@ import javax.swing.SwingUtilities;
 
 import VO.Data;
 import VO.Project;
+import VO.TagRepository;
 
 // 수업관리 화면
 public class ClassManager extends BasePage {
 	// 하드코딩 프로젝트 데이터
+	//	public static ArrayList<Project> projectData;
 	public static ArrayList<Project> projectData = Data.projectData;
 
 	// 전역으로 보관
@@ -41,6 +43,16 @@ public class ClassManager extends BasePage {
 				DefaultFrame.getInstance(new TagManager());
 			}
 		});
+
+		if (!UserManager.getInstance().getCurrentUser().getId().equals("soldesk")) {
+			TagRepository.getAllTags().removeAll(TagRepository.getAllTags());
+			TagRepository.getStudentTags().removeAll(TagRepository.getStudentTags());
+			TagRepository.getOutputTags().removeAll(TagRepository.getOutputTags());
+			projectData.removeAll(projectData);
+			//		} else {
+			//			Data.addData();
+		}
+
 		sortProjectList();
 		getTopBar().selectOnly("class");
 		JPanel content = getContentPanel();

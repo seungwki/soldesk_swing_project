@@ -34,18 +34,18 @@ public class TagRepository {
 		// 기본 학생 태그
 		addOrReuseStudentTag("우수", "성적이 우수한 학생", Color.BLUE, oldTags);
 		addOrReuseStudentTag("주의", "관심 필요", Color.RED, oldTags);
-		addOrReuseStudentTag("신입", "3개월 이내의 학생", Color.ORANGE, oldTags);
-		addOrReuseStudentTag("팀장", "리더쉽 위주", Color.green, oldTags);
+		addOrReuseStudentTag("신입", "3개월 이내의 학생", Color.GREEN, oldTags);
+//		addOrReuseStudentTag("팀장", "리더쉽 위주", Color.green, oldTags);
 		addOrReuseStudentTag("멘토", "친근하며 가르침 능숙", Color.BLUE, oldTags);
 		addOrReuseStudentTag("발표", "발표 담당", Color.ORANGE, oldTags);
-		addOrReuseStudentTag("자료", "자료조사자", Color.ORANGE, oldTags);
+//		addOrReuseStudentTag("자료", "자료조사자", Color.ORANGE, oldTags);
 
 		// 기본 산출물 태그
 		addOrReuseOutputTag("완료", "작업 완료됨", Color.blue, oldTags);
-		addOrReuseOutputTag("미완", "아직 미완성", Color.ORANGE, oldTags);
+//		addOrReuseOutputTag("미완", "아직 미완성", Color.ORANGE, oldTags);
 		addOrReuseOutputTag("수작", "훌륭함", Color.BLUE, oldTags);
 		addOrReuseOutputTag("초안", "상의단계", Color.LIGHT_GRAY, oldTags);
-		addOrReuseOutputTag("통과", "채점 완료", Color.LIGHT_GRAY, oldTags);
+//		addOrReuseOutputTag("통과", "채점 완료", Color.LIGHT_GRAY, oldTags);
 		addOrReuseOutputTag("지각", "기한오버", Color.red, oldTags);
 		addOrReuseOutputTag("파일없음", "자료,파일 누락", Color.red, oldTags);
 	}

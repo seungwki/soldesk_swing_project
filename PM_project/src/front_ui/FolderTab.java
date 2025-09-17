@@ -40,11 +40,11 @@ public class FolderTab extends JComponent {
 		setOpaque(false);
 		setSize(w, h);
 
-//		JLabel t = new JLabel(text, SwingConstants.CENTER);
-//		t.setFont(Theme.FONT_14_BOLD); // 폰트 크기
-//		t.setForeground(Color.DARK_GRAY);
-//		t.setBounds(0, 0, w, h);
-//		add(t);
+		JLabel t = new JLabel(text, SwingConstants.CENTER);
+		t.setFont(Theme.FONT_14_BOLD); // 폰트 크기
+		t.setForeground(Color.DARK_GRAY);
+		t.setBounds(0, 0, w, h);
+		add(t);
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		addMouseListener(new MouseAdapter() {
@@ -111,7 +111,7 @@ public class FolderTab extends JComponent {
 		g2.setFont(getFont() != null ? getFont() : new Font("맑은 고딕", Font.BOLD, 14));
 		int tx = (w - fm.stringWidth(text)) / 2;
 		int ty = (h - fm.getHeight()) / 2 + fm.getAscent();
-		g2.drawString(text, tx, ty);
+//		g2.drawString(text, tx, ty);
 		g2.dispose();
 	}
 

@@ -10,8 +10,10 @@ public class UserManager {
 	private String currentUserId;
 
 	private UserManager() {
-		// 테스트용 초기 계정
-		users.put("admin", new User("admin", "admin", "관리자", "비공개", "admin@example.com", true));
+		// 테스트용 초기 계정(데이터 있음)
+		users.put("soldesk", new User("soldesk", "soldesk", "관리자", "비공개", "soldesk@example.com", true));
+		//데이터 없는 신규 계정
+		users.put("newUser", new User("newUser", "newUser", "관리자", "비공개", "newUser@example.com", true));
 	}
 
 	public static UserManager getInstance() {
