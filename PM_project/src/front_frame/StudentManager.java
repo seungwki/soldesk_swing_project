@@ -51,6 +51,7 @@ import VO.Team;
 import front_ui.TopBar;
 
 public class StudentManager extends BasePage {
+	private static Data sharedData = null;
 	private final Data data; // 전체 데이터
 	private Project pj; // 현재 선택된 프로젝트
 	private final List<Project> projects;
@@ -60,9 +61,9 @@ public class StudentManager extends BasePage {
 		@Override
 		public boolean isCellEditable(int r, int c) {
 			return c == 1; // "이름"
-							// 컬럼만
-							// 버튼처럼
-							// 클릭																																										// 가능
+			// 컬럼만
+			// 버튼처럼
+			// 클릭																																										// 가능
 		}
 	};
 
@@ -84,8 +85,12 @@ public class StudentManager extends BasePage {
 			}
 
 		});
-
-		this.data = new Data();
+		// 싱글톤 패턴으로 데이터 인스턴스 공유
+		if (sharedData == null) {
+			sharedData = new Data();
+		}
+		this.data = sharedData;
+		//		this.data = new Data();
 		projects = data.getProjects();
 		if (projects.isEmpty())
 			throw new IllegalStateException("데이터가 비어있습니다.");

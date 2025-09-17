@@ -21,6 +21,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import VO.Data;
+
 public class FrameBegin extends JPanel {
 	// ───────── 화면 크기 ─────────
 	private static final int FRAME_W = 800, FRAME_H = 600; // ← 전체 프레임 크기(내용 영역 기준)

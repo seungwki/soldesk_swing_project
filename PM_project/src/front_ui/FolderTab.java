@@ -1,15 +1,18 @@
-// front_ui/FolderTab.java
 package front_ui;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Path2D;
 
 import javax.swing.JComponent;
+import front_util.Theme;
 
 public class FolderTab extends JComponent {
 	private String text;
+	private final Color bgColor;
+	private final Runnable onClick;
 	private String degree;
 
 	private boolean selected = false;
@@ -20,7 +23,6 @@ public class FolderTab extends JComponent {
 	private Color textColor = Color.DARK_GRAY;
 
 	private static final int ARC = 18;
-	private final Runnable onClick; // 클릭 콜백(없으면 null)
 
 	// 기존 간단 생성자도 유지
 	public FolderTab(String text, int w, int h) {
@@ -31,15 +33,23 @@ public class FolderTab extends JComponent {
 	public FolderTab(String text, Color baseColor, int w, int h, Runnable onClick) {
 		this.text = text;
 		this.unselectedBg = (baseColor != null) ? baseColor : Color.WHITE;
+		this.bgColor = baseColor;
 		this.onClick = onClick;
 
 		setPreferredSize(new Dimension(w, h));
 		setOpaque(false);
+		setSize(w, h);
+
+//		JLabel t = new JLabel(text, SwingConstants.CENTER);
+//		t.setFont(Theme.FONT_14_BOLD); // 폰트 크기
+//		t.setForeground(Color.DARK_GRAY);
+//		t.setBounds(0, 0, w, h);
+//		add(t);
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 
 		addMouseListener(new MouseAdapter() {
 			@Override
-			public void mousePressed(MouseEvent e) {
+			public void mouseClicked(java.awt.event.MouseEvent e) {
 				if (onClick != null)
 					onClick.run();
 			}
@@ -67,6 +77,7 @@ public class FolderTab extends JComponent {
 	// paintComponent 교체
 	@Override
 	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
 		Graphics2D g2 = (Graphics2D) g.create();
 		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		int w = getWidth(), h = getHeight(), arc = 18;
@@ -80,7 +91,15 @@ public class FolderTab extends JComponent {
 		p.quadTo(w, 0, w, arc);
 		p.lineTo(w, h);
 		p.closePath();
-
+		//		int r = Theme.RADIUS_12; // 상단 라운드 반경
+		g2.setColor(bgColor);
+		//		p.moveTo(0, h);
+		//		p.lineTo(0, r); // 왼쪽 올라감
+		//		p.quadTo(0, 0, r, 0); // ↖ 상단-좌 라운드
+		//		p.lineTo(w - r, 0); // 상단 직선
+		//		p.quadTo(w, 0, w, r); // ↗ 상단-우 라운드
+		//		p.lineTo(w, h); // 오른쪽 내려감
+		//		p.closePath(); // 하단은 각진 채로 닫힘
 		g2.setColor(selected ? selectedBg : unselectedBg);
 		g2.fill(p);
 

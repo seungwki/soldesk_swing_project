@@ -6,7 +6,7 @@ import front_frame.FrameBegin;
 
 public class TeachCloudMain {
 	public static void main(String[] args) {
-		Data data = new Data();
+//		Data data = new Data();
 		DefaultFrame.getInstance(new FrameBegin());
 	}
 }

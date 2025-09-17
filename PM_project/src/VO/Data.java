@@ -9,8 +9,8 @@ import java.util.StringTokenizer;
 public class Data {
 	public static ArrayList<Project> projectData = new ArrayList<>();
 
-	public Data() {
-
+//	public Data() {
+	static {
 		//반 추가
 		projectData.add(new Project("반1", "장소1"));//5
 		projectData.add(new Project("반2", "장소2"));//5
