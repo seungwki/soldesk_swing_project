@@ -373,30 +373,78 @@ public class DataInputDialog extends JDialog {
 				listTagList.clearSelection();
 			}
 		});
-
 		listTagList.addListSelectionListener(e -> {
 			if (!e.getValueIsAdjusting()) {
 				listTagAdd.clearSelection();
 			}
 		});
 		//추가, 제거 버튼 기능 구현
+		//		btnAddTag.addActionListener(new ActionListener() {//추가 버튼
+		//			@Override
+		//			public void actionPerformed(ActionEvent e) {
+		//				if (listTagList.getSelectedValue() != null) {//뭔가가 선택됐을 때 추가하시오
+		//					String addTagname = listTagList.getSelectedValue();
+		//					Tag tempTag = null;//선택한 태그 그 자체를 찾음
+		//					for (int i = 0; i < leftTagList.size(); i++) {
+		//						if (leftTagList.get(i).getName().equals(addTagname)) {
+		//							tempTag = leftTagList.get(i);
+		//							break;
+		//						}
+		//					}
+		//					//right model에 추가하기
+		//					rightTagListModel.addElement(addTagname);
+		//					//right list에 추가하기
+		//					rightTagList.add(tempTag);
+		//					//left model에 제거하기
+		//					leftTagListModel.removeElement(addTagname);
+		//					//left list에 제거하기
+		//					leftTagList.remove(tempTag);
+		//				}
+		//			}
+		//		});
 		btnAddTag.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int addIndex = listTagList.getSelectedIndex();//listTagAdd
-				String addTagname = listTagList.getSelectedValue();
-				rightTagListModel.addElement(addTagname);
-				leftTagListModel.removeElement(addTagname);
-				Tag tempTag = null;
-				for (int i = 0; i < leftTagList.size(); i++) {
-					if (leftTagList.get(i).getName().equals(addTagname)) {
-						tempTag = leftTagList.get(i);
+				if (listTagAdd.getSelectedValue() != null) { // 왼쪽 리스트에서 선택된 항목
+					String addTagname = listTagAdd.getSelectedValue();
+					Tag tempTag = null;
+					for (int i = 0; i < leftTagList.size(); i++) {
+						if (leftTagList.get(i).getName().equals(addTagname)) {
+							tempTag = leftTagList.get(i);
+							break;
+						}
+					}
+					if (tempTag != null) {
+						// 오른쪽으로 이동
+						rightTagListModel.addElement(addTagname);
+						rightTagList.add(tempTag);
+						leftTagListModel.removeElement(addTagname);
 						leftTagList.remove(tempTag);
-						output.getTagList().add(null);
-						break;
 					}
 				}
-				rightTagList.add(tempTag);
+			}
+		});
+
+		btnRemoveTag.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (listTagList.getSelectedValue() != null) { // 오른쪽 리스트에서 선택된 항목
+					String removeTagname = listTagList.getSelectedValue();
+					Tag tempTag = null;
+					for (int i = 0; i < rightTagList.size(); i++) {
+						if (rightTagList.get(i).getName().equals(removeTagname)) {
+							tempTag = rightTagList.get(i);
+							break;
+						}
+					}
+					if (tempTag != null) {
+						// 왼쪽으로 이동
+						leftTagListModel.addElement(removeTagname);
+						leftTagList.add(tempTag);
+						rightTagListModel.removeElement(removeTagname);
+						rightTagList.remove(tempTag);
+					}
+				}
 			}
 		});
 
@@ -406,6 +454,10 @@ public class DataInputDialog extends JDialog {
 		JLabel lbScore = label("점수");
 		JTextField scoreLeft = new JTextField();
 		JTextField scoreRight = new JTextField();
+		if (output != null) {
+			scoreLeft.setText(String.valueOf(output.getScore()));
+			scoreRight.setText(String.valueOf(output.getMaxScore()));
+		}
 		Dimension scoreSize = new Dimension(80, SCORE_H);
 		scoreLeft.setPreferredSize(scoreSize);
 		scoreRight.setPreferredSize(scoreSize);
@@ -483,7 +535,7 @@ public class DataInputDialog extends JDialog {
 					newMaxScore = 0;
 				}
 				//점수는 최대점수 이상이 될 수 없음.
-				if (!scoreRight.getText().equals("")) {
+				if (!scoreLeft.getText().equals("")) {
 					newScore = Double.parseDouble(scoreLeft.getText());
 				} else {
 					newScore = 0;
@@ -518,7 +570,7 @@ public class DataInputDialog extends JDialog {
 				output.setFile(fileList);
 				output.setTagList(rightTagList);
 				project.addTeam(DataInputDialog.this.team);
-				JOptionPane.showConfirmDialog(null, "생성되었습니다.", "", JOptionPane.OK_OPTION);
+				JOptionPane.showMessageDialog(null, "생성되었습니다.", "생성 완료",JOptionPane.PLAIN_MESSAGE);
 				DefaultFrame.getInstance(new ClassManagerCardViewer(project, degree - 1));
 				System.out.println(degree);
 				dispose();

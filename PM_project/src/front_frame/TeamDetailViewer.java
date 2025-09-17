@@ -173,15 +173,16 @@ public class TeamDetailViewer extends BasePage {
 		y += 28 + GAP_Y + 8;
 
 		// 중앙 정렬 버튼(컨텐츠 영역 기준)
-		int totalBtnW = BTN_W * 2 + BTN_GAP;
+//		int totalBtnW = BTN_W * 2 + BTN_GAP;
+		int totalBtnW = BTN_W;
 		int startX = x0 + (innerW - totalBtnW) / 2;
 
 		RoundedButton modifyButton = new RoundedButton("수정");
-		RoundedButton deleteButton = new RoundedButton("삭제");
+		//		RoundedButton deleteButton = new RoundedButton("삭제");
 		modifyButton.setBounds(startX, y, BTN_W, BTN_H);
-		deleteButton.setBounds(startX + BTN_W + BTN_GAP, y, BTN_W, BTN_H);
+		//		deleteButton.setBounds(startX + BTN_W + BTN_GAP, y, BTN_W, BTN_H);
 		body.add(modifyButton);
-		body.add(deleteButton);
+		//		body.add(deleteButton);
 		y += BTN_H + GAP_Y;
 
 		// 기능(그대로 유지)
@@ -190,13 +191,13 @@ public class TeamDetailViewer extends BasePage {
 			dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 			dialog.setVisible(true);
 		});
-		deleteButton.addActionListener(e -> {
-			int delete = JOptionPane.showConfirmDialog(null, "삭제하시겠습니까?", "삭제 확인", JOptionPane.OK_CANCEL_OPTION);
-			if (delete == JOptionPane.OK_OPTION) {
-				project.getTeams2().remove(team);
-				BasePage.changePage(new ClassManagerCardViewer(project, thisOutputDegree - 1));
-			}
-		});
+		//		deleteButton.addActionListener(e -> {
+		//			int delete = JOptionPane.showConfirmDialog(null, "삭제하시겠습니까?", "삭제 확인", JOptionPane.OK_CANCEL_OPTION);
+		//			if (delete == JOptionPane.OK_OPTION) {
+		//				project.getTeams2().remove(team);
+		//				BasePage.changePage(new ClassManagerCardViewer(project, thisOutputDegree - 1));
+		//			}
+		//		});
 
 		// 실제 높이 반영
 		body.setSize(bodyW, y);
