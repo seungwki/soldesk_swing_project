@@ -1056,38 +1056,64 @@ public class DataInputDialog extends JDialog {
 		btnCancel.addActionListener(e -> dispose());
 
 		btnSave.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				newMaxScore = scoreRight.getText().isEmpty() ? 0 : Double.parseDouble(scoreRight.getText());
-				newScore = scoreLeft.getText().isEmpty() ? 0 : Double.parseDouble(scoreLeft.getText());
-				if (newScore > newMaxScore) {
-					JOptionPane.showMessageDialog(null, "점수는 최대 점수보다 클 수 없습니다.", "잘못 된 입력", JOptionPane.PLAIN_MESSAGE);
-					return;
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			if (!scoreRight.getText().equals("")) {
+				newMaxScore = Double.parseDouble(scoreRight.getText());
+			} else {
+				newMaxScore = 0;
+			}
+			if (!scoreLeft.getText().equals("")) {
+				newScore = Double.parseDouble(scoreLeft.getText());
+			} else {
+				newScore = 0;
+			}
+
+			// 팀이 없으면 새로 생성
+			boolean isNewTeam = false;
+			if (DataInputDialog.this.team == null) {
+				if (!txtTeamName.getText().equals("")) {
+					DataInputDialog.this.team = new Team(txtTeamName.getText(), DataInputDialog.this.degree);
+				} else {
+					DataInputDialog.this.team = new Team(null, DataInputDialog.this.degree);
 				}
-				if (DataInputDialog.this.team == null) {
-					DataInputDialog.this.team = new Team(txtTeamName.getText().isEmpty() ? null : txtTeamName.getText(), DataInputDialog.this.degree);
-				}
-				if (DataInputDialog.this.output == null) {
-					DataInputDialog.this.output = new Output(fileList);
-					DataInputDialog.this.team.setOutput(DataInputDialog.this.output);
-				}
-				if (!txtSubject.getText().isEmpty()) {
-					output.setTitle(txtSubject.getText());
-				} else if (!fileList.isEmpty()) {
+				isNewTeam = true; // 새 팀이라는 표시
+			}
+
+			// Output 없으면 새로 생성
+			if (DataInputDialog.this.output == null) {
+				DataInputDialog.this.output = new Output(fileList);
+				DataInputDialog.this.team.setOutput(DataInputDialog.this.output);
+			}
+
+			if (newScore > newMaxScore) {
+				JOptionPane.showMessageDialog(null, "점수는 최대 점수보다 클 수 없습니다.", "잘못 된 입력", JOptionPane.PLAIN_MESSAGE);
+				return;
+			}
+
+			// Output 값 갱신
+			if (!txtSubject.getText().equals("")) {
+				output.setTitle(txtSubject.getText());
+			} else {
+				if (fileList.size() != 0) {
 					output.setTitle(fileList.get(0).getName());
 				}
-				output.setScore(newScore);
-				output.setMaxScore(newMaxScore);
-				DataInputDialog.this.team.setOutput(output);
-				output.setFile(fileList);
-				output.setTagList(rightTagList);
-				project.addTeam(DataInputDialog.this.team);
-
-				JOptionPane.showMessageDialog(null, "생성되었습니다.", "생성 완료", JOptionPane.PLAIN_MESSAGE);
-				DefaultFrame.getInstance(new ClassManagerCardViewer(project, degree - 1));
-				dispose();
 			}
-		});
+			output.setScore(newScore);
+			output.setMaxScore(newMaxScore);
+			output.setFile(fileList);
+			output.setTagList(rightTagList);
+
+			// 새 팀일 때만 추가
+			if (isNewTeam) {
+				project.addTeam(DataInputDialog.this.team);
+			}
+
+			JOptionPane.showMessageDialog(null, "저장되었습니다.", "완료", JOptionPane.PLAIN_MESSAGE);
+			DefaultFrame.getInstance(new ClassManagerCardViewer(project, degree - 1));
+			dispose();
+		}
+	});
 
 		c.gridx = 0;
 		c.gridy = 7;
