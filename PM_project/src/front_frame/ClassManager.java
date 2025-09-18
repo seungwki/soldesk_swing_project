@@ -53,7 +53,7 @@ public class ClassManager extends BasePage {
 			//			Data.addData();
 		}
 
-		sortProjectList();
+//		sortProjectList();
 		getTopBar().selectOnly("class");
 		JPanel content = getContentPanel();
 		content.setLayout(null);
