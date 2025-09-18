@@ -24,132 +24,131 @@ import javax.swing.JTextField;
 import VO.User;
 
 public class SignUpPage extends JPanel {
-	   public SignUpPage() {
-	      setLayout(null); // 현재 패널에서 직접 구성
-	      setPreferredSize(new Dimension(800, 600)); // 보이도록 설정
+	public SignUpPage() {
+		setLayout(null); // 현재 패널에서 직접 구성
+		setPreferredSize(new Dimension(800, 600)); // 보이도록 설정
 
-			setBackground(Color.WHITE);
+		setBackground(Color.WHITE);
 
-			ImageIcon icon = new ImageIcon("logo_temp.png");
+		ImageIcon icon = new ImageIcon("logo_temp.png");
 
-			// 원하는 크기로 축소 (예: 100x60)
-			Image img = icon.getImage().getScaledInstance(60, 50, Image.SCALE_SMOOTH);
-			ImageIcon scaledIcon = new ImageIcon(img);
+		// 원하는 크기로 축소 (예: 100x60)
+		Image img = icon.getImage().getScaledInstance(60, 50, Image.SCALE_SMOOTH);
+		ImageIcon scaledIcon = new ImageIcon(img);
 
-			JLabel imageLabel = new JLabel(scaledIcon);
-			imageLabel.setBounds(380, 30, 60, 50); // 반드시 이미지 크기와 동일하게!
+		JLabel imageLabel = new JLabel(scaledIcon);
+		imageLabel.setBounds(380, 30, 60, 50); // 반드시 이미지 크기와 동일하게!
 
-			add(imageLabel);
+		add(imageLabel);
 
-			JLabel labelId = new JLabel("ID");
-			JTextField tfId = new JTextField();
-			labelId.setBounds(275, 98, 100, 30);
-			tfId.setBounds(312, 100, 200, 30);
+		JLabel labelId = new JLabel("ID");
+		JTextField tfId = new JTextField();
+		labelId.setBounds(275, 98, 100, 30);
+		tfId.setBounds(312, 100, 200, 30);
 
-	      JLabel labelPw1 = new JLabel("PW");
-	      JPasswordField tfPw1 = new JPasswordField();
-	      JLabel labelpw = new JLabel("영문/숫자/특수문자 포함 8~16자");
-	      labelPw1.setBounds(270, 148, 100, 30);
-	      labelpw.setBounds(310, 180, 260, 20);
-	      tfPw1.setBounds(312, 150, 200, 30);
+		JLabel labelPw1 = new JLabel("PW");
+		JPasswordField tfPw1 = new JPasswordField();
+		JLabel labelpw = new JLabel("영문/숫자/특수문자 포함 8~16자");
+		labelPw1.setBounds(270, 148, 100, 30);
+		labelpw.setBounds(310, 180, 260, 20);
+		tfPw1.setBounds(312, 150, 200, 30);
 
-	      JLabel labelPw2 = new JLabel("PW 확인");
-			JPasswordField tfPw2 = new JPasswordField();
-			labelPw2.setBounds(245, 197, 100, 30);
-			tfPw2.setBounds(312, 200, 200, 30);
+		JLabel labelPw2 = new JLabel("PW 확인");
+		JPasswordField tfPw2 = new JPasswordField();
+		labelPw2.setBounds(245, 197, 100, 30);
+		tfPw2.setBounds(312, 200, 200, 30);
 
-			JLabel labelName = new JLabel("이름");
-			JTextField tfName = new JTextField();
-			labelName.setBounds(265, 247, 100, 30);
-			tfName.setBounds(312, 250, 200, 30);
+		JLabel labelName = new JLabel("이름");
+		JTextField tfName = new JTextField();
+		labelName.setBounds(265, 247, 100, 30);
+		tfName.setBounds(312, 250, 200, 30);
 
-			JLabel labelEmail = new JLabel("E-MAIL");
-			JTextField tfEmail = new JTextField();
-			labelEmail.setBounds(250, 297, 100, 30);
-			tfEmail.setBounds(312, 300, 200, 30);
+		JLabel labelEmail = new JLabel("E-MAIL");
+		JTextField tfEmail = new JTextField();
+		labelEmail.setBounds(250, 297, 100, 30);
+		tfEmail.setBounds(312, 300, 200, 30);
 
-			JLabel labelSex = new JLabel("성별");
-			JCheckBox tfSex1 = new JCheckBox("남");
-			JCheckBox tfSex2 = new JCheckBox("여");
-	      JCheckBox tfSex3 = new JCheckBox("비공개", true);
-	      ButtonGroup bgSex = new ButtonGroup();
-	      
-	      bgSex.add(tfSex1);
-	      bgSex.add(tfSex2);
-	      bgSex.add(tfSex3);
-	      
-	      labelSex.setBounds(265, 350, 100, 30);
-			tfSex1.setBounds(320, 350, 60, 30);
-			tfSex2.setBounds(380, 350, 60, 30);
-			tfSex3.setBounds(440, 350, 80, 30);
+		JLabel labelSex = new JLabel("성별");
+		JCheckBox tfSex1 = new JCheckBox("남");
+		JCheckBox tfSex2 = new JCheckBox("여");
+		JCheckBox tfSex3 = new JCheckBox("비공개", true);
+		ButtonGroup bgSex = new ButtonGroup();
 
-	      JLabel labelAgree = new JLabel("개인정보 수집 동의");
-	      JCheckBox tfa1 = new JCheckBox("동의");
-	      labelAgree.setBounds(263, 400, 150, 30);
-			tfa1.setBounds(450, 400, 80, 30);
-			
-			// 보기 (하이퍼링크)
-					JLabel dummyDisagree = new JLabel("<html><u>보기</u></html>");
-					dummyDisagree.setForeground(Color.BLUE); // 파란색으로 하이퍼링크처럼
-					dummyDisagree.setCursor(new Cursor(Cursor.HAND_CURSOR)); // 마우스를 손모양으로
-					dummyDisagree.setBounds(395, 399, 60, 30); // 위치와 크기 설정
+		bgSex.add(tfSex1);
+		bgSex.add(tfSex2);
+		bgSex.add(tfSex3);
 
-					// 클릭해도 아무 일도 일어나지 않음 (더미라서)
-					dummyDisagree.addMouseListener(new MouseAdapter() {
-					    @Override
-					    public void mouseClicked(MouseEvent e) {
-					        // 아무 동작도 하지 않음
-					    }
-					});
+		labelSex.setBounds(265, 350, 100, 30);
+		tfSex1.setBounds(320, 350, 60, 30);
+		tfSex2.setBounds(380, 350, 60, 30);
+		tfSex3.setBounds(440, 350, 80, 30);
 
-					add(dummyDisagree);
+		JLabel labelAgree = new JLabel("개인정보 수집 동의");
+		JCheckBox tfa1 = new JCheckBox("동의");
+		labelAgree.setBounds(263, 400, 150, 30);
+		tfa1.setBounds(450, 400, 80, 30);
 
-	   
-	   // -- 가입, 뒤로가기 버튼 색상,폰트 --
-	   		JButton btnSubmit = new JButton("가입하기");
-	   		JButton btnBack = new JButton("뒤로가기");
+		// 보기 (하이퍼링크)
+		JLabel dummyDisagree = new JLabel("<html><u>보기</u></html>");
+		dummyDisagree.setForeground(Color.BLUE); // 파란색으로 하이퍼링크처럼
+		dummyDisagree.setCursor(new Cursor(Cursor.HAND_CURSOR)); // 마우스를 손모양으로
+		dummyDisagree.setBounds(395, 399, 60, 30); // 위치와 크기 설정
 
-	   		btnSubmit.setBounds(300, 460, 100, 40);
-	   		btnBack.setBounds(420, 460, 100, 40);
+		// 클릭해도 아무 일도 일어나지 않음 (더미라서)
+		dummyDisagree.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// 아무 동작도 하지 않음
+			}
+		});
 
-	   		// 스타일 적용
-	   		Color mainBlue = new Color(0x4e74de);
+		add(dummyDisagree);
 
-	   		btnSubmit.setBackground(mainBlue);
-	   		btnSubmit.setForeground(Color.WHITE);
-	   		btnSubmit.setFocusPainted(false);
-	   		btnSubmit.setBorderPainted(false);
+		// -- 가입, 뒤로가기 버튼 색상,폰트 --
+		JButton btnSubmit = new JButton("가입하기");
+		JButton btnBack = new JButton("뒤로가기");
 
-	   		btnBack.setBackground(mainBlue);
-	   		btnBack.setForeground(Color.WHITE);
-	   		btnBack.setFocusPainted(false);
-	   		btnBack.setBorderPainted(false);
+		btnSubmit.setBounds(300, 460, 100, 40);
+		btnBack.setBounds(420, 460, 100, 40);
 
-	   		// 필요하면 폰트도 추가
-	   		btnSubmit.setFont(new Font("맑은 고딕", Font.BOLD, 13));
-	   		btnBack.setFont(new Font("맑은 고딕", Font.BOLD, 13));
-	   		// --- 여기까지 ----
+		// 스타일 적용
+		Color mainBlue = new Color(0x4e74de);
 
-	      // 컴포넌트 추가
-	      add(labelId);
-	      add(tfId);
-	      add(labelPw1);
-	      add(tfPw1);
-	      add(labelPw2);
-	      add(tfPw2);
-	      add(labelName);
-	      add(tfName);
-	      add(labelEmail);
-	      add(tfEmail);
-	      add(labelSex);
-	      add(tfSex1);
-	      add(tfSex2);
-	      add(tfSex3);
-	      add(labelAgree);
-	      add(tfa1);
-	      add(btnSubmit);
-	      add(btnBack);
-	      add(labelpw);
+		btnSubmit.setBackground(mainBlue);
+		btnSubmit.setForeground(Color.WHITE);
+		btnSubmit.setFocusPainted(false);
+		btnSubmit.setBorderPainted(false);
+
+		btnBack.setBackground(mainBlue);
+		btnBack.setForeground(Color.WHITE);
+		btnBack.setFocusPainted(false);
+		btnBack.setBorderPainted(false);
+
+		// 필요하면 폰트도 추가
+		btnSubmit.setFont(new Font("맑은 고딕", Font.BOLD, 13));
+		btnBack.setFont(new Font("맑은 고딕", Font.BOLD, 13));
+		// --- 여기까지 ----
+
+		// 컴포넌트 추가
+		add(labelId);
+		add(tfId);
+		add(labelPw1);
+		add(tfPw1);
+		add(labelPw2);
+		add(tfPw2);
+		add(labelName);
+		add(tfName);
+		add(labelEmail);
+		add(tfEmail);
+		add(labelSex);
+		add(tfSex1);
+		add(tfSex2);
+		add(tfSex3);
+		add(labelAgree);
+		add(tfa1);
+		add(btnSubmit);
+		add(btnBack);
+		add(labelpw);
 
 		// 버튼 동작
 		btnSubmit.addActionListener(e -> {
@@ -214,8 +213,7 @@ public class SignUpPage extends JPanel {
 	public static boolean checkVaildPassword(String userPw) {
 		boolean result = false;
 
-		Pattern passwordPtn = Pattern
-				.compile("^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\\\(\\\\)\\-_=+]).{8,16}$");
+		Pattern passwordPtn = Pattern.compile("^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\\\(\\\\)\\-_=+]).{8,16}$");
 		Matcher passMatcher = passwordPtn.matcher(userPw);
 
 		if (passMatcher.find()) {
@@ -231,5 +229,3 @@ public class SignUpPage extends JPanel {
 		return email.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 	}
 }
-
-

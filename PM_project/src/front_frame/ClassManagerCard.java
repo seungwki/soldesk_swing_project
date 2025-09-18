@@ -64,6 +64,12 @@ public class ClassManagerCard extends JPanel {
 			// 수정 기능
 			JTextField newTitle = new JTextField(20);
 			JTextField newSubtitle = new JTextField(10);
+			if (!project.getPlace().equals("")) {
+				newSubtitle.setText(project.getPlace());
+			}
+			if (!project.getName().equals("")) {
+				newTitle.setText(project.getName());
+			}
 			JPanel pane = new JPanel();
 			pane.add(new JLabel("이름 : "));
 			pane.add(newTitle);
@@ -73,9 +79,11 @@ public class ClassManagerCard extends JPanel {
 			if (result == JOptionPane.OK_OPTION) {
 				if (!newSubtitle.getText().equals("")) {
 					titleLabel.setText(newSubtitle.getText());
+					project.setName(newTitle.getText());
 				}
 				if (!newTitle.getText().equals("")) {
 					subLabel.setText(newTitle.getText());
+					project.setPlace(newSubtitle.getText());
 				}
 			}
 			newTitle.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, KeyboardFocusManager.getCurrentKeyboardFocusManager().getDefaultFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
