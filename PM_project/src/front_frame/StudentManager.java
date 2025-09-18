@@ -63,7 +63,7 @@ public class StudentManager extends BasePage {
 			return c == 1; // "이름"
 			// 컬럼만
 			// 버튼처럼
-			// 클릭																																										// 가능
+			// 클릭                                                                                                                              // 가능
 		}
 	};
 
@@ -90,11 +90,11 @@ public class StudentManager extends BasePage {
 			sharedData = new Data();
 		}
 		this.data = sharedData;
-		//		this.data = new Data();
+		//      this.data = new Data();
 		projects = data.getProjects();
 		if (!projects.isEmpty())
 			this.pj = projects.get(0); // 기본 선택
-		//			throw new IllegalStateException("데이터가 비어있습니다.");
+		//         throw new IllegalStateException("데이터가 비어있습니다.");
 
 		getTopBar().selectOnly("student");
 
@@ -337,7 +337,7 @@ public class StudentManager extends BasePage {
 				return;
 			}
 
-			JDialog dlg = new JDialog(SwingUtilities.getWindowAncestor(this), "팀 추가", Dialog.ModalityType.APPLICATION_MODAL);
+			JDialog dlg = new JDialog(SwingUtilities.getWindowAncestor(this), "팀 인원 추가", Dialog.ModalityType.APPLICATION_MODAL);
 			dlg.setLayout(new BorderLayout());
 
 			makeTeam panel = new makeTeam(data.getProjects(), current, selectedDeg, result -> {
@@ -350,8 +350,8 @@ public class StudentManager extends BasePage {
 					}
 				}
 				if (target == null) {
-					target = new Team(result.teamName, result.degree);
-					result.project.addTeam(target);
+					JOptionPane.showMessageDialog(dlg, "해당 차수/팀이 존재하지 않습니다.\n먼저 팀을 생성한 뒤 다시 시도하세요.");
+					return; // 생성 금지, 바로 종료
 				}
 
 				// 2) 멤버 추가(중복 방지) + 미배정에서 제거
@@ -379,7 +379,8 @@ public class StudentManager extends BasePage {
 				}
 
 				dlg.dispose();
-				JOptionPane.showMessageDialog(this, "팀 저장 완료: " + result.teamName + " (" + result.degree + "차)");
+				JOptionPane.showMessageDialog(this, "팀 배정 완료: " + result.teamName + " (" + result.degree + "차)");
+
 			});
 
 			dlg.add(panel, BorderLayout.CENTER);

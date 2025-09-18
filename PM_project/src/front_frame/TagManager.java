@@ -80,13 +80,13 @@ public class TagManager extends BasePage {
 		box.setBorderColor(BORDER_OUTPUT);
 		getContentPanel().add(box);
 
-		// ── 탭 바(학생/산출물) ────────────────────────────
+		// ── 탭 바(학생/과제물) ────────────────────────────
 		final int tabW = 100, tabH = 28;
 		final int tabBottom = boxBaseY + Theme.BORDER_THICK; // 내부 상단선
 		final int tabY = tabBottom - tabH;
 
-		tabs = new TabsBar(new TabSpec[] { new TabSpec("학생", Theme.TAB_STUDENT_BG), // 산출물 탭 색 변경은 Theme class에서
-				new TabSpec("산출물", Theme.TAB_OUTPUT_BG) // 마찬가지
+		tabs = new TabsBar(new TabSpec[] { new TabSpec("학생", Theme.TAB_STUDENT_BG), // 과제물 탭 색 변경은 Theme class에서
+				new TabSpec("과제물", Theme.TAB_OUTPUT_BG) // 마찬가지
 		}, tabW, tabH);
 		final int tabStudentX = boxX;
 		final int tabOutputX = boxX + 110; // 탭 사이 간격
@@ -289,7 +289,7 @@ public class TagManager extends BasePage {
 			return;
 		}
 
-		// 현재 선택된 탭에 따라 학생 or 산출물 분기
+		// 현재 선택된 탭에 따라 학생 or 과제물 분기
 		boolean toStudent = studentSelected; // 현재 탭이 학생이면 true, 아니면 false
 
 		if (isDuplicateTag(toStudent, tagName)) {
@@ -354,9 +354,9 @@ public class TagManager extends BasePage {
 		panel.add(new JLabel("카테고리:"), gbc);
 		gbc.gridx = 1;
 		gbc.gridy = 1;
-		String[] categories = { "학생", "산출물" };
+		String[] categories = { "학생", "과제물" };
 		JComboBox<String> categoryCombo = new JComboBox<>(categories);
-		categoryCombo.setSelectedItem(toStudent ? "학생" : "산출물");
+		categoryCombo.setSelectedItem(toStudent ? "학생" : "과제물");
 		categoryCombo.setEnabled(false);
 		panel.add(categoryCombo, gbc);
 

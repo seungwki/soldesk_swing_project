@@ -24,7 +24,6 @@ import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 
 import VO.Project;
@@ -43,7 +42,7 @@ public class makeTeam extends JPanel {
 
 	// 생성 전용
 	private final JComboBox<Integer> sldgCreate = new JComboBox<>();
-	private final JTextField tfTeamName = new JTextField(20);
+	private final JComboBox<String> sltm = new JComboBox<>();
 
 	// 삭제 전용
 	private final JComboBox<Integer> sldgDelete = new JComboBox<>();
@@ -98,6 +97,8 @@ public class makeTeam extends JPanel {
 		fillDegreesForDelete(currentDeg);
 		fillTeamsForDelete();
 		fillAvailableFromUnassigned(); // 좌측 리스트: 미배정
+		fillTeamsForCreate(); // 생성 쪽 팀 콤보 채우기
+		syncSelectedWithTeam(); // 선택된 팀 멤버를 오른쪽에 표시
 
 		bindListeners(onSave);
 	}
@@ -118,7 +119,7 @@ public class makeTeam extends JPanel {
 		Dimension fieldSize = new Dimension(140, 26);
 		Dimension degreeSize = new Dimension(55, 26); // 차수 전용
 		Dimension lessonSize = new Dimension(250, 26); // 수업 전용 드롭박스 크기
-		Dimension teamDeleteSize = new Dimension(100, 26); // 삭제할 팀 드롭박스
+		Dimension teamDeleteSize = new Dimension(120, 26); // 삭제할 팀 드롭박스
 
 		sldgCreate.setPreferredSize(degreeSize);
 		sldgCreate.setMinimumSize(degreeSize);
@@ -150,36 +151,29 @@ public class makeTeam extends JPanel {
 		// ============ 생성할 팀명 ============
 		gbc.gridx = 0;
 		gbc.gridy = 2;
-		top.add(new JLabel("생성할 팀명"), gbc);
+		top.add(new JLabel("추가할 팀명"), gbc);
 
 		gbc.gridx = 1;
-		//9월16일 수정
-		this.tfTeamName.setPreferredSize(fieldSize);
-		top.add(this.tfTeamName, gbc); // ← (20) 없앰
-		tfTeamName.setPreferredSize(fieldSize); // 드롭박스랑 동일 크기
-		top.add(tfTeamName, gbc);
+		sltm.setPreferredSize(teamDeleteSize);
+		sltm.setMinimumSize(teamDeleteSize);
+		sltm.setMaximumSize(teamDeleteSize);
+		top.add(sltm, gbc);
 
 		// ============ 삭제할 차수 ============
-		gbc.gridx = 0;
-		gbc.gridy = 3;
-		top.add(new JLabel("삭제할 차수"), gbc);
-
-		gbc.gridx = 1;
-		sldgCreate.setPreferredSize(degreeSize);
-		top.add(sldgDelete, gbc);
+		/*
+		 * gbc.gridx = 0; gbc.gridy = 3; top.add(new JLabel("삭제할 차수"), gbc);
+		 * 
+		 * gbc.gridx = 1; sldgCreate.setPreferredSize(degreeSize); top.add(sldgDelete, gbc);
+		 */
 
 		// ============ 삭제할 팀 ============
-		gbc.gridx = 0;
-		gbc.gridy = 4;
-		top.add(new JLabel("삭제할 팀"), gbc);
-
-		gbc.gridx = 1;
-		sltmDelete.setPreferredSize(teamDeleteSize);
-		sltmDelete.setMinimumSize(teamDeleteSize);
-		sltmDelete.setMaximumSize(teamDeleteSize);
-		top.add(sltmDelete, gbc);
-
-		add(top, BorderLayout.NORTH);
+		/*
+		 * gbc.gridx = 0; gbc.gridy = 4; top.add(new JLabel("삭제할 팀"), gbc);
+		 * 
+		 * gbc.gridx = 1; sltmDelete.setPreferredSize(teamDeleteSize); sltmDelete.setMinimumSize(teamDeleteSize); sltmDelete.setMaximumSize(teamDeleteSize); top.add(sltmDelete, gbc);
+		 * 
+		 * add(top, BorderLayout.NORTH);
+		 */
 		// ============ 오른쪽 빈 공간 ============
 		gbc.gridx = 2;
 		gbc.gridy = 0;
@@ -280,21 +274,21 @@ public class makeTeam extends JPanel {
 		gbc.insets = new java.awt.Insets(4, 4, 4, 4);
 
 		JButton btnSave = new JButton("팀 저장");
-		JButton btnDeleteTeam = new JButton("팀 삭제");
+		//JButton btnDeleteTeam = new JButton("팀 삭제");
 
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		southPanel.add(btnSave, gbc);
 
 		gbc.gridx = 1;
-		southPanel.add(btnDeleteTeam, gbc);
+		//southPanel.add(btnDeleteTeam, gbc);
 
 		// SOUTH 영역에 추가
 		add(southPanel, BorderLayout.SOUTH);
 
 		// 버튼 기능 연결
 		btnSave.addActionListener(e -> saveTeam(onSave));
-		btnDeleteTeam.addActionListener(e -> deleteTeam());
+		//btnDeleteTeam.addActionListener(e -> deleteTeam());
 	}
 
 	private void configureLists() {
@@ -352,6 +346,37 @@ public class makeTeam extends JPanel {
 			slpj.setSelectedItem(current);
 		else if (slpj.getItemCount() > 0)
 			slpj.setSelectedIndex(0);
+	}
+
+	private void fillTeamsForCreate() {
+		sltm.removeAllItems();
+		Project p = (Project) slpj.getSelectedItem();
+		Integer d = (Integer) sldgCreate.getSelectedItem();
+		if (p == null || d == null)
+			return;
+
+		for (Team t : p.getTeams()) {
+			if (t.getDegree() == d)
+				sltm.addItem(t.getTName());
+		}
+	}
+
+	// 생성용: sltm에서 고른 '있는 팀'의 멤버를 오른쪽 선택목록(selModel)에 뿌리기
+	private void syncSelectedWithTeam() {
+		selModel.clear();
+		Project p = (Project) slpj.getSelectedItem();
+		Integer d = (Integer) sldgCreate.getSelectedItem();
+		String teamName = (String) sltm.getSelectedItem();
+		if (p == null || d == null || teamName == null)
+			return;
+
+		for (Team t : p.getTeams()) {
+			if (t.getDegree() == d && t.getTName().equals(teamName)) {
+				for (Student s : t.getMembers())
+					selModel.addElement(s);
+				break;
+			}
+		}
 	}
 
 	// 생성용 차수(1차 이상만)
@@ -437,6 +462,8 @@ public class makeTeam extends JPanel {
 	private void bindListeners(Consumer<Result> onSave) {
 		slpj.addActionListener(e -> {
 			fillDegreesForCreate(null);
+			fillTeamsForCreate(); // ✅ 추가
+			syncSelectedWithTeam(); // ✅ 추가
 			fillDegreesForDelete(null);
 			fillTeamsForDelete();
 			fillAvailableFromUnassigned();
@@ -445,6 +472,17 @@ public class makeTeam extends JPanel {
 		sldgDelete.addActionListener(e -> {
 			fillTeamsForDelete();
 			// 생성용 차수에는 영향 없음
+		});
+
+		// 생성 차수 바뀌면 '있는 팀' 목록 갱신 + 해당 팀 멤버 표시
+		sldgCreate.addActionListener(e -> {
+			fillTeamsForCreate();
+			syncSelectedWithTeam();
+		});
+
+		// 생성 팀 선택 바뀌면 해당 팀 멤버 표시
+		sltm.addActionListener(e -> {
+			syncSelectedWithTeam();
 		});
 	}
 
@@ -455,7 +493,7 @@ public class makeTeam extends JPanel {
 	private void saveTeam(Consumer<Result> onSave) {
 		Project p = (Project) slpj.getSelectedItem();
 		Integer d = (Integer) sldgCreate.getSelectedItem(); // 생성용
-		String teamName = tfTeamName.getText().trim();
+		String teamName = (String) sltm.getSelectedItem();
 
 		if (p == null || d == null) {
 			JOptionPane.showMessageDialog(this, "수업과 (생성할) 차수를 선택하세요.");

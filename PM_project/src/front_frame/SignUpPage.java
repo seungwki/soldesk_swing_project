@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -87,6 +86,10 @@ public class SignUpPage extends JPanel {
 		JCheckBox tfa1 = new JCheckBox("동의");
 		labelAgree.setBounds(263, 400, 150, 30);
 		tfa1.setBounds(450, 400, 80, 30);
+
+		for (JCheckBox cb : new JCheckBox[] { tfSex1, tfSex2, tfSex3, tfa1 }) {
+			cb.setOpaque(false);
+		}
 
 		// 보기 (하이퍼링크)
 		JLabel dummyDisagree = new JLabel("<html><u>보기</u></html>");

@@ -53,7 +53,7 @@ public class ClassManager extends BasePage {
 			//			Data.addData();
 		}
 
-//		sortProjectList();
+		sortProjectList();
 		getTopBar().selectOnly("class");
 		JPanel content = getContentPanel();
 		content.setLayout(null);
@@ -151,7 +151,8 @@ public class ClassManager extends BasePage {
 				layoutCards();
 			} else {
 				JOptionPane.showMessageDialog(content, "제목은 비워둘 수 없습니다.");
-				projectCreate(newTitle, newSubtitle, content);
+				//				projectCreate(newTitle, newSubtitle, content);
+				projectCreate(newSubtitle, newTitle, content);
 			}
 		}
 	}//projectCreate

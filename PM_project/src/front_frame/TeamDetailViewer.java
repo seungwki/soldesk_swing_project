@@ -173,16 +173,16 @@ public class TeamDetailViewer extends BasePage {
 		y += 28 + GAP_Y + 8;
 
 		// 중앙 정렬 버튼(컨텐츠 영역 기준)
-//		int totalBtnW = BTN_W * 2 + BTN_GAP;
-		int totalBtnW = BTN_W;
+		int totalBtnW = BTN_W * 2 + BTN_GAP;
+		//		int totalBtnW = BTN_W;
 		int startX = x0 + (innerW - totalBtnW) / 2;
 
 		RoundedButton modifyButton = new RoundedButton("수정");
-		//		RoundedButton deleteButton = new RoundedButton("삭제");
+		RoundedButton deleteButton = new RoundedButton("삭제");
 		modifyButton.setBounds(startX, y, BTN_W, BTN_H);
-		//		deleteButton.setBounds(startX + BTN_W + BTN_GAP, y, BTN_W, BTN_H);
+		deleteButton.setBounds(startX + BTN_W + BTN_GAP + 15, y, BTN_W, BTN_H);
 		body.add(modifyButton);
-		//		body.add(deleteButton);
+		body.add(deleteButton);
 		y += BTN_H + GAP_Y;
 
 		// 기능(그대로 유지)
@@ -191,13 +191,22 @@ public class TeamDetailViewer extends BasePage {
 			dialog.setModalityType(Dialog.ModalityType.APPLICATION_MODAL);
 			dialog.setVisible(true);
 		});
-		//		deleteButton.addActionListener(e -> {
-		//			int delete = JOptionPane.showConfirmDialog(null, "삭제하시겠습니까?", "삭제 확인", JOptionPane.OK_CANCEL_OPTION);
-		//			if (delete == JOptionPane.OK_OPTION) {
-		//				project.getTeams2().remove(team);
-		//				BasePage.changePage(new ClassManagerCardViewer(project, thisOutputDegree - 1));
-		//			}
-		//		});
+
+		deleteButton.addActionListener(e -> {
+			int confirm = JOptionPane.showConfirmDialog(this, "팀을 삭제하면 팀원은 '미배정'으로 이동합니다.\n정말 삭제하시겠습니까?", "팀 삭제", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+			if (confirm != JOptionPane.YES_OPTION)
+				return;
+
+			try {
+				// 팀 삭제 + 팀원 미배정 이동 (Project 쪽 제공 메서드 사용)
+				project.deleteTeamAndMoveMembersToUnassigned(team.getDegree(), team.getTName());
+
+				// 삭제 후 현재 차수 화면으로 돌아가기 (0-based index라 -1)
+				BasePage.changePage(new ClassManagerCardViewer(project, thisOutputDegree - 1));
+			} catch (Exception ex) {
+				JOptionPane.showMessageDialog(this, "삭제 중 오류가 발생했습니다: " + ex.getMessage());
+			}
+		});
 
 		// 실제 높이 반영
 		body.setSize(bodyW, y);
